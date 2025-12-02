@@ -12,7 +12,6 @@ class AppLayout extends Component
      */
     public function render(): View
     {
-        // view layout/app.bladeout
         return view('layouts.app');
     }
 }

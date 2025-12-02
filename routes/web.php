@@ -1,16 +1,32 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Admin\UserController;
 
-Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
-Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+Route::get('/', function () {
+    return view('welcome');
+});
 
-// 🔹 Trang store (người dùng bình thường)
-Route::get('/store', function () {
-    return view('store'); 
-})->middleware('auth')->name('store');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// 🔹 Import các route admin riêng (quản trị viên)
-require __DIR__ . '/admin.php';
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+
+// Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+//     // Dashboard admin
+//     Route::get('/dashboard', function () {
+//         return view('dashboard');
+//     })->name('dashboard');
+
+//     // CRUD users
+//     Route::resource('users', UserController::class);
+// });
