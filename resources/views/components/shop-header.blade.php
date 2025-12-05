@@ -3,14 +3,12 @@
         <div class="flex justify-between items-center h-16">
             <div class="flex-shrink-0 flex items-center">
                 <a href="/" class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-miku-500 rounded-full flex items-center justify-center text-white font-bold">
-                        M
-                    </div>
+                    <img src="{{ asset('img/Circle_Logo.png') }}" alt="Mirai Store Logo"
+                        class="h-10 w-auto object-contain hover:opacity-90 transition-opacity">
                     <span class="font-bold text-xl text-gray-800 tracking-wide">MIRAI<span
                             class="text-miku-500">STORE</span></span>
                 </a>
             </div>
-
             <nav class="hidden md:flex space-x-8">
                 <a href="/"
                     class="text-gray-600 hover:text-miku-500 font-medium transition duration-150 ease-in-out">Trang

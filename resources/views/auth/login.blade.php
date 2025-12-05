@@ -2,14 +2,13 @@
     <div class="min-h-screen flex items-stretch text-white overflow-hidden transition-colors duration-300" style="min-height: 100vh;">
         
         <div class="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat relative items-center" 
-             style="background-image: url('https://images4.alphacoders.com/936/936378.jpg'); background-size: cover; background-position: center center;">
+             style="background-image: url('https://res.cloudinary.com/davfujasj/image/upload/v1764930652/miku_lfnyju.jpg'); background-size: cover; background-position: center center;">
             
             <div class="absolute inset-0 bg-black opacity-40"></div> 
             
             <div class="w-full px-24 z-10 relative"> 
-                <h1 class="text-5xl font-bold text-left tracking-wide text-white">Gaming Kai</h1>
-                <p class="text-3xl my-4 text-white">Khám phá thế giới ảo,<br>kết nối đam mê thực.</p>
-                <p class="text-sm my-4 text-miku-300 font-semibold">Project Miku Style 2025</p>
+                <h1 class="text-5xl font-bold text-left tracking-wide text-white">Mirai Store</h1>
+                <p class="text-sm my-4 text-miku-300 font-semibold">Tải game uy tín, giá rẻ</p>
             </div>
         </div>
 
