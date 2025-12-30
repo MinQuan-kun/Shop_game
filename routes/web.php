@@ -16,6 +16,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/user/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::delete('/user/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
