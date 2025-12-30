@@ -11,22 +11,26 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/user/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/user/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('users', UserController::class);
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
 });
 
 require __DIR__.'/auth.php';
 
-// Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-//     // Dashboard admin
-//     Route::get('/dashboard', function () {
-//         return view('dashboard');
-//     })->name('dashboard');
-
-//     // CRUD users
-//     Route::resource('users', UserController::class);
-// });

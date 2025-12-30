@@ -17,6 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // Thêm các cột mới
+            $table->string('role')->default('user');      // Mặc định là 'user'
+            $table->string('status')->default('active');  // Mặc định là 'active'
+            $table->string('avatar')->nullable();         // Cho phép null
+            
             $table->rememberToken();
             $table->timestamps();
         });
