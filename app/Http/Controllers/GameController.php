@@ -11,7 +11,8 @@ class GameController extends Controller
     // 1. Hiển thị form đăng bán
     public function create()
     {
-        return view('games.create');
+        $categories = \App\Models\Category::all();
+        return view('admin.games.create', compact('categories'));
     }
 
     // 2. Xử lý lưu game và upload ảnh
@@ -60,7 +61,6 @@ class GameController extends Controller
 
             // Tạm thời trả về kết quả để bạn test xem link ảnh hoạt động chưa
             return redirect()->back()->with('success', 'Đăng game thành công! Link ảnh: ' . $imageUrl);
-
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Lỗi upload ảnh: ' . $e->getMessage());
         }

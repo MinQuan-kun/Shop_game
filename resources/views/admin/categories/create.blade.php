@@ -1,11 +1,8 @@
 <x-app-layout>
-    {{-- Phần Header & Breadcrumb --}}
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-        {{-- SỬA TẠI ĐÂY: Thêm 'text-black' --}}
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-    Thêm Thể Loại
-</h2>
+        <h2 class="text-title-md2 font-bold text-black dark:text-white">
+            Thêm Thể Loại Mới
+        </h2>
 
         <nav>
             <ol class="flex items-center gap-2">
@@ -17,50 +14,69 @@
                 <li>
                     <a class="font-medium text-gray-500 hover:text-black dark:text-white"
                         href="{{ route('admin.categories.index') }}">
-                        Thể loại /
+                        Categories /
                     </a>
                 </li>
-                <li class="font-medium text-primary">Thêm mới</li>
+                <li class="font-medium text-black dark:text-white">Create</li>
             </ol>
         </nav>
     </div>
 
-    {{-- Phần Form --}}
-    <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-        <form action="{{ route('admin.categories.store') }}" method="POST">
-            @csrf
+    {{-- Form Container --}}
+    <div class="rounded-2xl border border-gray-200 bg-white shadow-default dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="border-b border-gray-200 px-7 py-4 dark:border-gray-800">
+            <h3 class="font-medium text-black dark:text-white">
+                Thông tin thể loại
+            </h3>
+        </div>
 
-            {{-- Tên danh mục --}}
-            <div class="mb-4">
-                <label class="mb-2.5 block font-medium text-black dark:text-white">
-                    Tên thể loại <span class="text-red-500">*</span>
-                </label>
-                <input type="text" name="name" placeholder="VD: Hành động, Nhập vai, Kinh dị..." required
-                    class="w-full rounded-lg border border-gray-300 bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary dark:border-gray-700 dark:text-white" />
-            </div>
+        <div class="p-7">
+            <form action="{{ route('admin.categories.store') }}" method="POST">
+                @csrf
 
-            <div class="mb-4">
-                <label class="mb-2.5 block font-medium text-black dark:text-white">
-                    Mô tả
-                </label>
-                <textarea name="description" rows="3" placeholder="Mô tả ngắn..."
-                    class="w-full rounded-lg border border-gray-300 bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary dark:border-gray-700 dark:text-white"></textarea>
-            </div>
-
-            <div class="mb-6">
-                <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_active" value="1" checked class="sr-only peer">
-                    <div
-                        class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div class="w-full">
+                        <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="name">
+                            Tên thể loại <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="w-full rounded border border-gray-300 bg-gray-50 py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-primary"
+                            type="text" name="name" id="name" placeholder="Ví dụ: Indie, Hành động..."
+                            required />
+                        @error('name')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
-                    <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Kích hoạt ngay</span>
-                </label>
-            </div>
+                </div>
 
-            <button type="submit"
-                class="flex w-full justify-center rounded bg-primary p-3 font-medium text-white hover:bg-opacity-90">
-                Lưu Thể Loại
-            </button>
-        </form>
+                <div class="mb-5.5">
+                    <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="description">
+                        Mô tả
+                    </label>
+                    <textarea
+                        class="w-full rounded border border-gray-300 bg-gray-50 py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-primary"
+                        name="description" id="description" rows="5" placeholder="Mô tả ngắn gọn về thể loại..."></textarea>
+                </div>
+
+                <div
+                    class="mt-8 flex items-center justify-end gap-x-6 border-t border-gray-100 pt-6 dark:border-gray-800">
+                    {{-- Nút Hủy: Đẩy sang trái một chút bằng cách tăng gap --}}
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+                        Hủy bỏ
+                    </a>
+
+                    {{-- Nút Lưu: Nhỏ gọn, màu đen/trắng đảo chiều --}}
+                    <button type="submit"
+                        class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Lưu thể loại
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </x-app-layout>

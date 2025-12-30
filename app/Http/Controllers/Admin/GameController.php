@@ -20,47 +20,40 @@ class GameController extends Controller
 
     public function create()
     {
-        $categories = Category::where('is_active', true)->get();
+        $categories = \App\Models\Category::all();
         return view('admin.games.create', compact('categories'));
     }
 
-    // --- HÀM STORE (THÊM MỚI) ---
+    // --- HÀM STORE  ---
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,_id',
+            'category_ids' => 'required|array',
+            'category_ids.*' => 'exists:categories,_id',
             'price' => 'required|numeric|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'download_link' => 'nullable|url',
+            'image' => 'required|image|max:2048',
+            'download_link' => 'nullable',
             'description' => 'nullable|string',
         ]);
 
-        $data = $request->all();
+        $data = $request->except('category_ids');
         $data['slug'] = Str::slug($request->name) . '-' . time();
         $data['is_active'] = $request->has('is_active');
+        $data['category_ids'] = $request->category_ids;
 
-        // XỬ LÝ UPLOAD ẢNH (CLOUDINARY SDK)
         if ($request->hasFile('image')) {
-            // 1. Cấu hình từ file .env (Thay vì hardcode)
             Configuration::instance(env('CLOUDINARY_URL'));
-
-            // 2. Sử dụng UploadApi
             $upload = new UploadApi();
             $result = $upload->upload($request->file('image')->getRealPath(), [
                 'folder' => 'Shop_Game/games',
-                'public_id' => 'game_' . $data['slug'], 
+                'public_id' => 'game_' . $data['slug'],
                 'overwrite' => true,
-                'resource_type' => 'image',
-
             ]);
-
-            // 3. Lấy link ảnh bảo mật (https)
             $data['image'] = $result['secure_url'];
         }
 
         Game::create($data);
-
         return redirect()->route('admin.games.index')->with('success', 'Thêm game thành công!');
     }
 
@@ -94,7 +87,7 @@ class GameController extends Controller
 
             $result = $upload->upload($request->file('image')->getRealPath(), [
                 'folder' => 'Shop_Game/games', // Thư mục con
-                'public_id' => 'game_' . $data['slug'] . '_' . time(), 
+                'public_id' => 'game_' . $data['slug'] . '_' . time(),
                 'overwrite' => true,
             ]);
 

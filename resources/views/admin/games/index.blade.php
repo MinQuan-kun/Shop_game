@@ -4,7 +4,6 @@
             Quản lý Game
         </h2>
         
-        {{-- Nút Thêm Game Mới --}}
         <a href="{{ route('admin.games.create') }}" 
            class="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-black dark:text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
             <span>
