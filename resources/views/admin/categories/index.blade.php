@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Header & Breadcrumb tương tự bên User --}}
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-bold text-black dark:text-white">
             Quản lý Thể loại
@@ -18,7 +17,6 @@
 
     {{-- Khối danh sách --}}
     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        {{-- Tiêu đề bảng & Thống kê --}}
         <div class="px-6 py-6 flex justify-between items-center border-b border-gray-200 dark:border-gray-800">
             <h3 class="text-xl font-bold text-black dark:text-white">
                 Danh sách thể loại

@@ -65,7 +65,6 @@
                         Hủy bỏ
                     </a>
 
-                    {{-- Nút Lưu: Nhỏ gọn, màu đen/trắng đảo chiều --}}
                     <button type="submit"
                         class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
