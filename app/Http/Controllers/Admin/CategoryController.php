@@ -19,7 +19,7 @@ class CategoryController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.games.create', compact('categories'));
+        return view('admin.categories.create', compact('categories'));
     }
 
     public function store(Request $request)

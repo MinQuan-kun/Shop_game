@@ -95,12 +95,12 @@
                             <td class="px-6 py-4">
                                 @if (isset($user->role) && $user->role === 'admin')
                                     <span
-                                        class="rounded-full bg-error-50 px-2 py-0.5 text-theme-xs font-medium text-error-700 dark:bg-error-500/15 dark:text-error-500">
+                                        class="inline-flex items-center justify-center gap-1 rounded-full bg-error-500 px-2.5 py-0.5 text-sm font-medium text-white">
                                         Admin
                                     </span>
                                 @else
                                     <span
-                                        class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
+                                        class="inline-flex items-center justify-center gap-1 rounded-full bg-blue-light-500 px-2.5 py-0.5 text-sm font-medium text-white">
                                         Member
                                     </span>
                                 @endif
