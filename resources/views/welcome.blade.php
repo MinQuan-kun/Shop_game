@@ -46,9 +46,8 @@
                                 <div class="p-4">
                                     {{-- Tên Game --}}
                                     <h3 class="text-lg font-bold text-gray-900 dark:text-white leading-snug mb-2 group-hover:text-miku-600 dark:group-hover:text-miku-400 transition line-clamp-2 min-h-[3.5rem]">
-                                        <a href="#">{{ $game->name }}</a>
-                                    </h3>
-
+                                        <a href="{{ route('game.show', $game->id) }}">{{ $game->name }}
+                                        </a>
                                     {{-- Ngày đăng --}}
                                     <div class="text-sm text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700 pt-3 flex justify-between items-center">
                                         <span>
@@ -56,7 +55,7 @@
                                             {{ $game->created_at->diffForHumans() }}
                                         </span>
                                         
-                                        {{-- Nền tảng (Hiển thị icon đầu tiên nếu có - tuỳ chọn) --}}
+                                        {{-- Nền tảng  --}}
                                         @if(!empty($game->platforms))
                                             <span class="text-xs bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-gray-600 dark:text-gray-300">
                                                 {{ $game->platforms[0] ?? 'Game' }}

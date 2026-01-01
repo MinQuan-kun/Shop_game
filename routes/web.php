@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\GameController;
 use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/game/{id}', [HomeController::class, 'show'])->name('game.show');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'admin'])->name('dashboard');
