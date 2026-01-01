@@ -6,10 +6,9 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\GameController;
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\HomeController;
 
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'admin'])->name('dashboard');
