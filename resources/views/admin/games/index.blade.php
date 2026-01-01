@@ -113,9 +113,7 @@
                                                 @endphp
                                                 @if ($category)
                                                     <span
-                                                        class="inline-flex items-center justify-center rounded-full border px-3 py-1 text-xs font-medium transition-colors
-                        bg-blue-50 text-blue-600 border-blue-100
-                        dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20 mr-1 mb-1">
+                                                        class="inline-flex items-center justify-center gap-1 rounded-full bg-gray-800 px-2.5 py-0.5 text-sm font-medium text-white dark:bg-white/15 dark:text-white">
                                                         {{ $category->name }}
                                                     </span>
                                                 @endif
@@ -129,7 +127,7 @@
                                 <td class="px-6 py-4 text-center">
                                     @if ($game->price == 0)
                                         <span
-                                            class="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-200 dark:text-green-900">
+                                            class="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-black dark:text-white">
                                             Miễn phí
                                         </span>
                                     @else
