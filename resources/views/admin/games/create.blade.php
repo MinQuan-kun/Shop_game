@@ -222,14 +222,16 @@
                                 this.showOtherInput = this.selectedLanguages.includes('Khác');
                             }
                         }">
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Ngôn
-                                ngữ</label>
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Ngôn ngữ
+                            </label>
 
                             <div
                                 class="flex flex-wrap items-center gap-x-6 gap-y-4 rounded-lg border border-gray-300 dark:border-gray-700 p-4 bg-transparent">
                                 @foreach (['Tiếng Anh', 'Tiếng Việt', 'Khác'] as $lang)
+                                    {{-- ĐÃ SỬA: Thêm text-black dark:text-white vào label --}}
                                     <label
-                                        class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                                        class="flex cursor-pointer items-center text-sm font-medium select-none text-black dark:text-white">
                                         <div class="relative">
                                             <input type="checkbox" name="languages[]" value="{{ $lang }}"
                                                 class="sr-only" x-model="selectedLanguages" @change="toggleOther()">
@@ -256,7 +258,7 @@
 
                             <div x-show="showOtherInput" x-transition class="mt-3">
                                 <input type="text" name="other_language" placeholder="Nhập ngôn ngữ khác..."
-                                    class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm dark:border-gray-700 dark:bg-gray-900" />
+                                    class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm text-black dark:text-white focus:border-brand-500 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900" />
                             </div>
                         </div>
 
