@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    
+
     protected $connection = 'mongodb';
     protected $collection = 'users';
 
@@ -27,11 +27,13 @@ class User extends Authenticatable
         'role',
         'status',
         'avatar',
+        'balance',
     ];
     protected $attributes = [
-        'role' => 'admin',       
-        'status' => 'active',   
+        'role' => 'admin',
+        'status' => 'active',
         'avatar' => null,
+        'balance' => 0,
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -54,5 +56,52 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if user has sufficient balance
+     */
+    public function hasBalance($amount): bool
+    {
+        return (float) $this->balance >= (float) $amount;
+    }
+
+    public function addBalance($amount): void
+    {
+        // Cast to float to ensure numeric operation
+        $currentBalance = (float) ($this->balance ?? 0);
+        $newBalance = $currentBalance + (float) $amount;
+
+        // Update directly instead of using increment to avoid MongoDB string issues
+        $this->update(['balance' => $newBalance]);
+        $this->refresh();
+    }
+
+    public function deductBalance($amount): bool
+    {
+        if (!$this->hasBalance($amount)) {
+            return false;
+        }
+
+        // Cast to float to ensure numeric operation
+        $currentBalance = (float) ($this->balance ?? 0);
+        $newBalance = $currentBalance - (float) $amount;
+
+        // Update directly instead of using decrement
+        $this->update(['balance' => $newBalance]);
+        $this->refresh();
+
+        return true;
+    }
+
+    /**
+     * Check if user owns a specific game
+     */
+    public function ownsGame($gameId): bool
+    {
+        return \App\Models\OrderItem::whereHas('order', function ($query) {
+            $query->where('user_id', $this->_id)
+                ->where('status', 'completed');
+        })->where('game_id', $gameId)->exists();
     }
 }
