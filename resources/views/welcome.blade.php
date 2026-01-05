@@ -95,12 +95,19 @@
                             Thể Loại
                         </h3>
                         <ul class="space-y-2">
-                            {{-- Lưu ý: Nếu muốn danh sách này động, bạn cần truyền $categories từ HomeController --}}
-                            @foreach (['Hành động', 'Nhập vai', 'Chiến thuật', 'Thể thao', 'Mô phỏng', 'Kinh dị'] as $cate)
+                            {{-- All games link --}}
+                            <li>
+                                <a href="{{ route('home') }}"
+                                    class="block text-gray-600 dark:text-gray-300 hover:text-miku-600 dark:hover:text-miku-400 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition font-medium {{ !request('category') ? 'bg-miku-50 dark:bg-miku-900/20 text-miku-600 dark:text-miku-400' : '' }}">
+                                    <i class="fa-solid fa-list text-miku-500 mr-2"></i> Tất cả
+                                </a>
+                            </li>
+                            
+                            @foreach ($categories as $category)
                                 <li>
-                                    <a href="#"
-                                        class="block text-gray-600 dark:text-gray-300 hover:text-miku-600 dark:hover:text-miku-400 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition font-medium">
-                                        <i class="fa-solid fa-caret-right text-miku-500 mr-2"></i> {{ $cate }}
+                                    <a href="{{ route('home', ['category' => $category->slug]) }}"
+                                        class="block text-gray-600 dark:text-gray-300 hover:text-miku-600 dark:hover:text-miku-400 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition font-medium {{ request('category') === $category->slug ? 'bg-miku-50 dark:bg-miku-900/20 text-miku-600 dark:text-miku-400' : '' }}">
+                                        <i class="fa-solid fa-caret-right text-miku-500 mr-2"></i> {{ $category->name }}
                                     </a>
                                 </li>
                             @endforeach
