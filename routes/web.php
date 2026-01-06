@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/game/{id}', [HomeController::class, 'show'])->name('game.show');
+Route::get('/api/games/search', [HomeController::class, 'searchSuggestions'])->name('games.search');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
