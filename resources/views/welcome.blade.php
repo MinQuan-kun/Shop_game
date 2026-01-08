@@ -156,7 +156,7 @@
                                     <img src="{{ Str::startsWith($game->image, 'http') ? $game->image : asset('storage/' . $game->image) }}"
                                          alt="{{ $game->name }}"
                                          class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                                    
+                                        
                                     {{-- Nhãn giá / Miễn phí --}}
                                     <div class="absolute top-2 right-2">
                                         @if($game->price == 0)
