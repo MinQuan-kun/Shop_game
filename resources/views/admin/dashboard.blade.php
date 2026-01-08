@@ -1,3 +1,4 @@
+
 <x-admin-layout>
     <div class="mb-6">
         <h2 class="text-title-md2 font-bold text-black dark:text-white">
@@ -73,8 +74,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h4 class="text-title-md font-bold text-black dark:text-white">
-                        {{ number_format(\App\Models\Order::sum('total_amount'), 0, ',', '.') }}đ
-                    </h4>
+                        {{ number_format((float) (string) \App\Models\Order::sum('total_amount'), 0, ',', '.') }}đ </h4>
                     <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Doanh thu</span>
                 </div>
                 <div class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
@@ -124,9 +124,9 @@
                                     </p>
                                 </td>
                                 <td class="px-4 py-4">
-                                    @if($order->status === 'completed')
+                                    @if ($order->status === 'completed')
                                         <span
-                                            class="inline-flex rounded-full bg-success bg-opacity-10 px-3 py-1 text-sm font-medium text-success">
+                                            class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-success-800 dark:bg-success-900 dark:text-success-200">
                                             Hoàn thành
                                         </span>
                                     @else

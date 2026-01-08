@@ -36,7 +36,7 @@
                                 <div class="text-right">
                                     @if($order->status == 'completed')
                                         <span
-                                            class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                            class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-success-800 dark:bg-success-900 dark:text-success-200">
                                             <i class="fa-solid fa-check-circle"></i> Hoàn thành
                                         </span>
                                     @elseif($order->status == 'pending')

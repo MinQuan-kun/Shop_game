@@ -95,6 +95,13 @@ class GameController extends Controller
         $data['slug'] = Str::slug($request->name);
         $data['is_active'] = $request->has('is_active');
 
+        if (in_array('Khác', $request->languages) && $request->other_language) {
+        $langs = $request->languages;
+        $langs = array_filter($langs, fn($l) => $l !== 'Khác');
+        $langs[] = $request->other_language;
+        $data['languages'] = array_values($langs);
+    }
+
         // XỬ LÝ UPLOAD ẢNH KHI SỬA
         if ($request->hasFile('image')) {
             Configuration::instance(env('CLOUDINARY_URL'));

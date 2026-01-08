@@ -98,7 +98,7 @@
                                     <span class="text-gray-600 dark:text-gray-400">Trạng thái:</span>
                                     @if($order->status == 'completed')
                                         <span
-                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200">
                                             Hoàn thành
                                         </span>
                                     @endif

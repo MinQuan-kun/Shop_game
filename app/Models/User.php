@@ -30,7 +30,7 @@ class User extends Authenticatable
         'balance',
     ];
     protected $attributes = [
-        'role' => 'admin',
+        'role' => 'user',
         'status' => 'active',
         'avatar' => null,
         'balance' => 0,
