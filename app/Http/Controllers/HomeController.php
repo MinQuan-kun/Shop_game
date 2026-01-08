@@ -6,78 +6,44 @@ use App\Models\Game;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Services\RecommendationService;
 
 class HomeController extends Controller
 {
+    protected $recommendationService;
+
+    // Inject Service vào Constructor
+    public function __construct(RecommendationService $recommendationService)
+    {
+        $this->recommendationService = $recommendationService;
+    }
+
     public function index(Request $request)
     {
+        // 1. Logic lọc game theo giá
         $query = Game::where('is_active', true);
-
-        // Filter by category if provided
         if ($request->has('category')) {
-            $category = Category::where('slug', $request->category)->first();
-            if ($category) {
-                $query->whereIn('category_ids', [$category->_id]);
-            }
         }
-
-        // Filter by price range
-        if ($request->has('min_price') && $request->min_price !== '') {
-            $query->where('price', '>=', (int)$request->min_price);
-        }
-        if ($request->has('max_price') && $request->max_price !== '') {
-            $query->where('price', '<=', (int)$request->max_price);
-        }
-
-        // Filter by platform
-        if ($request->has('platform') && !empty($request->platform)) {
-            $platforms = is_array($request->platform) ? $request->platform : [$request->platform];
-            $query->where(function ($q) use ($platforms) {
-                foreach ($platforms as $platform) {
-                    $q->orWhere('platforms', 'regex', "/{$platform}/i");
-                }
-            });
-        }
-
-        // Filter by publisher
-        if ($request->has('publisher') && !empty($request->publisher)) {
-            $query->where('publisher', 'regex', "/" . $request->publisher . "/i");
-        }
-
-        // Search functionality
-        if ($request->has('search') && !empty($request->search)) {
-            $search = $request->search;
-            // MongoDB regex search with proper delimiter (case-insensitive)
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'regex', "/{$search}/i")
-                    ->orWhere('description', 'regex', "/{$search}/i");
-            });
+        if ($request->has('min_price')) {
         }
 
         $games = $query->latest()->paginate(12);
         $categories = Category::all();
-        
-        // Get unique publishers for filter dropdown
-        $publishers = Game::where('is_active', true)
-            ->distinct('publisher')
-            ->pluck('publisher')
-            ->sort()
-            ->values();
+        $publishers = Game::where('is_active', true)->distinct('publisher')->pluck('publisher')->sort()->values();
 
-        return view('welcome', compact('games', 'categories', 'publishers'));
+        // 2. Lấy danh sách "Có thể bạn thích" cho Trang Chủ
+        $recommendedGames = $this->recommendationService->getForHome(Auth::user(), 4); // Lấy 4 game
+
+        return view('welcome', compact('games', 'categories', 'publishers', 'recommendedGames'));
     }
 
     public function show($id)
     {
-        // Find game by ID
         $game = Game::where('is_active', true)->findOrFail($id);
 
-        // Get related games
-        $relatedGames = Game::where('is_active', true)
-            ->where('_id', '!=', $id)
-            ->latest()
-            ->take(4)
-            ->get();
+        // Logic đề xuất thông minh thay vì chỉ lấy mới nhất
+        $relatedGames = $this->recommendationService->getRelatedGames($game, 4);
 
         return view('games.show', compact('game', 'relatedGames'));
     }
@@ -85,7 +51,7 @@ class HomeController extends Controller
     public function searchSuggestions(Request $request)
     {
         $query = $request->input('q');
-        
+
         if (empty($query) || strlen($query) < 2) {
             return response()->json([]);
         }
