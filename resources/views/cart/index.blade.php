@@ -4,7 +4,7 @@
 
             <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-8">
                 <i class="fa-solid fa-shopping-cart text-miku-500 mr-2"></i>
-                Giỏ hàng của bạn
+                Giỏ game của bạn
             </h1>
 
             @if($cartItems->isEmpty())

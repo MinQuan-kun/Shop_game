@@ -76,4 +76,51 @@ class HomeController extends Controller
 
         return response()->json($suggestions);
     }
+    public function shop(Request $request)
+    {
+        // 1. Khởi tạo query
+        $query = Game::where('is_active', true);
+
+        // 2. Xử lý Tìm kiếm (Search)
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // 3. Xử lý Lọc theo Thể loại (Category)
+        if ($request->has('category') && $request->category != '') {
+            // Nếu lưu dạng mảng ID trong MongoDB
+            $query->where('category_ids', $request->category);
+        }
+
+        // 4. Sắp xếp (Optional)
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'newest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                default:
+                    $query->orderBy('created_at', 'desc');
+            }
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // 5. Lấy dữ liệu & Phân trang (12 game/trang)
+        $games = $query->paginate(12)->withQueryString();
+
+        // 6. Lấy danh sách danh mục để hiển thị ở Sidebar
+        $categories = Category::all();
+
+        return view('shop.index', compact('games', 'categories'));
+    }
 }

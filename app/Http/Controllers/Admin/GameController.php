@@ -14,7 +14,7 @@ class GameController extends Controller
 {
     public function index()
     {
-        $games = Game::with('category')->latest()->paginate(10);
+        $games = Game::with('categories')->latest()->paginate(10);
         return view('admin.games.index', compact('games'));
     }
 
@@ -96,11 +96,11 @@ class GameController extends Controller
         $data['is_active'] = $request->has('is_active');
 
         if (in_array('Khác', $request->languages) && $request->other_language) {
-        $langs = $request->languages;
-        $langs = array_filter($langs, fn($l) => $l !== 'Khác');
-        $langs[] = $request->other_language;
-        $data['languages'] = array_values($langs);
-    }
+            $langs = $request->languages;
+            $langs = array_filter($langs, fn($l) => $l !== 'Khác');
+            $langs[] = $request->other_language;
+            $data['languages'] = array_values($langs);
+        }
 
         // XỬ LÝ UPLOAD ẢNH KHI SỬA
         if ($request->hasFile('image')) {

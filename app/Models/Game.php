@@ -33,9 +33,14 @@ class Game extends Model
         'is_active' => 'boolean',
     ];
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, null, 'category_ids', '_id');
+    }
+
+    public function getPrimaryCategoryAttribute()
+    {
+        return $this->categories->first();
     }
 
     public function getPriceFormatAttribute()
@@ -45,23 +50,14 @@ class Game extends Model
 
     public function getDirectDownloadLinkAttribute()
     {
-        // Lấy link gốc từ database
+        // (Giữ nguyên code xử lý link drive của bạn)
         $url = $this->download_link;
-
-        // Kiểm tra xem có phải link Google Drive không
         if (strpos($url, 'drive.google.com') !== false) {
-            // Tách lấy File ID
-            // Hỗ trợ cả dạng /file/d/ID/view và ?id=ID
             preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $url, $matches);
-
             if (isset($matches[1])) {
-                $fileId = $matches[1];
-                // Trả về link tải trực tiếp
-                return "https://drive.google.com/uc?export=download&id=" . $fileId;
+                return "https://drive.google.com/uc?export=download&id=" . $matches[1];
             }
         }
-
-        // Nếu không phải link Drive thì trả về link gốc
         return $url;
     }
 }
