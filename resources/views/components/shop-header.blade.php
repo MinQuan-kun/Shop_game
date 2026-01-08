@@ -58,14 +58,31 @@
 
                 @auth
                     {{-- Cart Icon with Badge --}}
-                    <a href="{{ route('cart.index') }}" class="relative text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 transition">
+                    <a href="{{ route('cart.index') }}"
+                        class="relative text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 transition">
                         <i class="fa-solid fa-shopping-cart fa-lg"></i>
                         @php
                             $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
                         @endphp
                         @if($cartCount > 0)
-                            <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                            <span id="cart-count"
+                                class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                                 {{ $cartCount }}
+                            </span>
+                        @endif
+                    </a>
+
+                    {{-- Wishlist Icon with Badge --}}
+                    <a href="{{ route('wishlist.index') }}"
+                        class="relative text-gray-700 dark:text-gray-300 hover:text-pink-500 dark:hover:text-pink-400 transition">
+                        <i class="fa-solid fa-heart fa-lg"></i>
+                        @php
+                            $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                        @endphp
+                        @if($wishlistCount > 0)
+                            <span id="wishlist-count"
+                                class="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                {{ $wishlistCount }}
                             </span>
                         @endif
                     </a>
@@ -112,14 +129,16 @@
                         </button>
 
                         <div x-show="dropdownOpen" @click.outside="dropdownOpen = false"
-                           class="absolute right-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 py-2 z-50 overflow-hidden transform transition-all duration-200"
+                            class="absolute right-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 py-2 z-50 overflow-hidden transform transition-all duration-200"
                             style="display: none;">
                             {{-- Wallet Balance (First Item) --}}
-                            <div class="px-4 py-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-b border-green-500/20">
+                            <div
+                                class="px-4 py-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-b border-green-500/20">
                                 <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Số dư ví</p>
                                 <a href="{{ route('wallet.index') }}" class="flex items-center gap-2 group">
                                     <i class="fa-solid fa-wallet text-green-600 dark:text-green-400"></i>
-                                    <span class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition">
+                                    <span
+                                        class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition">
                                         {{ number_format(Auth::user()->balance ?? 0, 0, ',', '.') }} đ
                                     </span>
                                 </a>
@@ -152,6 +171,17 @@
                                             d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                     </svg>
                                     Đơn hàng của tôi
+                                </a>
+
+                                <a href="{{ route('wishlist.index') }}"
+                                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-miku-50 dark:hover:bg-gray-700 hover:text-miku-600 dark:hover:text-white transition-colors">
+                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-pink-500" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                        </path>
+                                    </svg>
+                                    Danh sách yêu thích
                                 </a>
 
                                 <a href="#"
