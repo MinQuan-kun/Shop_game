@@ -17,10 +17,22 @@
             <h3 class="text-xl font-bold text-black dark:text-white">
                 Danh sách tài khoản
             </h3>
-            <span
-                class="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-md dark:bg-gray-700 text-black dark:text-white">
-                Tổng: {{ $users->total() }} users
-            </span>
+            <div class="flex items-center gap-4">
+                <a href="{{ route('admin.users.create') }}"
+                    class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="3">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Thêm quản trị
+                </a>
+
+                <span
+                    class="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-md dark:bg-gray-700 text-black dark:text-white">
+                    Tổng: {{ $users->total() }} users
+                </span>
+            </div>
         </div>
 
         <div class="p-6">
