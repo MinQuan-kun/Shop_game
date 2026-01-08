@@ -1,209 +1,233 @@
-
 <x-admin-layout>
-    <div class="mb-6">
-        <h2 class="text-title-md2 font-bold text-black dark:text-white">
-            Dashboard
-        </h2>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Tổng quan hệ thống</p>
+    {{-- 1. Header & Actions --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+        <div>
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Dashboard</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Tổng quan hoạt động kinh doanh</p>
+        </div>
+        <a href="{{ route('admin.reports.export') }}"
+            class="inline-flex items-center justify-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-file-csv mr-2"></i> Xuất Báo Cáo
+        </a>
     </div>
 
-    {{-- Statistics Cards --}}
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 mb-6">
-        {{-- Total Users --}}
-        <div
-            class="rounded-2xl border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div class="flex items-center justify-between">
+    {{-- 2. Thẻ Thống Kê Tổng Quan (4 Cards) --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {{-- Card 1: Doanh Thu --}}
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 border-l-4 border-blue-500">
+            <div class="flex justify-between items-start">
                 <div>
-                    <h4 class="text-title-md font-bold text-black dark:text-white">
-                        {{ \App\Models\User::count() }}
-                    </h4>
-                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Người dùng</span>
+                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Doanh Thu</p>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-1">{{ number_format($totalRevenue, 0, ',', '.') }} đ</h3>
                 </div>
-                <div class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg>
-                </div>
+                <div class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-blue-600"><i class="fa-solid fa-sack-dollar text-xl"></i></div>
             </div>
         </div>
-
-        {{-- Total Games --}}
-        <div
-            class="rounded-2xl border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div class="flex items-center justify-between">
+        {{-- Card 2: Đơn Hàng --}}
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 border-l-4 border-yellow-500">
+            <div class="flex justify-between items-start">
                 <div>
-                    <h4 class="text-title-md font-bold text-black dark:text-white">
-                        {{ \App\Models\Game::count() }}
-                    </h4>
-                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Tổng games</span>
+                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Đơn Hàng</p>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-1">{{ number_format($totalOrders) }}</h3>
                 </div>
-                <div class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z">
-                        </path>
-                    </svg>
-                </div>
+                <div class="p-2 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg text-yellow-600"><i class="fa-solid fa-cart-shopping text-xl"></i></div>
             </div>
         </div>
-
-        {{-- Total Orders --}}
-        <div
-            class="rounded-2xl border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div class="flex items-center justify-between">
+        {{-- Card 3: Khách Hàng --}}
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 border-l-4 border-green-500">
+            <div class="flex justify-between items-start">
                 <div>
-                    <h4 class="text-title-md font-bold text-black dark:text-white">
-                        {{ \App\Models\Order::count() }}
-                    </h4>
-                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Đơn hàng</span>
+                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Khách Hàng</p>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-1">{{ number_format($totalUsers) }}</h3>
                 </div>
-                <div class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                    </svg>
-                </div>
+                <div class="p-2 bg-green-50 dark:bg-green-900/30 rounded-lg text-green-600"><i class="fa-solid fa-users text-xl"></i></div>
             </div>
         </div>
-
-        {{-- Total Revenue --}}
-        <div
-            class="rounded-2xl border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div class="flex items-center justify-between">
+        {{-- Card 4: Games --}}
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 border-l-4 border-purple-500">
+            <div class="flex justify-between items-start">
                 <div>
-                    <h4 class="text-title-md font-bold text-black dark:text-white">
-                        {{ number_format((float) (string) \App\Models\Order::sum('total_amount'), 0, ',', '.') }}đ </h4>
-                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Doanh thu</span>
+                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Games</p>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-1">{{ number_format($totalGames) }}</h3>
                 </div>
-                <div class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                        </path>
-                    </svg>
-                </div>
+                <div class="p-2 bg-purple-50 dark:bg-purple-900/30 rounded-lg text-purple-600"><i class="fa-solid fa-gamepad text-xl"></i></div>
             </div>
         </div>
     </div>
 
-    {{-- Recent Orders --}}
-    <div class="rounded-2xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div class="px-6 py-6 border-b border-stroke dark:border-strokedark">
-            <h3 class="text-xl font-bold text-black dark:text-white">
-                Đơn hàng gần đây
+    {{-- 3. BIỂU ĐỒ DOANH THU (Line Chart) --}}
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 mb-8">
+        {{-- Header của Chart --}}
+        <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+            <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+                <span id="chartTitle">Biểu đồ doanh thu Tuần này</span>
             </h3>
+
+            {{-- Bộ nút chuyển đổi: Tuần / Tháng / Quý --}}
+            <div class="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
+                <button onclick="updateChart('week')" id="btn-week"
+                    class="px-4 py-1.5 text-sm font-medium rounded-md transition-all bg-white dark:bg-gray-600 text-indigo-600 dark:text-white shadow">
+                    Tuần
+                </button>
+                <button onclick="updateChart('month')" id="btn-month"
+                    class="px-4 py-1.5 text-sm font-medium rounded-md transition-all text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-600 shadow-sm">
+                    Tháng
+                </button>
+                <button onclick="updateChart('quarter')" id="btn-quarter"
+                    class="px-4 py-1.5 text-sm font-medium rounded-md transition-all text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-600 shadow-sm">
+                    Quý
+                </button>
+            </div>
         </div>
 
-        <div class="p-6">
-            <div class="max-w-full overflow-x-auto">
-                <table class="w-full table-auto">
-                    <thead>
-                        <tr class="bg-gray-2 text-left dark:bg-meta-4">
-                            <th class="px-4 py-4 font-medium text-black dark:text-white">Mã đơn</th>
-                            <th class="px-4 py-4 font-medium text-black dark:text-white">Khách hàng</th>
-                            <th class="px-4 py-4 font-medium text-black dark:text-white">Tổng tiền</th>
-                            <th class="px-4 py-4 font-medium text-black dark:text-white">Trạng thái</th>
-                            <th class="px-4 py-4 font-medium text-black dark:text-white">Ngày tạo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse(\App\Models\Order::with('user')->latest()->take(10)->get() as $order)
-                            <tr class="border-b border-stroke dark:border-strokedark">
-                                <td class="px-4 py-4">
-                                    <p class="text-black dark:text-white font-medium">{{ $order->order_number }}</p>
-                                </td>
-                                <td class="px-4 py-4">
-                                    <p class="text-black dark:text-white">{{ $order->user->name ?? 'N/A' }}</p>
-                                    <p class="text-sm text-gray-500">{{ $order->user->email ?? '' }}</p>
-                                </td>
-                                <td class="px-4 py-4">
-                                    <p class="text-black dark:text-white font-medium">
-                                        {{ number_format($order->total_amount, 0, ',', '.') }}đ
-                                    </p>
-                                </td>
-                                <td class="px-4 py-4">
-                                    @if ($order->status === 'completed')
-                                        <span
-                                            class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-success-800 dark:bg-success-900 dark:text-success-200">
-                                            Hoàn thành
-                                        </span>
-                                    @else
-                                        <span
-                                            class="inline-flex rounded-full bg-warning bg-opacity-10 px-3 py-1 text-sm font-medium text-warning">
-                                            {{ ucfirst($order->status) }}
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-4">
-                                    <p class="text-black dark:text-white">
-                                        {{ $order->created_at->format('d/m/Y H:i') }}
-                                    </p>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                                    Chưa có đơn hàng nào
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+        <div class="relative w-full h-80">
+            <canvas id="revenueChart"></canvas>
         </div>
     </div>
 
-    {{-- Quick Actions --}}
-    <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
-        <a href="{{ route('admin.games.create') }}"
-            class="rounded-2xl border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark hover:shadow-lg transition-shadow">
-            <div class="flex items-center gap-4">
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary bg-opacity-10">
-                    <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-black dark:text-white">Thêm Game Mới</h4>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Thêm game vào cửa hàng</p>
-                </div>
-            </div>
-        </a>
-
-        <a href="{{ route('admin.users.index') }}"
-            class="rounded-2xl border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark hover:shadow-lg transition-shadow">
-            <div class="flex items-center gap-4">
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary bg-opacity-10">
-                    <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-black dark:text-white">Quản lý Users</h4>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Xem danh sách người dùng</p>
-                </div>
-            </div>
-        </a>
-
-        <a href="{{ route('admin.games.index') }}"
-            class="rounded-2xl border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark hover:shadow-lg transition-shadow">
-            <div class="flex items-center gap-4">
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary bg-opacity-10">
-                    <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z">
-                        </path>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-black dark:text-white">Quản lý Games</h4>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Xem tất cả games</p>
-                </div>
-            </div>
-        </a>
+    {{-- 4. Bảng Giao Dịch --}}
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+            <h3 class="font-bold text-lg text-gray-800 dark:text-white">Giao dịch mới nhất</h3>
+            <a href="{{ route('orders.index') }}" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">Xem tất cả &rarr;</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 dark:text-gray-400 font-semibold tracking-wider">
+                        <th class="px-6 py-4">Mã Đơn</th>
+                        <th class="px-6 py-4">Khách Hàng</th>
+                        <th class="px-6 py-4 text-right">Tổng Tiền</th>
+                        <th class="px-6 py-4 text-center">Trạng Thái</th>
+                        <th class="px-6 py-4 text-right">Ngày Tạo</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                    @forelse($recentOrders as $order)
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+                        <td class="px-6 py-4 text-sm font-medium text-indigo-600 dark:text-indigo-400">#{{ $order->order_number }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-white">{{ $order->user->name ?? 'Guest' }}</td>
+                        <td class="px-6 py-4 text-right text-sm font-bold text-gray-800 dark:text-white">
+                            {{ number_format((float)(is_object($order->total_amount) ? $order->total_amount->__toString() : $order->total_amount), 0, ',', '.') }} đ
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                {{ $order->status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                {{ ucfirst($order->status) }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right text-sm text-gray-500">{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-gray-500">Chưa có dữ liệu</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    {{-- Script Chart.js --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const dataSets = {
+            week: {
+                labels: @json($chartWeek['labels']),
+                data: @json($chartWeek['data']),
+                title: 'Biểu đồ doanh thu tuần này'
+            },
+            month: {
+                labels: @json($chartMonth['labels']),
+                data: @json($chartMonth['data']),
+                title: 'Biểu đồ doanh thu tháng này'
+            },
+            quarter: {
+                labels: @json($chartQuarter['labels']),
+                data: @json($chartQuarter['data']),
+                title: 'Biểu đồ doanh thu quý này'
+            }
+        };
+
+        let chartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('revenueChart');
+            if (!ctx) return;
+
+            // Mặc định hiển thị Tuần này
+            const initialData = dataSets.week;
+
+            chartInstance = new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: initialData.labels,
+                    datasets: [{
+                        label: 'Doanh thu',
+                        data: initialData.data,
+                        backgroundColor: 'rgba(99, 102, 241, 0.15)',
+                        borderColor: '#6366f1', // Indigo color
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#6366f1',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4 // Đường cong mềm mại
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            border: {
+                                display: false
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    if (value >= 1000000) return (value / 1000000) + 'tr';
+                                    if (value >= 1000) return (value / 1000) + 'k';
+                                    return value;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        function updateChart(type) {
+            if (!chartInstance) return;
+
+            const selectedData = dataSets[type];
+            chartInstance.data.labels = selectedData.labels;
+            chartInstance.data.datasets[0].data = selectedData.data;
+            chartInstance.update();
+
+            document.getElementById('chartTitle').innerText = selectedData.title;
+
+            // Xử lý nút active
+            document.querySelectorAll('button[id^="btn-"]').forEach(btn => {
+                btn.className = "px-4 py-1.5 text-sm font-medium rounded-md transition-all text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-600 shadow-sm";
+            });
+            const activeBtn = document.getElementById('btn-' + type);
+            activeBtn.className = "px-4 py-1.5 text-sm font-medium rounded-md transition-all bg-white dark:bg-gray-600 text-indigo-600 dark:text-white shadow font-bold";
+        }
+    </script>
 </x-admin-layout>
