@@ -281,41 +281,31 @@
                         {{-- Danh mục & Ngôn ngữ --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
                             <h3 class="text-lg font-black text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-tag text-purple-500"></i>
-                                Danh mục & Ngôn ngữ
+                                <i class="fa-solid fa-star text-purple-500"></i>
+                                Đánh giá & Phản hồi
                             </h3>
                             <div class="space-y-3">
-                                @if(!empty($game->category_ids))
-                                    <div>
-                                        <p class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-2">Thể loại:</p>
-                                        <div class="flex flex-wrap gap-2">
-                                            @foreach($game->category_ids as $catId)
-                                                @php
-                                                    $categories = \App\Models\Category::all();
-                                                    $cat = $categories->find($catId);
-                                                @endphp
-                                                @if($cat)
-                                                    <a href="{{ route('shop.index', ['category' => $catId]) }}"
-                                                        class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 px-2 py-1 rounded hover:bg-blue-200 dark:hover:bg-blue-900/60 transition">
-                                                        {{ $cat->name }}
-                                                    </a>
-                                                @endif
-                                            @endforeach
+                                <div>
+                                    <p class="text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">Độ phổ biến:</p>
+                                    <div class="flex items-center gap-2">
+                                        <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r from-yellow-400 to-yellow-500" style="width: 75%"></div>
                                         </div>
+                                        <span class="text-sm font-bold text-gray-700 dark:text-gray-300">75%</span>
                                     </div>
-                                @endif
-                                @if(!empty($game->languages))
-                                    <div class="border-t border-gray-100 dark:border-gray-700 pt-3">
-                                        <p class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-2">Ngôn ngữ:</p>
-                                        <div class="flex flex-wrap gap-2">
-                                            @foreach(is_array($game->languages) ? $game->languages : [$game->languages] as $lang)
-                                                <span class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-2 py-1 rounded">
-                                                    {{ $lang }}
-                                                </span>
-                                            @endforeach
+                                </div>
+                                <div class="border-t border-gray-100 dark:border-gray-700 pt-3">
+                                    <p class="text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">Người chơi hài lòng:</p>
+                                    <div class="flex items-center gap-2">
+                                        <div class="flex text-yellow-400">
+                                            @for($i = 1; $i <= 4; $i++)
+                                                <i class="fa-solid fa-star text-sm"></i>
+                                            @endfor
+                                            <i class="fa-regular fa-star text-sm"></i>
                                         </div>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">(8,543 đánh giá)</span>
                                     </div>
-                                @endif
+                                </div>
                             </div>
                         </div>
                     </div>

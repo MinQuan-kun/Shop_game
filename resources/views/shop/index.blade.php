@@ -128,33 +128,6 @@
 
                                     {{-- KHU VỰC CÁC NÚT (WISHLIST + CART) --}}
                                     <div class="flex items-center gap-2">
-                                        {{-- Thể loại --}}
-                                        <div
-                                            class="mb-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2 flex-wrap">
-                                            @if (!empty($game->platforms))
-                                                <span
-                                                    class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">
-                                                    {{ $game->platforms[0] ?? 'PC' }}
-                                                </span>
-                                            @endif
-                                            @if (!empty($game->category_ids))
-                                                @foreach ($game->category_ids as $catId)
-                                                    @php
-                                                        $cat = $categories->find($catId);
-                                                    @endphp
-                                                    @if ($cat)
-                                                        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">
-                                                            {{ $cat->name }}
-                                                        </span>
-                                                    @endif
-                                                @endforeach
-                                            @else
-                                                <span class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">
-                                                    Game
-                                                </span>
-                                            @endif
-                                        </div>
-=======
                                         {{-- [MỚI] Nút Wishlist (Trái tim) --}}
                                         @auth
                                         {{-- TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP (Dùng AJAX) --}}
@@ -173,7 +146,6 @@
                                             <i class="fa-regular fa-heart text-sm group-hover/wishlist:text-red-500"></i>
                                         </a>
                                         @endauth
->>>>>>> 7aeee5e4b0316261d25a19c270a8446069201e4e
 
                                         {{-- Nút Thêm vào giỏ (Giữ nguyên) --}}
                                         @auth
@@ -324,17 +296,6 @@
                                 </form>
                                 @endforeach
                             </div>
-
-                            {{-- Danh sách Categories --}}
-                            @foreach ($categories as $cat)
-                            <a href="{{ route('shop.index', array_merge(request()->query(), ['category' => $cat->id, 'page' => 1])) }}"
-                                class="flex items-center justify-between p-3 rounded-xl transition group {{ request('category') == $cat->id ? 'bg-miku-50 dark:bg-miku-900/20 text-miku-600 dark:text-miku-400 font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300' }}">
-                                <span>{{ $cat->name }}</span>
-                                @if (request('category') == $cat->id)
-                                <i class="fa-solid fa-check text-xs"></i>
-                                @endif
-                            </a>
-                            @endforeach
                         </div>
 
                         {{-- FILTER: Nhà phát hành --}}
