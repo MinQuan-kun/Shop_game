@@ -17,6 +17,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {{-- Order Items --}}
+                {{-- Order Items --}}
                 <div class="lg:col-span-2 space-y-6">
                     <div
                         class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
@@ -26,27 +27,47 @@
                         </h2>
 
                         <div class="space-y-4">
-                            @foreach($order->items as $item)
+                            @foreach ($order->items as $item)
                                 <div
                                     class="flex gap-4 pb-4 border-b border-gray-200 dark:border-gray-700 last:border-0 last:pb-0">
-                                    <img src="{{ Str::startsWith($item->game->image, 'http') ? $item->game->image : asset('storage/' . $item->game->image) }}"
-                                        alt="{{ $item->game->name }}" class="w-24 h-24 rounded-lg object-cover">
+                                    @php
+                                        $imageSrc = asset('img/no-image.png'); // Ảnh mặc định nếu game bị xóa
+                                        if ($item->game) {
+                                            $imageSrc = Str::startsWith($item->game->image, 'http')
+                                                ? $item->game->image
+                                                : asset('storage/' . $item->game->image);
+                                        }
+                                    @endphp
+
+                                    <img src="{{ $imageSrc }}" alt="{{ $item->game?->name ?? 'Game Deleted' }}"
+                                        class="w-24 h-24 rounded-lg object-cover grayscale-0 {{ !$item->game ? 'grayscale opacity-50' : '' }}">
 
                                     <div class="flex-1">
-                                        <h3 class="font-bold text-gray-900 dark:text-white mb-1">{{ $item->game->name }}
+                                        {{-- SỬA LỖI 2: Dùng ?-> và ?? để hiển thị tên khi game null --}}
+                                        <h3 class="font-bold text-gray-900 dark:text-white mb-1">
+                                            {{ $item->game?->name ?? 'Sản phẩm không còn tồn tại' }}
                                         </h3>
+
                                         <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                            {{ $item->game->publisher }}</p>
+                                            {{ $item->game?->publisher ?? 'N/A' }}
+                                        </p>
+
                                         <p class="text-brand-600 dark:text-brand-400 font-bold">
                                             {{ number_format($item->price, 0, ',', '.') }} VNĐ
                                         </p>
 
-                                        @if($item->game->download_link)
+                                        {{-- SỬA LỖI 3: Kiểm tra game tồn tại trước khi hiện nút download --}}
+                                        @if ($item->game && $item->game->download_link)
                                             <a href="{{ $item->game->download_link }}" target="_blank"
                                                 class="inline-block mt-3 bg-miku-500 hover:bg-miku-600 text-white text-sm font-bold py-2 px-4 rounded-lg transition">
                                                 <i class="fa-solid fa-download mr-1"></i>
                                                 Tải game
                                             </a>
+                                        @elseif(!$item->game)
+                                            <span class="inline-block mt-3 text-red-500 text-sm italic">
+                                                <i class="fa-solid fa-circle-exclamation mr-1"></i>
+                                                Game đã bị gỡ khỏi hệ thống
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -96,7 +117,7 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">Trạng thái:</span>
-                                    @if($order->status == 'completed')
+                                    @if ($order->status == 'completed')
                                         <span
                                             class="px-2 py-1 text-xs font-semibold rounded-full bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200">
                                             Hoàn thành
