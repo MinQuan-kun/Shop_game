@@ -14,6 +14,15 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/game/{id}', [HomeController::class, 'show'])->name('game.show');
 Route::get('/api/games/search', [HomeController::class, 'searchSuggestions'])->name('games.search');
 
+// Temporary route to clear cache - Remove after deployment fix
+Route::get('/clear-all-cache-temp', function () {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    return 'Cache cleared! You can now login. Remember to remove this route after testing.';
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'admin'])->name('dashboard');
@@ -88,6 +97,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Discount Code Management
     Route::resource('discounts', DiscountController::class);
     Route::post('/discounts/{id}/toggle', [DiscountController::class, 'toggleActive'])->name('discounts.toggle');
+
+    // Order Management (Admin view all orders)
+    Route::get('/orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
+
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
 });
