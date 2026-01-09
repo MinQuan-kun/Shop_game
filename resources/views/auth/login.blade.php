@@ -72,9 +72,6 @@
                             <input type="checkbox" name="remember" class="w-4 h-4 border-gray-300 dark:border-gray-600 rounded text-miku-500 focus:ring-miku-500 dark:bg-gray-700">
                             <span class="ml-2">Ghi nhớ tôi</span>
                         </label>
-                        @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-miku-600 dark:text-miku-400 hover:text-miku-800 dark:hover:text-miku-300 font-semibold transition-colors">Quên mật khẩu?</a>
-                        @endif
                     </div>
 
                     <div class="px-4 pb-2 pt-4">

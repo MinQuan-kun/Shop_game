@@ -15,6 +15,7 @@ class CartController extends Controller
     public function index()
     {
         $cartItems = Cart::where('user_id', Auth::id())
+            ->whereHas('game')
             ->with('game')
             ->get();
 
