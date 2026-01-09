@@ -128,8 +128,6 @@
 
                                     {{-- KHU VỰC CÁC NÚT (WISHLIST + CART) --}}
                                     <div class="flex items-center gap-2">
-
-<<<<<<< HEAD
                                         {{-- Thể loại --}}
                                         <div
                                             class="mb-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2 flex-wrap">
@@ -277,7 +275,6 @@
                         </div>
                         @endif
 
-<<<<<<< HEAD
                         {{-- FILTER: Giá --}}
                         <div class="overflow-hidden last:rounded-b-xl">
                             <button type="button" class="filter-toggle w-full px-6 py-4 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold flex items-center justify-between transition"
@@ -327,7 +324,7 @@
                                 </form>
                                 @endforeach
                             </div>
-=======
+
                             {{-- Danh sách Categories --}}
                             @foreach ($categories as $cat)
                             <a href="{{ route('shop.index', array_merge(request()->query(), ['category' => $cat->id, 'page' => 1])) }}"
@@ -338,7 +335,6 @@
                                 @endif
                             </a>
                             @endforeach
->>>>>>> 7aeee5e4b0316261d25a19c270a8446069201e4e
                         </div>
 
                         {{-- FILTER: Nhà phát hành --}}
