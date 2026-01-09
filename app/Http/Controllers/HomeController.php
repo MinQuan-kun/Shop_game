@@ -141,8 +141,9 @@ class HomeController extends Controller
             ->pluck('category_ids')
             ->flatten()
             ->unique()
+            ->values()
             ->toArray();
-        $categories = Category::whereIn('_id', $categoriesWithGames)->get();
+        $categories = Category::whereIn('_id', $categoriesWithGames)->get()->unique('_id');
         
         // 9. Lấy danh sách publishers từ TẤT CẢ games
         $allPublishers = Game::where('is_active', true)
