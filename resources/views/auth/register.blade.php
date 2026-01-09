@@ -10,7 +10,7 @@
             <div class="w-full px-24 z-10 relative"> 
                 <h1 class="text-5xl font-bold text-left tracking-wide text-white">Mirai Store</h1>
                 <p class="text-3xl my-4 text-white">Tham gia ngay,<br>trải nghiệm bất tận.</p>
-                <p class="text-sm my-4 text-miku-300 font-semibold">Cộng đồng game bản quyền hàng đầu</p>
+                <p class="text-sm my-4 text-miku-300 font-semibold">Cộng đồng game hàng đầu</p>
             </div>
         </div>
 
