@@ -20,6 +20,6 @@ class Category extends Model
 
     public function games()
     {
-        return $this->hasMany(Game::class);
+        return $this->belongsToMany(Game::class, null, 'category_ids', '_id');
     }
 }
