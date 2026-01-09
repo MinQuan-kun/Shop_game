@@ -46,6 +46,13 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # 9. Bật mod_rewrite của Apache (để Laravel route hoạt động)
 RUN a2enmod rewrite
 
+# Cấu hình cho phép .htaccess hoạt động trong thư mục public
+RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/apache2.conf
+RUN echo "    Options Indexes FollowSymLinks" >> /etc/apache2/apache2.conf
+RUN echo "    AllowOverride All" >> /etc/apache2/apache2.conf
+RUN echo "    Require all granted" >> /etc/apache2/apache2.conf
+RUN echo "</Directory>" >> /etc/apache2/apache2.conf
+
 # 10. Mở port 80
 EXPOSE 80
 
