@@ -21,10 +21,15 @@ class ProfileController extends Controller
         $user = $request->user();
 
         // Get purchased games from orders
+        // FIX: Thêm ->filter() để loại bỏ các game null (do game đã bị xóa khỏi database)
         $purchasedGames = \App\Models\OrderItem::whereHas('order', function ($query) use ($user) {
             $query->where('user_id', $user->_id)
                 ->where('status', 'completed');
-        })->with('game')->get()->pluck('game')->unique('_id');
+        })->with('game')
+          ->get()
+          ->pluck('game')
+          ->filter() // <--- QUAN TRỌNG: Loại bỏ null tại đây
+          ->unique('_id');
 
         // Get transaction history with order relationship
         $transactions = \App\Models\Transaction::where('user_id', $user->_id)
