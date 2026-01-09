@@ -228,7 +228,7 @@
                             Game Mới
                         @endif
                     </h2>
-                    <a href="#" class="text-sm text-miku-600 dark:text-miku-400 hover:underline">
+                    <a href="/shop" class="text-sm text-miku-600 dark:text-miku-400 hover:underline">
                         Xem tất cả <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
