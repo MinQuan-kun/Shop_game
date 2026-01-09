@@ -43,9 +43,10 @@ class WalletController extends Controller
      */
     public function testDeposit(Request $request)
     {
-        // Only allow in development environment
-        if (!app()->environment('local')) {
-            abort(403, 'This route is only available in development');
+        // Allow in development OR for admin users (for testing on production)
+        $user = Auth::user();
+        if (!app()->environment('local') && !config('app.debug') && $user->role !== 'admin') {
+            abort(403, 'This route is only available in development or for admin users');
         }
 
         $request->validate([

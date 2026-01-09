@@ -6,7 +6,8 @@
         <nav>
             <ol class="flex items-center gap-2">
                 <li>
-                    <a class="font-medium text-gray-500 hover:text-black dark:text-white" href="{{ route('dashboard') }}">
+                    <a class="font-medium text-gray-500 hover:text-black dark:text-white"
+                        href="{{ route('dashboard') }}">
                         Dashboard /
                     </a>
                 </li>
@@ -28,8 +29,7 @@
                 </span>
                 <a href="{{ route('admin.games.create') }}"
                     class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="3">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
@@ -136,14 +136,14 @@
                                             {{ number_format($game->price, 0, ',', '.') }} VND
                                         </span>
                                     @endif
+                                </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-end space-x-3">
                                         {{-- Nút Sửa --}}
                                         <a href="{{ route('admin.games.edit', $game->id) }}"
                                             class="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-white/10 transition-all"
                                             title="Chỉnh sửa">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z">
                                                 </path>
@@ -160,10 +160,8 @@
                                                 onclick="confirmDeleteGame('{{ $game->id }}', '{{ $game->name }}')"
                                                 class="p-2 rounded-full text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-500/10 transition-all"
                                                 title="Xóa Game">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                                                     </path>
                                                 </svg>

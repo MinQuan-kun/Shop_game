@@ -78,10 +78,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
-
     Route::patch('/users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggleStatus');
     Route::patch('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
