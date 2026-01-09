@@ -84,29 +84,31 @@
                                     class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-0 focus:border-blue-500 outline-none transition text-sm">
                                     <option value="">Chọn...</option>
                                     @foreach (['PC', 'PS5', 'Xbox Series X/S', 'Nintendo Switch'] as $platform)
-                                        <option value="{{ $platform }}"
-                                            {{ in_array($platform, (array) request('platform', [])) ? 'selected' : '' }}>
-                                            {{ $platform }}</option>
+                                    <option value="{{ $platform }}"
+                                        {{ in_array($platform, (array) request('platform', [])) ? 'selected' : '' }}>
+                                        {{ $platform }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
 
                             {{-- Nhà phát hành --}}
                             @if ($publishers->count() > 0)
-                                <div>
-                                    <label
-                                        class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide block mb-2">🏢
-                                        NPH</label>
-                                    <select name="publisher"
-                                        class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-0 focus:border-purple-500 outline-none transition text-sm">
-                                        <option value="">Tất cả</option>
-                                        @foreach ($publishers as $pub)
-                                            <option value="{{ $pub }}"
-                                                {{ request('publisher') === $pub ? 'selected' : '' }}>
-                                                {{ substr($pub, 0, 15) }}{{ strlen($pub) > 15 ? '...' : '' }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                            <div>
+                                <label
+                                    class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide block mb-2">🏢
+                                    NPH</label>
+                                <select name="publisher"
+                                    class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-0 focus:border-purple-500 outline-none transition text-sm">
+                                    <option value="">Tất cả</option>
+                                    @foreach ($publishers as $pub)
+                                    <option value="{{ $pub }}"
+                                        {{ request('publisher') === $pub ? 'selected' : '' }}>
+                                        {{ substr($pub, 0, 15) }}{{ strlen($pub) > 15 ? '...' : '' }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             @endif
 
                         </div>
@@ -118,10 +120,10 @@
                                 <i class="fa-solid fa-check mr-2"></i>Áp dụng
                             </button>
                             @if (request()->hasAny(['search', 'category', 'min_price', 'max_price', 'platform', 'publisher']))
-                                <a href="{{ route('home') }}"
-                                    class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition shadow-md transform hover:scale-105 duration-300 flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-redo"></i>Reset
-                                </a>
+                            <a href="{{ route('home') }}"
+                                class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition shadow-md transform hover:scale-105 duration-300 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-redo"></i>Reset
+                            </a>
                             @endif
                         </div>
                     </div>
@@ -136,24 +138,24 @@
                         ⭐ Tất cả
                     </button>
                     @foreach ($categories as $category)
-                        <button type="submit" name="category" value="{{ $category->slug }}"
-                            class="px-4 py-2 rounded-lg font-semibold text-sm transition {{ request('category') === $category->slug ? 'bg-miku-500 text-white shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-miku-500' }}">
-                            {{ $category->name }}
-                        </button>
+                    <button type="submit" name="category" value="{{ $category->slug }}"
+                        class="px-4 py-2 rounded-lg font-semibold text-sm transition {{ request('category') === $category->slug ? 'bg-miku-500 text-white shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-miku-500' }}">
+                        {{ $category->name }}
+                    </button>
                     @endforeach
                 </div>
                 {{-- Preserve other filters --}}
                 @if (request('search'))
-                    <input type="hidden" name="search" value="{{ request('search') }}">
+                <input type="hidden" name="search" value="{{ request('search') }}">
                 @endif
                 @if (request('min_price'))
-                    <input type="hidden" name="min_price" value="{{ request('min_price') }}">
+                <input type="hidden" name="min_price" value="{{ request('min_price') }}">
                 @endif
                 @if (request('max_price'))
-                    <input type="hidden" name="max_price" value="{{ request('max_price') }}">
+                <input type="hidden" name="max_price" value="{{ request('max_price') }}">
                 @endif
                 @if (request('publisher'))
-                    <input type="hidden" name="publisher" value="{{ request('publisher') }}">
+                <input type="hidden" name="publisher" value="{{ request('publisher') }}">
                 @endif
             </form>
 
@@ -161,71 +163,71 @@
             <div>
                 {{-- Section Gợi ý AI --}}
                 @if (isset($recommendedGames) && $recommendedGames->count() > 0)
-                    <div class="mb-12">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div
-                                class="p-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg text-white shadow-lg">
-                                <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-wide">
-                                    @auth
-                                        Gợi ý dành riêng cho bạn
-                                    @else
-                                        Game Nổi Bật & Bán Chạy
-                                    @endauth
-                                </h2>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    @auth
-                                        Dựa trên sở thích và lịch sử mua hàng của bạn
-                                    @else
-                                        Những tựa game được cộng đồng yêu thích nhất
-                                    @endauth
-                                </p>
-                            </div>
+                <div class="mb-12">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div
+                            class="p-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg text-white shadow-lg">
+                            <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
                         </div>
-
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            @foreach ($recommendedGames as $recGame)
-                                <div
-                                    class="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
-                                    {{-- Ảnh --}}
-                                    <div class="relative h-40 overflow-hidden">
-                                        <img src="{{ Str::startsWith($recGame->image, 'http') ? $recGame->image : asset('storage/' . $recGame->image) }}"
-                                            alt="{{ $recGame->name }}"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                                        @if ($recGame->price == 0)
-                                            <span
-                                                class="absolute top-2 right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded">FREE</span>
-                                        @endif
-                                    </div>
-
-                                    {{-- Info --}}
-                                    <div class="p-4">
-                                        <h3 class="font-bold text-gray-900 dark:text-white truncate mb-1"
-                                            title="{{ $recGame->name }}">
-                                            <a href="{{ route('game.show', $recGame->id) }}">{{ $recGame->name }}</a>
-                                        </h3>
-                                        <div class="flex justify-between items-center mt-2">
-                                            <span class="text-sm font-bold text-miku-600 dark:text-miku-400">
-                                                {{ number_format($recGame->price, 0, ',', '.') }}đ
-                                            </span>
-                                            <span class="text-xs text-gray-500 flex items-center gap-1">
-                                                <i class="fa-solid fa-star text-yellow-400"></i> Gợi ý
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                        <div>
+                            <h2 class="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-wide">
+                                @auth
+                                Gợi ý dành riêng cho bạn
+                                @else
+                                Game Nổi Bật & Bán Chạy
+                                @endauth
+                            </h2>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                @auth
+                                Dựa trên sở thích và lịch sử mua hàng của bạn
+                                @else
+                                Những tựa game được cộng đồng yêu thích nhất
+                                @endauth
+                            </p>
                         </div>
                     </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        @foreach ($recommendedGames as $recGame)
+                        <div
+                            class="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+                            {{-- Ảnh --}}
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="{{ Str::startsWith($recGame->image, 'http') ? $recGame->image : asset('storage/' . $recGame->image) }}"
+                                    alt="{{ $recGame->name }}"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                @if ($recGame->price == 0)
+                                <span
+                                    class="absolute top-2 right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded">FREE</span>
+                                @endif
+                            </div>
+
+                            {{-- Info --}}
+                            <div class="p-4">
+                                <h3 class="font-bold text-gray-900 dark:text-white truncate mb-1"
+                                    title="{{ $recGame->name }}">
+                                    <a href="{{ route('game.show', $recGame->id) }}">{{ $recGame->name }}</a>
+                                </h3>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span class="text-sm font-bold text-miku-600 dark:text-miku-400">
+                                        {{ number_format($recGame->price, 0, ',', '.') }}đ
+                                    </span>
+                                    <span class="text-xs text-gray-500 flex items-center gap-1">
+                                        <i class="fa-solid fa-star text-yellow-400"></i> Gợi ý
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
                 @endif
                 <div class="flex items-center justify-between mb-6 border-l-4 border-miku-500 pl-4">
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-wider">
                         @if (request('category'))
-                            {{ $categories->firstWhere('slug', request('category'))?->name ?? 'Games' }} Mới
+                        {{ $categories->firstWhere('slug', request('category'))?->name ?? 'Games' }} Mới
                         @else
-                            Game Mới
+                        Game Mới
                         @endif
                     </h2>
                     <a href="/shop" class="text-sm text-miku-600 dark:text-miku-400 hover:underline">
@@ -236,103 +238,103 @@
                 {{-- Grid hiển thị Game --}}
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                     @foreach ($games as $game)
-                        <div
-                            class="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300 flex flex-col h-full">
+                    <div
+                        class="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300 flex flex-col h-full">
 
-                            {{-- [LOGIC] Tính toán giá ảo --}}
-                            @php
-                                $hasDiscount = $game->price > 0;
-                                $discountPercent = $hasDiscount ? rand(10, 30) : 0;
-                                $fakeOriginalPrice = $game->price * (1 + $discountPercent / 100);
-                            @endphp
+                        {{-- [LOGIC] Tính toán giá ảo --}}
+                        @php
+                        $hasDiscount = $game->price > 0;
+                        $discountPercent = $hasDiscount ? rand(10, 30) : 0;
+                        $fakeOriginalPrice = $game->price * (1 + $discountPercent / 100);
+                        @endphp
 
-                            {{-- 1. ẢNH GAME --}}
-                            <div class="relative h-48 overflow-hidden bg-gray-200 dark:bg-gray-700">
-                                <a href="{{ route('game.show', $game->id) }}" class="block w-full h-full">
-                                    <img src="{{ str_starts_with($game->image, 'http') ? $game->image : asset('storage/' . $game->image) }}"
-                                        alt="{{ $game->name }}"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
-                                </a>
+                        {{-- 1. ẢNH GAME --}}
+                        <div class="relative h-48 overflow-hidden bg-gray-200 dark:bg-gray-700">
+                            <a href="{{ route('game.show', $game->id) }}" class="block w-full h-full">
+                                <img src="{{ str_starts_with($game->image, 'http') ? $game->image : asset('storage/' . $game->image) }}"
+                                    alt="{{ $game->name }}"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
+                            </a>
 
-                                {{-- Badge (Góc phải trên + Nhấp nháy) --}}
-                                <div class="absolute top-2 right-2 flex flex-col items-end gap-1">
-                                    @if ($game->price == 0)
-                                        <span
-                                            class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">
-                                            Miễn phí
-                                        </span>
-                                    @else
-                                        <span
-                                            class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm animate-pulse">
-                                            -{{ $discountPercent }}%
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            {{-- 2. NỘI DUNG --}}
-                            <div class="p-4 flex flex-col flex-grow">
-                                {{-- Tên Game --}}
-                                <h3
-                                    class="text-base font-bold text-gray-900 dark:text-white leading-tight mb-2 line-clamp-2 hover:text-miku-600 dark:hover:text-miku-400 transition-colors">
-                                    <a href="{{ route('game.show', $game->id) }}">
-                                        {{ $game->name }}
-                                    </a>
-                                </h3>
-
-                                {{-- Thông tin phụ --}}
-                                <div class="mb-4 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                                    @if (!empty($game->platforms))
-                                        <span
-                                            class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{{ $game->platforms[0] ?? 'PC' }}</span>
-                                    @endif
-                                    {{-- Dùng optional để tránh lỗi nếu chưa có category --}}
-                                    <span>{{ optional($game->primary_category)->name ?? 'Game' }}</span>
-                                </div>
-
-                                {{-- 3. CHÂN CARD (Giá & Nút mua) --}}
-                                <div
-                                    class="mt-auto pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
-
-                                    {{-- Giá tiền --}}
-                                    <div class="flex flex-col">
-                                        @if ($game->price == 0)
-                                            <span class="text-lg font-bold text-green-500">Miễn phí</span>
-                                        @else
-                                            <span class="text-[10px] text-gray-400 line-through">
-                                                {{ number_format($fakeOriginalPrice, 0, ',', '.') }}đ
-                                            </span>
-                                            <span class="text-lg font-black text-miku-600 dark:text-miku-400">
-                                                {{ number_format($game->price, 0, ',', '.') }}đ
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    {{-- Nút Giỏ hàng (Hoạt động thật) --}}
-                                    {{-- Kiểm tra: Nếu là Guest -> Link sang Login, Nếu User -> Submit Form --}}
-                                    @auth
-                                        <form action="{{ route('cart.add') }}" method="POST" class="ajax-cart-form">
-                                            @csrf
-                                            {{-- Quan trọng: name="game_id" phải khớp với Controller --}}
-                                            <input type="hidden" name="game_id" value="{{ $game->id }}">
-
-                                            <button type="submit"
-                                                class="flex items-center justify-center w-10 h-10 rounded-full bg-miku-50 dark:bg-miku-900/30 text-miku-600 dark:text-miku-400 hover:bg-miku-500 hover:text-white transition-all shadow-sm hover:shadow-md transform active:scale-95"
-                                                title="Thêm vào giỏ hàng">
-                                                <i class="fa-solid fa-cart-plus"></i>
-                                            </button>
-                                        </form>
-                                    @else
-                                        <a href="{{ route('login') }}"
-                                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-miku-500 hover:text-white transition-all shadow-sm"
-                                            title="Đăng nhập để mua">
-                                            <i class="fa-solid fa-cart-plus"></i>
-                                        </a>
-                                    @endauth
-
-                                </div>
+                            {{-- Badge (Góc phải trên + Nhấp nháy) --}}
+                            <div class="absolute top-2 right-2 flex flex-col items-end gap-1">
+                                @if ($game->price == 0)
+                                <span
+                                    class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">
+                                    Miễn phí
+                                </span>
+                                @else
+                                <span
+                                    class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm animate-pulse">
+                                    -{{ $discountPercent }}%
+                                </span>
+                                @endif
                             </div>
                         </div>
+
+                        {{-- 2. NỘI DUNG --}}
+                        <div class="p-4 flex flex-col flex-grow">
+                            {{-- Tên Game --}}
+                            <h3
+                                class="text-base font-bold text-gray-900 dark:text-white leading-tight mb-2 line-clamp-2 hover:text-miku-600 dark:hover:text-miku-400 transition-colors">
+                                <a href="{{ route('game.show', $game->id) }}">
+                                    {{ $game->name }}
+                                </a>
+                            </h3>
+
+                            {{-- Thông tin phụ --}}
+                            <div class="mb-4 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                                @if (!empty($game->platforms))
+                                <span
+                                    class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{{ $game->platforms[0] ?? 'PC' }}</span>
+                                @endif
+                                {{-- Dùng optional để tránh lỗi nếu chưa có category --}}
+                                <span>{{ optional($game->primary_category)->name ?? 'Game' }}</span>
+                            </div>
+
+                            {{-- 3. CHÂN CARD (Giá & Nút mua) --}}
+                            <div
+                                class="mt-auto pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+
+                                {{-- Giá tiền --}}
+                                <div class="flex flex-col">
+                                    @if ($game->price == 0)
+                                    <span class="text-lg font-bold text-green-500">Miễn phí</span>
+                                    @else
+                                    <span class="text-[10px] text-gray-400 line-through">
+                                        {{ number_format($fakeOriginalPrice, 0, ',', '.') }}đ
+                                    </span>
+                                    <span class="text-lg font-black text-miku-600 dark:text-miku-400">
+                                        {{ number_format($game->price, 0, ',', '.') }}đ
+                                    </span>
+                                    @endif
+                                </div>
+
+                                {{-- Nút Giỏ hàng (Hoạt động thật) --}}
+                                {{-- Kiểm tra: Nếu là Guest -> Link sang Login, Nếu User -> Submit Form --}}
+                                @auth
+                                <form action="{{ route('cart.add') }}" method="POST" class="ajax-cart-form">
+                                    @csrf
+                                    {{-- Quan trọng: name="game_id" phải khớp với Controller --}}
+                                    <input type="hidden" name="game_id" value="{{ $game->id }}">
+
+                                    <button type="submit"
+                                        class="flex items-center justify-center w-10 h-10 rounded-full bg-miku-50 dark:bg-miku-900/30 text-miku-600 dark:text-miku-400 hover:bg-miku-500 hover:text-white transition-all shadow-sm hover:shadow-md transform active:scale-95"
+                                        title="Thêm vào giỏ hàng">
+                                        <i class="fa-solid fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                                @else
+                                <a href="{{ route('login') }}"
+                                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-miku-500 hover:text-white transition-all shadow-sm"
+                                    title="Đăng nhập để mua">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                </a>
+                                @endauth
+
+                            </div>
+                        </div>
+                    </div>
                     @endforeach
                 </div>
 
