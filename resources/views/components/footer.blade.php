@@ -52,12 +52,6 @@
                             Game Mới Phát Hành
                         </a>
                     </li>
-                    <li>
-                        <a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">
-                            Tin Tức & Blog
-                        </a>
-                    </li>
                 </ul>
             </div>
 
@@ -65,19 +59,26 @@
             <div>
                 <h3 class="text-gray-900 dark:text-white font-bold uppercase tracking-wider mb-4 text-sm">Hỗ Trợ</h3>
                 <ul class="space-y-3">
-                    <li><a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">Trung
-                            Tâm Trợ Giúp</a></li>
-                    <li><a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">Chính
-                            Sách Bảo Mật</a></li>
-                    <li><a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">Điều
-                            Khoản Dịch Vụ</a></li>
-                    <li><a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">Liên
-                            Hệ Quảng Cáo</a></li>
-                </ul>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#" @click.prevent="activeModal = 'help'"
+                                class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">
+                                Trung Tâm Trợ Giúp
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="activeModal = 'privacy'"
+                                class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">
+                                Chính Sách Bảo Mật
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="activeModal = 'terms'"
+                                class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">
+                                Điều Khoản Dịch Vụ
+                            </a>
+                        </li>
+                    </ul>
             </div>
 
             {{-- Cột 4: Newsletter --}}
@@ -103,7 +104,8 @@
         <div
             class="border-t border-gray-200 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-gray-500 dark:text-gray-500 text-sm text-center md:text-left">
-                &copy; {{ date('Y') }} <span class="text-miku-600 dark:text-miku-400 font-bold">Mirai Store</span>. All rights reserved.
+                &copy; {{ date('Y') }} <span class="text-miku-600 dark:text-miku-400 font-bold">Mirai Store</span>.
+                All rights reserved.
             </p>
 
             <div class="flex items-center gap-6">

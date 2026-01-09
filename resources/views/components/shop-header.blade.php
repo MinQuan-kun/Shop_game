@@ -36,10 +36,6 @@
                     class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150 {{ request()->routeIs('community.index') ? 'text-miku-500 dark:text-miku-400' : '' }}">
                     Cộng đồng
                 </a>
-                <a href="#"
-                    class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150">
-                    Hỗ trợ
-                </a>
             </nav>
 
             <div class="flex-1 flex items-center justify-end gap-4">
