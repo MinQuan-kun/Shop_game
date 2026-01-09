@@ -3,11 +3,11 @@ set -e
 
 echo "🚀 Starting deployment tasks for MongoDB Project..."
 
-# Clear cache Laravel
-php artisan optimize:clear
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+# Clear all Laravel cache (DO NOT re-cache on Render deployment)
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
 
 echo "✅ Cache cleared. Starting Apache..."
 
