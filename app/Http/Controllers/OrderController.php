@@ -52,9 +52,27 @@ class OrderController extends Controller
                 ->with('error', 'Giỏ hàng của bạn đang trống!');
         }
 
-        $total = $cartItems->sum(function ($item) {
+        $subtotal = $cartItems->sum(function ($item) {
             return $item->price_at_time * $item->quantity;
         });
+
+        // Initialize discount variables
+        $discountAmount = 0;
+        $discountCode = null;
+        $finalTotal = $subtotal;
+
+        // Process discount code if provided
+        if ($request->filled('discount_code')) {
+            $discountCode = \App\Models\DiscountCode::where('code', strtoupper($request->discount_code))->first();
+
+            if ($discountCode && $discountCode->isValid()) {
+                $discountAmount = $discountCode->calculateDiscount($subtotal);
+                $finalTotal = $subtotal - $discountAmount;
+            } else {
+                // Invalid discount code - show error but allow checkout without discount
+                return back()->with('error', 'Mã giảm giá không hợp lệ hoặc đã hết hạn. Vui lòng thử lại hoặc thanh toán không có mã giảm giá.');
+            }
+        }
 
         // Check if user already owns any games in cart
         foreach ($cartItems as $cartItem) {
@@ -63,10 +81,10 @@ class OrderController extends Controller
             }
         }
 
-        // Check if user has sufficient balance
-        if (!$user->hasBalance($total)) {
+        // Check if user has sufficient balance (use final total after discount)
+        if (!$user->hasBalance($finalTotal)) {
             return back()->with('error', 'Số dư không đủ! Vui lòng nạp thêm tiền vào ví.')
-                ->with('required_amount', $total)
+                ->with('required_amount', $finalTotal)
                 ->with('current_balance', $user->balance);
         }
 
@@ -74,17 +92,20 @@ class OrderController extends Controller
             // Start transaction
             DB::beginTransaction();
 
-            // Deduct balance
-            if (!$user->deductBalance($total)) {
+            // Deduct balance (use final total after discount)
+            if (!$user->deductBalance($finalTotal)) {
                 throw new \Exception('Không thể trừ số dư.');
             }
 
-            // Create order
+            // Create order with discount information
             $order = Order::create([
                 'user_id' => $user->id,
-                'total_amount' => $total,
+                'total_amount' => $finalTotal, // Store final amount after discount
                 'status' => 'completed',
-                'payment_method' => 'wallet'
+                'payment_method' => 'wallet',
+                'discount_code_id' => $discountCode?->_id,
+                'discount_amount' => $discountAmount,
+                'subtotal' => $subtotal
             ]);
 
             // Create order items
@@ -98,24 +119,39 @@ class OrderController extends Controller
             }
 
             // Create transaction record
+            $description = 'Mua game - Đơn hàng ' . $order->order_number;
+            if ($discountAmount > 0) {
+                $description .= ' (Đã giảm ' . number_format($discountAmount, 0, ',', '.') . ' VNĐ)';
+            }
+
             Transaction::create([
                 'user_id' => $user->id,
                 'type' => 'purchase',
-                'amount' => $total,
+                'amount' => $finalTotal,
                 'status' => 'completed',
-                'description' => 'Mua game - Đơn hàng ' . $order->order_number,
+                'description' => $description,
                 'order_id' => $order->id,
                 'reference_id' => $order->id,
                 'payment_method' => 'wallet'
             ]);
+
+            // Increment discount code usage count if applied
+            if ($discountCode) {
+                $discountCode->increment('used_count');
+            }
 
             // Clear cart
             Cart::where('user_id', $user->id)->delete();
 
             DB::commit();
 
+            $successMessage = 'Đặt hàng thành công!';
+            if ($discountAmount > 0) {
+                $successMessage .= ' Bạn đã tiết kiệm được ' . number_format($discountAmount, 0, ',', '.') . ' VNĐ!';
+            }
+
             return redirect()->route('orders.show', $order->id)
-                ->with('success', 'Đặt hàng thành công!');
+                ->with('success', $successMessage);
 
         } catch (\Exception $e) {
             DB::rollBack();
