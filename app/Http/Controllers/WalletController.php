@@ -39,16 +39,10 @@ class WalletController extends Controller
     }
 
     /**
-     * Test deposit (Development only - bypasses MoMo/PayPal)
+     * Test deposit (Quick deposit with test card - Available for all users)
      */
     public function testDeposit(Request $request)
     {
-        // Allow in development OR for admin users (for testing on production)
-        $user = Auth::user();
-        if (!app()->environment('local') && !config('app.debug') && $user->role !== 'admin') {
-            abort(403, 'This route is only available in development or for admin users');
-        }
-
         $request->validate([
             'amount' => 'required|numeric|min:1000'
         ]);
@@ -65,8 +59,8 @@ class WalletController extends Controller
                 'type' => 'deposit',
                 'amount' => $amount,
                 'status' => 'completed',
-                'description' => 'Test deposit - Thẻ ngân hàng (Development)',
-                'reference_id' => 'TEST_CARD_' . time(),
+                'description' => 'Nạp tiền - Thẻ ngân hàng',
+                'reference_id' => 'CARD_' . time() . '_' . $user->id,
                 'payment_method' => 'test_card',
             ]);
 
@@ -76,7 +70,7 @@ class WalletController extends Controller
             DB::commit();
 
             return redirect()->route('wallet.index')
-                ->with('success', '✅ Test deposit thành công! Số dư mới: ' . number_format($user->balance, 0, ',', '.') . ' VNĐ');
+                ->with('success', '✅ Nạp tiền thành công! Số dư mới: ' . number_format($user->balance, 0, ',', '.') . ' VNĐ');
 
         } catch (\Exception $e) {
             DB::rollBack();
