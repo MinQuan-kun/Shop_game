@@ -115,9 +115,10 @@ return [
 
         'mongodb' => [
             'driver'   => 'mongodb',
+            'dsn'      => env('DB_DSN'),
+            'database' => env('DB_DATABASE', 'store_game'),
             'host'     => env('DB_HOST', '127.0.0.1'),
             'port'     => env('DB_PORT', 27017),
-            'database' => env('DB_DATABASE', 'store_game'),
             'username' => env('DB_USERNAME', ''),
             'password' => env('DB_PASSWORD', ''),
             'options'  => [
