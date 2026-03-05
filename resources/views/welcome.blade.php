@@ -1,63 +1,7 @@
 <x-shop-layout>
     <div class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
 
-        <div class="relative w-full h-[500px] lg:h-[600px] overflow-hidden group bg-gray-900">
-
-            <div class="absolute inset-0 w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-[2000ms] ease-in-out"
-                style="background-image: url('https://images.hdqwalls.com/wallpapers/hatsune-miku-fantasy-art-4k-y6.jpg');">
-            </div>
-
-            <div
-                class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-miku-900/30 mix-blend-multiply">
-            </div>
-            <div class="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-transparent"></div>
-
-
-            <div class="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-                <div class="max-w-2xl animate-fade-in-up">
-                    <div
-                        class="inline-flex items-center gap-2 bg-miku-500/20 border border-miku-500/50 rounded-full px-3 py-1 mb-4 backdrop-blur-sm">
-                        <span class="flex h-2 w-2 relative justify-center items-center">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-miku-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-miku-500"></span>
-                        </span>
-                        <span class="text-miku-300 text-xs font-bold uppercase tracking-widest">Chào mừng đến với tương
-                            lai</span>
-                    </div>
-
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
-                        Thế Giới Game <br>
-                        <span
-                            class="text-transparent bg-clip-text bg-gradient-to-r from-miku-400 to-blue-400 filter drop-shadow-[0_0_10px_rgba(57,197,187,0.5)]">
-                            Không Giới Hạn
-                        </span>
-                    </h1>
-
-                    <p class="text-lg text-gray-300 mb-8 leading-relaxed font-medium drop-shadow-md">
-                        Tải xuống hàng ngàn tựa game bom tấn bản quyền với tốc độ ánh sáng. Tham gia cộng đồng Gaming
-                        Kai và chinh phục mọi thử thách ngay hôm nay.
-                    </p>
-
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#"
-                            class="group relative inline-flex items-center justify-center px-8 py-3 font-bold text-white bg-miku-500 rounded-full overflow-hidden shadow-lg shadow-miku-500/30 transition-all duration-300 hover:bg-miku-600 hover:scale-105 hover:shadow-miku-500/50">
-                            <span
-                                class="absolute inset-0 w-full h-full bg-gradient-to-br from-miku-400 to-miku-600 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                            <span class="relative flex items-center gap-2">
-                                Khám Phá Ngay <i class="fa-solid fa-rocket group-hover:animate-bounce"></i>
-                            </span>
-                        </a>
-
-                        <a href="#"
-                            class="inline-flex items-center justify-center px-8 py-3 font-bold text-white border-2 border-gray-400/50 bg-gray-900/30 backdrop-blur-sm rounded-full transition-all duration-300 hover:bg-white hover:text-gray-900 hover:border-white">
-                            Xem Cộng Đồng <i class="fa-brands fa-discord ml-2"></i>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <x-banner />
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div class="flex flex-col lg:flex-row gap-8">
@@ -81,7 +25,7 @@
                                 <div class="p-4">
                                     <h3
                                         class="text-lg font-bold text-gray-900 dark:text-white leading-snug mb-2 group-hover:text-miku-600 dark:group-hover:text-miku-400 transition">
-                                        <a href="#">Elden Ring: Shadow of Miku</a>
+                                        <a href="#">ELDEN RING NIGHTREIGN</a>
                                     </h3>
                                     <div
                                         class="text-sm text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700 pt-3">
