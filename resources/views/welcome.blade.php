@@ -69,13 +69,13 @@
                     <div
                         class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 relative h-64 flex items-center justify-center group cursor-pointer shadow-sm transition-colors duration-300">
 
-                        <img src="https://i.pinimg.com/736x/b2/24/49/b224497559194d2f0eb3528b6d396489.jpg"
+                        <img src="https://res.cloudinary.com/davfujasj/image/upload/v1765274236/Gemini_Generated_Image_l4qelbl4qelbl4qe_v2akas.png"
                             class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition duration-500">
 
                         <div class="relative z-10 text-center p-4">
                             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Tham gia Discord</h3>
 
-                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Nhận link tải tốc độ cao & hỗ trợ
+                            <p class="text-sm font-bold text-gray-600 dark:text-gray-300 mb-4">Nhận link tải tốc độ cao & hỗ trợ
                                 cài đặt</p>
 
                             <span
