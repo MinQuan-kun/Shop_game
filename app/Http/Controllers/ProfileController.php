@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-// === THÊM DÒNG NÀY ĐỂ SỬA LỖI ===
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Upload\UploadApi;
 
 class ProfileController extends Controller
 {
@@ -44,34 +44,43 @@ class ProfileController extends Controller
      */
     public function updateAvatar(Request $request): RedirectResponse
     {
-        // 1. Validate ảnh
         $request->validate([
             'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ]);
 
         $user = $request->user();
 
-        // 2. Xử lý upload lên Cloudinary
         if ($request->hasFile('avatar')) {
             try {
-                $uploadedFileUrl = Cloudinary::upload($request->file('avatar')->getRealPath(), [
+                // 1. CẤU HÌNH TRỰC TIẾP TẠI ĐÂY (Thay thế config/env)
+                // Lưu ý: Chuỗi này lấy từ Dashboard của bạn
+                Configuration::instance('cloudinary://155879274742561:j2dKa-onHxbm5jKbDJjz9SUaIrw@davfujasj?secure=true');
+
+                // 2. Sử dụng UploadApi trực tiếp
+                $upload = new UploadApi();
+                $result = $upload->upload($request->file('avatar')->getRealPath(), [
                     'folder' => 'Shop_Game/users',
                     'public_id' => 'user_' . $user->id,
-                    'overwrite' => true, 
+                    'overwrite' => true,
                     'transformation' => [
                         'width' => 500,
                         'height' => 500,
-                        'crop' => 'fill', 
+                        'crop' => 'fill',
                         'gravity' => 'face'
                     ]
-                ])->getSecurePath();
+                ]);
 
+                // 3. Lấy link ảnh từ kết quả trả về
+                $uploadedFileUrl = $result['secure_url'];
+
+                // 4. Lưu vào Database
                 $user->avatar = $uploadedFileUrl;
                 $user->save();
 
                 return Redirect::route('profile.edit')->with('status', 'avatar-updated');
             } catch (\Exception $e) {
-                return Redirect::route('profile.edit')->withErrors(['avatar' => 'Lỗi upload ảnh: ' . $e->getMessage()]);
+                // Hiển thị lỗi chi tiết ra màn hình để debug
+                return Redirect::route('profile.edit')->withErrors(['avatar' => 'Lỗi: ' . $e->getMessage()]);
             }
         }
 
