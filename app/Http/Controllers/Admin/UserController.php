@@ -14,4 +14,20 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    public function toggleStatus(User $user)
+    {
+
+        $user->is_active = !$user->is_active;
+        $user->save();
+
+        $status = $user->is_active ? 'được mở khóa' : 'đã bị khóa';
+        
+        return redirect()->back()->with('status', "Tài khoản {$user->name} đã $status thành công!");
+    }
+    
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->back()->with('status', 'Đã xóa tài khoản thành công!');
+    }
 }

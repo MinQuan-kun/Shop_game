@@ -24,11 +24,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('users', UserController::class);
 });
 
+
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::patch('/users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggleStatus');
 
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
 });
