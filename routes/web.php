@@ -3,8 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
-
+use App\Http\Controllers\Admin\GameController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -18,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::delete('/user/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
 });
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
@@ -32,8 +34,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     })->name('dashboard');
 
     Route::patch('/users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggleStatus');
-
-    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::resource('games', GameController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('users', UserController::class);
 });
 
 require __DIR__.'/auth.php';

@@ -52,11 +52,8 @@ class ProfileController extends Controller
 
         if ($request->hasFile('avatar')) {
             try {
-                // 1. CẤU HÌNH TRỰC TIẾP TẠI ĐÂY (Thay thế config/env)
-                // Lưu ý: Chuỗi này lấy từ Dashboard của bạn
-                Configuration::instance('cloudinary://155879274742561:j2dKa-onHxbm5jKbDJjz9SUaIrw@davfujasj?secure=true');
+                Configuration::instance(env('CLOUDINARY_URL'));
 
-                // 2. Sử dụng UploadApi trực tiếp
                 $upload = new UploadApi();
                 $result = $upload->upload($request->file('avatar')->getRealPath(), [
                     'folder' => 'Shop_Game/users',
@@ -70,16 +67,13 @@ class ProfileController extends Controller
                     ]
                 ]);
 
-                // 3. Lấy link ảnh từ kết quả trả về
                 $uploadedFileUrl = $result['secure_url'];
 
-                // 4. Lưu vào Database
                 $user->avatar = $uploadedFileUrl;
                 $user->save();
 
                 return Redirect::route('profile.edit')->with('status', 'avatar-updated');
             } catch (\Exception $e) {
-                // Hiển thị lỗi chi tiết ra màn hình để debug
                 return Redirect::route('profile.edit')->withErrors(['avatar' => 'Lỗi: ' . $e->getMessage()]);
             }
         }
@@ -108,6 +102,4 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-
-    
 }
