@@ -1,160 +1,342 @@
-<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 <x-app-layout>
-    {{-- Header & Breadcrumb: Tinh tế và thoáng đãng --}}
-    <div class="mb-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-                Thêm Game Mới
-            </h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Cập nhật đầy đủ thông tin để thu hút người chơi</p>
-        </div>
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-bold text-black dark:text-white">
+            Thêm Game Mới
+        </h2>
 
         <nav>
-            <ol class="flex items-center gap-2 text-sm">
-                <li><a class="text-gray-500 hover:text-black dark:hover:text-white transition-colors"
-                        href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="text-gray-400">/</li>
-                <li><a class="text-gray-500 hover:text-black dark:hover:text-white transition-colors"
-                        href="{{ route('admin.games.index') }}">Games</a></li>
-                <li class="text-gray-400">/</li>
-                <li class="font-semibold text-gray-900 dark:text-white">Thêm mới</li>
+            <ol class="flex items-center gap-2">
+                <li>
+                    <a class="font-medium text-gray-500 hover:text-black dark:text-white" href="{{ route('dashboard') }}">
+                        Dashboard /
+                    </a>
+                </li>
+                <li>
+                    <a class="font-medium text-gray-500 hover:text-black dark:text-white"
+                        href="{{ route('admin.games.index') }}">
+                        Games /
+                    </a>
+                </li>
+                <li class="font-medium text-black dark:text-white">Create</li>
             </ol>
         </nav>
     </div>
-
     <form action="{{ route('admin.games.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-
-            {{-- Cột Trái: Thông tin chính --}}
-            <div class="lg:col-span-2 space-y-8">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div class="lg:col-span-2 space-y-6">
                 <div
-                    class="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
-                    <div class="mb-6 border-b border-gray-100 pb-4 dark:border-gray-800">
-                        <h3 class="font-bold text-gray-800 dark:text-white">Thông tin cơ bản</h3>
-                    </div>
+                    class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                    <h3 class="mb-5 text-base font-medium text-gray-800 dark:text-white/90">Thông tin cơ bản</h3>
 
-                    <div class="space-y-6">
-                        {{-- Tên Game --}}
+                    <div class="space-y-4">
                         <div>
-                            <label class="mb-2.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">Tên sản
-                                phẩm <span class="text-red-500">*</span></label>
-                            <input type="text" name="name" placeholder="Ví dụ: God of War Ragnarök" required
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 px-5 text-black outline-none transition focus:border-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-white" />
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Tên Game
+                            </label>
+                            <input type="text" name="name" value="{{ old('name') }}" required
+                                class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-black dark:text-white border-gray-300 focus:border-brand-500 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900" />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
-                        {{-- Thể loại (Multi-select) --}}
-                        <div class="sm:col-span-2">
-                            <label class="mb-2.5 block text-sm font-semibold text-gray-700 dark:text-white">
-                                Thể loại <span class="text-red-500">*</span>
+                        {{-- Giá bán với nút gạt Miễn phí --}}
+                        <div x-data="{ isFree: false, price: '{{ old('price') }}' }">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Giá Game (VNĐ)
+                                </label>
+
+                                <label
+                                    class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                                    <span>Miễn phí</span>
+
+                                    <div class="relative">
+                                        {{-- Cập nhật x-model thành isFree để đồng bộ với ô nhập giá --}}
+                                        <input type="checkbox" name="is_free" id="price_toggle" class="sr-only"
+                                            x-model="isFree" @change="if(isFree) price = 0" />
+
+                                        {{-- Thanh trượt --}}
+                                        <div class="block h-6 w-11 rounded-full duration-300"
+                                            :class="isFree ? 'bg-brand-500' : 'bg-gray-200 dark:bg-white/10'">
+                                        </div>
+
+                                        {{-- Nút tròn --}}
+                                        <div :class="isFree ? 'translate-x-full' : 'translate-x-0'"
+                                            class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            {{-- Ô nhập giá: Tự động đổi màu nền khi Miễn phí và đảm bảo text trắng/đen --}}
+                            <input type="number" name="price" x-model="price" :readonly="isFree"
+                                class="w-full rounded-lg border px-4 py-2.5 text-sm transition-all duration-200"
+                                :class="isFree
+                                    ?
+                                    'bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60 border-gray-200 dark:border-gray-700 text-gray-500' :
+                                    'bg-transparent border-gray-300 dark:border-gray-700 text-black dark:text-white focus:border-brand-500 focus:ring-brand-500/10'" />
+                            <x-input-error :messages="$errors->get('price')" class="mt-2" />
+                        </div>
+
+                        {{-- Nhà sản xuất --}}
+                        <div>
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Nhà sản
+                                xuất</label>
+                            <input type="text" name="name" value="{{ old('name') }}" required
+                                class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-900" />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        </div>
+
+                        {{-- Nền tảng --}}
+                        <div>
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Nền tảng
                             </label>
-                            <div class="relative">
-                                <select id="category_select" name="category_ids[]" multiple
-                                    placeholder="Chọn một hoặc nhiều thể loại..." autocomplete="off" required
-                                    class="w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 px-5 text-black outline-none transition focus:border-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
+                            {{-- Flex-wrap giúp các nền tảng nằm ngang và tự xuống dòng khi hết màn hình --}}
+                            <div
+                                class="flex flex-wrap items-center gap-x-6 gap-y-4 rounded-lg border border-gray-300 dark:border-gray-700 p-4 bg-transparent">
+                                @php
+                                    $platforms = ['PC', 'Android', 'iOS', 'PlayStation', 'Xbox', 'Switch'];
+                                @endphp
+
+                                @foreach ($platforms as $platform)
+                                    <div x-data="{ platformToggle: false }">
+                                        <label for="platform_{{ $loop->index }}"
+                                            class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                                            <div class="relative">
+                                                <input type="checkbox" name="platforms[]"
+                                                    id="platform_{{ $loop->index }}" value="{{ $platform }}"
+                                                    class="sr-only" @change="platformToggle = !platformToggle" />
+
+                                                <div :class="platformToggle ? 'border-brand-500 bg-brand-500' :
+                                                    'bg-transparent border-gray-300 dark:border-gray-700'"
+                                                    class="hover:border-brand-500 dark:hover:border-brand-500 mr-3 flex h-5 w-5 items-center justify-center rounded-md border-[1.25px] duration-200">
+                                                    <span :class="platformToggle ? '' : 'opacity-0'">
+                                                        <svg width="14" height="14" viewBox="0 0 14 14"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7"
+                                                                stroke="white" stroke-width="1.94437"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {{ $platform }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <x-input-error :messages="$errors->get('platforms')" class="mt-2" />
+                        </div>
+
+                        <div x-data="{
+                            selectedLanguages: [],
+                            showOtherInput: false,
+                            toggleOther() {
+                                this.showOtherInput = this.selectedLanguages.includes('Khác');
+                            }
+                        }">
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Ngôn
+                                ngữ</label>
+
+                            <div
+                                class="flex flex-wrap items-center gap-x-6 gap-y-4 rounded-lg border border-gray-300 dark:border-gray-700 p-4 bg-transparent">
+                                @foreach (['Tiếng Anh', 'Tiếng Việt', 'Khác'] as $lang)
+                                    <label
+                                        class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                                        <div class="relative">
+                                            <input type="checkbox" name="languages[]" value="{{ $lang }}"
+                                                class="sr-only" x-model="selectedLanguages" @change="toggleOther()">
+                                            <div :class="selectedLanguages.includes('{{ $lang }}') ?
+                                                'border-brand-500 bg-brand-500' :
+                                                'bg-transparent border-gray-300 dark:border-gray-700'"
+                                                class="mr-3 flex h-5 w-5 items-center justify-center rounded-md border-[1.25px] duration-200">
+                                                <span
+                                                    :class="selectedLanguages.includes('{{ $lang }}') ? '' :
+                                                        'opacity-0'">
+                                                    <svg width="14" height="14" viewBox="0 0 14 14"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white"
+                                                            stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        {{ $lang }}
+                                    </label>
+                                @endforeach
+                            </div>
+
+                            <div x-show="showOtherInput" x-transition class="mt-3">
+                                <input type="text" name="other_language" placeholder="Nhập ngôn ngữ khác..."
+                                    class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm dark:border-gray-700 dark:bg-gray-900" />
                             </div>
                         </div>
 
-                        {{-- Mô tả --}}
                         <div>
-                            <label class="mb-2.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">Mô tả sản
-                                phẩm</label>
-                            <textarea name="description" rows="6" placeholder="Viết giới thiệu hấp dẫn về game..."
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 px-5 text-black outline-none transition focus:border-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-white"></textarea>
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Mô
+                                tả</label>
+                            <textarea name="description" rows="5"
+                                class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-900">{{ old('description') }}</textarea>
                         </div>
+                    </div>
+                </div>
+
+                <div
+                    class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                    <h3 class="mb-5 text-base font-medium text-gray-800 dark:text-white/90">Đường dẫn & Liên kết tải
+                        game</h3>
+                    <div class="relative">
+                        <span
+                            class="absolute top-1/2 left-0 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pr-3 pl-3.5 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                            http://
+                        </span>
+                        <input type="url" placeholder="www.example.com"
+                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    </div>
+                </div>
+            </div>
+            {{-- Nhập ảnh game với Dropzone --}}
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="px-5 py-4 sm:px-6 sm:py-5">
+                    <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                        Ảnh đại diện
+                    </h3>
+                </div>
+                <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
+                    <div x-data="{
+                        isDropping: false,
+                        photoPreview: null,
+                        handleFile(file) {
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = (e) => { this.photoPreview = e.target.result; };
+                            reader.readAsDataURL(file);
+                        },
+                        removePhoto() {
+                            this.photoPreview = null;
+                            $refs.photoInput.value = '';
+                        }
+                    }" class="relative">
+
+                        {{-- Drop Zone Container --}}
+                        <div class="relative rounded-xl border-2 border-dashed transition-all duration-200 min-h-[200px] flex items-center justify-center overflow-hidden"
+                            :class="isDropping ? 'border-brand-500 bg-brand-500/5' :
+                                'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'"
+                            @dragover.prevent="isDropping = true" @dragleave.prevent="isDropping = false"
+                            @drop.prevent="
+                    isDropping = false;
+                    if ($event.dataTransfer.files.length) {
+                        $refs.photoInput.files = $event.dataTransfer.files;
+                        handleFile($event.dataTransfer.files[0]);
+                    }
+                ">
+
+                            <input type="file" name="image" class="hidden" x-ref="photoInput" accept="image/*"
+                                @change="handleFile($el.files[0])" />
+
+                            {{-- Trạng thái chưa có ảnh --}}
+                            <div class="text-center p-6" x-show="!photoPreview">
+                                <div class="mb-4 flex justify-center">
+                                    <div @click="$refs.photoInput.click()"
+                                        class="cursor-pointer flex h-16 w-16 items-center justify-center rounded-full bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+                                        <svg class="fill-current" width="28" height="28" viewBox="0 0 29 28">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M14.5019 3.91699C14.2852 3.91699 14.0899 4.00891 13.953 4.15589L8.57363 9.53186C8.28065 9.82466 8.2805 10.2995 8.5733 10.5925C8.8661 10.8855 9.34097 10.8857 9.63396 10.5929L13.7519 6.47752V18.667C13.7519 19.0812 14.0877 19.417 14.5019 19.417C14.9161 19.417 15.2519 19.0812 15.2519 18.667V6.48234L19.3653 10.5929C19.6583 10.8857 20.1332 10.8855 20.426 10.5925C20.7188 10.2995 20.7186 9.82463 20.4256 9.53184L15.0838 4.19378C14.9463 4.02488 14.7367 3.91699 14.5019 3.91699ZM5.91626 18.667C5.91626 18.2528 5.58047 17.917 5.16626 17.917C4.75205 17.917 4.41626 18.2528 4.41626 18.667V21.8337C4.41626 23.0763 5.42362 24.0837 6.66626 24.0837H22.3339C23.5766 24.0837 24.5839 23.0763 24.5839 21.8337V18.667C24.5839 18.2528 24.2482 17.917 23.8339 17.917C23.4197 17.917 23.0839 18.2528 23.0839 18.667V21.8337C23.0839 22.2479 22.7482 22.5837 22.3339 22.5837H6.66626C6.25205 22.5837 5.91626 22.2479 5.91626 21.8337V18.667Z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <h4 class="text-sm font-semibold text-gray-800 dark:text-white/90">Kéo thả ảnh vào đây
+                                </h4>
+                                <p class="mt-1 text-xs text-gray-500">hoặc <span @click="$refs.photoInput.click()"
+                                        class="text-brand-500 cursor-pointer hover:underline font-medium">Chọn
+                                        file</span></p>
+                            </div>
+
+                            {{-- Trạng thái đã có ảnh xem trước --}}
+                            <div x-show="photoPreview" class="group relative w-full h-full p-2">
+                                <img :src="photoPreview"
+                                    class="max-h-80 w-full object-contain rounded-lg shadow-sm bg-white dark:bg-gray-800">
+
+                                {{-- Overlay khi hover vào ảnh --}}
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 rounded-lg">
+                                    <div class="flex gap-3">
+                                        {{-- Nút thay đổi ảnh --}}
+                                        <button type="button" @click="$refs.photoInput.click()"
+                                            class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-900 hover:bg-brand-500 hover:text-white transition-colors shadow-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                                <path d="m15 5 4 4" />
+                                            </svg>
+                                        </button>
+                                        {{-- Nút xóa ảnh --}}
+                                        <button type="button" @click="removePhoto()"
+                                            class="flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors shadow-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M3 6h18" />
+                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                                <line x1="10" y1="11" x2="10" y2="17" />
+                                                <line x1="14" y1="11" x2="14" y2="17" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <x-input-error :messages="$errors->get('image')" class="mt-2" />
                     </div>
                 </div>
             </div>
 
-            {{-- Cột Phải: Giá, Ảnh & Trạng thái --}}
-            <div class="space-y-8">
-                {{-- Box Giá & Link --}}
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
-                    <div class="space-y-6">
-                        <div>
-                            <label class="mb-2.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">Giá bán
-                                (VNĐ) <span class="text-red-500">*</span></label>
-                            <input type="number" name="price" placeholder="500000" required
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 px-5 font-bold text-gray-900 outline-none focus:border-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white" />
-                        </div>
+            {{-- Trạng thái hiển thị --}}
+            <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                <div x-data="{ switcherToggle: true }">
+                    <label for="is_active_toggle"
+                        class="flex cursor-pointer items-center justify-between text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                        <span>Trạng thái kích hoạt</span>
 
-                        <div>
-                            <label class="mb-2.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">Đường dẫn
-                                tải game</label>
-                            <input type="text" name="download_link" placeholder="Google Drive, Mega..."
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 px-5 text-sm outline-none focus:border-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white" />
-                        </div>
-                    </div>
-                </div>
+                        <div class="relative">
+                            <input type="checkbox" name="is_active" id="is_active_toggle" class="sr-only"
+                                value="1" x-model="switcherToggle" @change="switcherToggle = $el.checked" />
 
-                {{-- Box Ảnh đại diện --}}
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
-                    <label class="mb-4 block text-sm font-semibold text-gray-700 dark:text-gray-300">Ảnh bìa (Thumbnail)
-                        <span class="text-red-500">*</span></label>
-                    <div
-                        class="group relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-8 text-center transition hover:border-gray-900 dark:border-gray-700 dark:hover:border-white">
-                        <svg class="mb-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                            width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                            <circle cx="8.5" cy="8.5" r="1.5" />
-                            <polyline points="21 15 16 10 5 21" />
-                        </svg>
-                        <input type="file" name="image" required
-                            class="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0" />
-                        <p class="text-xs text-gray-500">Kéo thả hoặc nhấp để chọn ảnh</p>
-                    </div>
-                </div>
-
-                {{-- Box Trạng thái --}}
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="block text-sm font-semibold text-gray-700 dark:text-white">Mở bán ngay</span>
-                            <span class="text-[11px] text-gray-500 italic text-success-500">Game sẽ hiển thị trên trang
-                                chủ</span>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="is_active" value="1" checked class="sr-only peer">
-                            <div
-                                class="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-success-500 peer-checked:after:translate-x-full peer-checked:after:border-white dark:bg-gray-700">
+                            {{-- Thanh trượt --}}
+                            <div class="block h-6 w-11 rounded-full duration-300"
+                                :class="switcherToggle ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'">
                             </div>
-                        </label>
-                    </div>
+
+                            {{-- Nút tròn --}}
+                            <div :class="switcherToggle ? 'translate-x-full' : 'translate-x-0'"
+                                class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear">
+                            </div>
+                        </div>
+                    </label>
+                    <p class="mt-2 text-xs text-gray-500">Nếu tắt, game sẽ không hiển thị ngoài trang chủ.</p>
                 </div>
             </div>
         </div>
+        </div>
 
-        {{-- Thanh điều hướng & Nút bấm dưới cùng --}}
-        <div class="mt-10 flex items-center justify-between border-t border-gray-100 pt-8 dark:border-gray-800">
+        <div class="mt-8 flex items-center justify-end gap-x-6 border-t border-gray-100 pt-6 dark:border-gray-800">
             <a href="{{ route('admin.games.index') }}"
-                class="text-sm font-semibold text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-all underline underline-offset-4">
-                Quay lại danh sách
+                class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+                Hủy bỏ
             </a>
 
-            <div class="flex gap-8 items-center">
-                <button type="reset" class="text-sm font-medium text-gray-400 hover:text-red-500 transition-colors">
-                    Làm mới form
-                </button>
-
-                {{-- Nút Lưu chuẩn mẫu bạn muốn: Nhỏ, màu Đen/Trắng --}}
-                <button type="submit"
-                    class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 active:scale-95">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="3">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    Lưu sản phẩm
-                </button>
-            </div>
+            <button type="submit"
+                class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Lưu Game
+            </button>
         </div>
     </form>
 </x-app-layout>

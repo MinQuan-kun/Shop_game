@@ -114,7 +114,6 @@
                         <a href="{{ url('/') }}" class="menu-item group"
                             :class="window.location.pathname === '/' ? 'menu-item-active' : 'menu-item-inactive'">
 
-                            {{-- Icon Ngôi nhà (Home) --}}
                             <svg class="group-hover:text-white"
                                 :class="window.location.pathname === '/' ? 'menu-item-icon-active' :
                                     'menu-item-icon-inactive'"

@@ -19,7 +19,7 @@
     background: #94a3b8;
 }
 
-/* AlpineJS Cloak (Chống giật layout khi tải trang) */
+/* AlpineJS Cloak  */
 [x-cloak] {
     display: none !important;
 }
