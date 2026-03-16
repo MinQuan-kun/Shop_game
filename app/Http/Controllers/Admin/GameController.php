@@ -33,15 +33,26 @@ class GameController extends Controller
             'category_ids.*' => 'exists:categories,_id',
             'price' => 'required|numeric|min:0',
             'image' => 'required|image|max:2048',
-            'download_link' => 'nullable',
+            'download_link' => 'nullable|url',
+            'publisher' => 'required|string|max:255',
+            'platforms' => 'required|array',
+            'languages' => 'required|array',
             'description' => 'nullable|string',
         ]);
 
-        $data = $request->except('category_ids');
+        $data = $request->all();
+
         $data['slug'] = Str::slug($request->name) . '-' . time();
         $data['is_active'] = $request->has('is_active');
-        $data['category_ids'] = $request->category_ids;
 
+        if (in_array('Khác', $request->languages) && $request->other_language) {
+            $langs = $request->languages;
+            $langs = array_filter($langs, fn($l) => $l !== 'Khác');
+            $langs[] = $request->other_language;
+            $data['languages'] = array_values($langs);
+        }
+
+        // Xử lý Upload ảnh lên Cloudinary
         if ($request->hasFile('image')) {
             Configuration::instance(env('CLOUDINARY_URL'));
             $upload = new UploadApi();
@@ -54,24 +65,29 @@ class GameController extends Controller
         }
 
         Game::create($data);
+
         return redirect()->route('admin.games.index')->with('success', 'Thêm game thành công!');
     }
 
     public function edit(Game $game)
     {
-        $categories = Category::where('is_active', true)->get();
+        $categories = Category::all();
         return view('admin.games.edit', compact('game', 'categories'));
     }
 
-    // --- HÀM UPDATE (CẬP NHẬT) ---
+    // --- HÀM UPDATE ---
     public function update(Request $request, Game $game)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,_id',
-            'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,_id',
+            'price' => 'nullable|numeric|min:0',
+            'image' => 'nullable|image|max:2048',
             'download_link' => 'nullable|url',
+            'publisher' => 'nullable|string|max:255',
+            'platforms' => 'nullable|array',
+            'languages' => 'required|array',
             'description' => 'nullable|string',
         ]);
 

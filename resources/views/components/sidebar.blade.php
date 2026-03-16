@@ -45,11 +45,12 @@
                             <svg class="group-hover:text-white"
                                 :class="window.location.pathname.startsWith('/dashboard') ? 'menu-item-icon-active' :
                                     'menu-item-icon-inactive'"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V8.99998C3.25 10.2426 4.25736 11.25 5.5 11.25H9C10.2426 11.25 11.25 10.2426 11.25 8.99998V5.5C11.25 4.25736 10.2426 3.25 9 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H9C9.41421 4.75 9.75 5.08579 9.75 5.5V8.99998C9.75 9.41419 9.41421 9.74998 9 9.74998H5.5C5.08579 9.74998 4.75 9.41419 4.75 8.99998V5.5ZM5.5 12.75C4.25736 12.75 3.25 13.7574 3.25 15V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H9C10.2426 20.75 11.25 19.7427 11.25 18.5V15C11.25 13.7574 10.2426 12.75 9 12.75H5.5ZM4.75 15C4.75 14.5858 5.08579 14.25 5.5 14.25H9C9.41421 14.25 9.75 14.5858 9.75 15V18.5C9.75 18.9142 9.41421 19.25 9 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V15ZM12.75 5.5C12.75 4.25736 13.7574 3.25 15 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V8.99998C20.75 10.2426 19.7426 11.25 18.5 11.25H15C13.7574 11.25 12.75 10.2426 12.75 8.99998V5.5ZM15 4.75C14.5858 4.75 14.25 5.08579 14.25 5.5V8.99998C14.25 9.41419 14.5858 9.74998 15 9.74998H18.5C18.9142 9.74998 19.25 9.41419 19.25 8.99998V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H15ZM15 12.75C13.7574 12.75 12.75 13.7574 12.75 15V18.5C12.75 19.7426 13.7574 20.75 15 20.75H18.5C19.7426 20.75 20.75 19.7427 20.75 18.5V15C20.75 13.7574 19.7426 12.75 18.5 12.75H15ZM14.25 15C14.25 14.5858 14.5858 14.25 15 14.25H18.5C18.9142 14.25 19.25 14.5858 19.25 15V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15C14.5858 19.25 14.25 18.9142 14.25 18.5V15Z"
-                                    fill="" />
+                                width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3v18h18"></path>
+                                <path d="M18 17V9"></path>
+                                <path d="M13 17V5"></path>
+                                <path d="M8 17v-3"></path>
                             </svg>
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Dashboard</span>
                         </a>
@@ -78,14 +79,16 @@
                             :class="{{ request()->routeIs('admin.categories.*') ? 'true' : 'false' }} ? 'menu-item-active' :
                                 'menu-item-inactive'">
 
-                            {{-- Icon List/Menu --}}
                             <svg class="group-hover:text-white"
                                 :class="{{ request()->routeIs('admin.categories.*') ? 'true' : 'false' }} ?
                                     'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
                             </svg>
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Category</span>
                         </a>
@@ -96,19 +99,18 @@
                             :class="{{ request()->routeIs('admin.games.*') ? 'true' : 'false' }} ? 'menu-item-active' :
                                 'menu-item-inactive'">
 
-                            <svg class="group-hover:text-white"
-                                :class="{{ request()->routeIs('admin.games.*') ? 'true' : 'false' }} ?
-                                    'menu-item-icon-active' :
-                                    'menu-item-icon-inactive'"
+                            <svg :class="{{ request()->routeIs('admin.games.*') ? 'true' : 'false' }} ?
+                                    'menu-item-icon-active' : 'menu-item-icon-inactive'"
                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M21 9H17V7H21V9ZM21 11H17V13H21V11ZM21 15H17V17H21V15ZM9 9H5V7H9V9ZM9 11H5V13H9V11ZM9 15H5V17H9V15ZM12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z"
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M11.665 3.75618C11.8762 3.65061 12.1247 3.65061 12.3358 3.75618L18.7807 6.97853L12.3358 10.2009C12.1247 10.3064 11.8762 10.3064 11.665 10.2009L5.22014 6.97853L11.665 3.75618ZM4.29297 8.19199V16.0946C4.29297 16.3787 4.45347 16.6384 4.70757 16.7654L11.25 20.0365V11.6512C11.1631 11.6205 11.0777 11.5843 10.9942 11.5425L4.29297 8.19199ZM12.75 20.037L19.2933 16.7654C19.5474 16.6384 19.7079 16.3787 19.7079 16.0946V8.19199L13.0066 11.5425C12.9229 11.5844 12.8372 11.6207 12.75 11.6515V20.037ZM13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857L11.3296 20.9149L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z"
                                     fill="" />
                             </svg>
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Games</span>
                         </a>
                     </li>
+
 
                     <li>
                         <a href="{{ url('/') }}" class="menu-item group"
