@@ -1,12 +1,3 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 <x-app-layout>
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-bold text-black dark:text-white">
@@ -30,6 +21,55 @@
             </ol>
         </nav>
     </div>
+
+    @if ($errors->any())
+        <div
+            class="rounded-xl border border-error-500 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/15 mb-6">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-error-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-bold text-error-500">Phát hiện lỗi nhập liệu:</h3>
+                    <div class="mt-2 text-sm text-error-500/80">
+                        <ul class="list-disc space-y-1 pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
+    @if (session('success'))
+        <div
+            class="flex w-full rounded-lg border-l-[6px] border-green-500 bg-green-500/5 px-7 py-8 shadow-md dark:bg-[#1b1b24] md:p-9 mb-6">
+            <div class="mr-5 flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-green-500">
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M15.2984 0.826822L15.2868 0.811827L15.2741 0.797751C14.9173 0.401837 14.3238 0.400754 13.9657 0.794406L5.91888 9.53011L2.05606 5.28116C1.69149 4.88028 1.071 4.87423 0.69834 5.26763C0.325329 5.66139 0.330881 6.28723 0.710041 6.67443L5.24736 11.3053C5.42152 11.4831 5.66103 11.584 5.91231 11.584C6.16359 11.584 6.40309 11.4831 6.57726 11.3053L15.2917 1.83988C15.6565 1.44431 15.6601 0.821361 15.2984 0.826822Z"
+                        fill="white" stroke="white" />
+                </svg>
+            </div>
+            <div class="w-full">
+                <h5 class="mb-3 text-lg font-bold text-[#004434] dark:text-[#beffec]">
+                    Thành công!
+                </h5>
+                <p class="leading-relaxed text-[#637381] dark:text-[#beffec]/80">
+                    {{ session('success') }}
+                </p>
+            </div>
+        </div>
+    @endif
+
     <form action="{{ route('admin.games.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
