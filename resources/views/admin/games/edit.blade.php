@@ -213,7 +213,7 @@
 
                             <div x-show="showOtherInput" x-transition class="mt-3">
                                 <input type="text" name="other_language" placeholder="Nhập ngôn ngữ khác..."
-                                    class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm dark:border-gray-700 dark:bg-gray-900" />
+                                    class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm text-black dark:text-white focus:border-brand-500 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900" />
                             </div>
                         </div>
 
