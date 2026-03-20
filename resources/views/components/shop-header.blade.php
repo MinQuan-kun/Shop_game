@@ -1,5 +1,4 @@
-<header
-    class="sticky top-0 z-50 w-full
+<header class="sticky top-0 z-50 w-full
          bg-white/90
          dark:bg-black
          backdrop-blur
@@ -57,6 +56,21 @@
                     </div>
                 @endguest
 
+                @auth
+                    {{-- Cart Icon with Badge --}}
+                    <a href="{{ route('cart.index') }}" class="relative text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 transition">
+                        <i class="fa-solid fa-shopping-cart fa-lg"></i>
+                        @php
+                            $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
+                        @endphp
+                        @if($cartCount > 0)
+                            <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                {{ $cartCount }}
+                            </span>
+                        @endif
+                    </a>
+                @endauth
+
                 <button onclick="toggleTheme()"
                     class="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors">
                     <svg class="w-6 h-6 hidden dark:block text-yellow-400" fill="none" stroke="currentColor"
@@ -98,8 +112,18 @@
                         </button>
 
                         <div x-show="dropdownOpen" @click.outside="dropdownOpen = false"
-                            class="absolute right-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 py-2 z-50 overflow-hidden transform transition-all duration-200"
+                           class="absolute right-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 py-2 z-50 overflow-hidden transform transition-all duration-200"
                             style="display: none;">
+                            {{-- Wallet Balance (First Item) --}}
+                            <div class="px-4 py-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-b border-green-500/20">
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Số dư ví</p>
+                                <a href="{{ route('wallet.index') }}" class="flex items-center gap-2 group">
+                                    <i class="fa-solid fa-wallet text-green-600 dark:text-green-400"></i>
+                                    <span class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition">
+                                        {{ number_format(Auth::user()->balance ?? 0, 0, ',', '.') }} đ
+                                    </span>
+                                </a>
+                            </div>
 
                             <div
                                 class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
@@ -120,6 +144,16 @@
                                     Hồ sơ cá nhân
                                 </a>
 
+                                <a href="{{ route('orders.index') }}"
+                                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-miku-50 dark:hover:bg-gray-700 hover:text-miku-600 dark:hover:text-white transition-colors">
+                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-miku-500" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                    </svg>
+                                    Đơn hàng của tôi
+                                </a>
+
                                 <a href="#"
                                     class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-miku-50 dark:hover:bg-gray-700 hover:text-miku-600 dark:hover:text-white transition-colors">
                                     <svg class="w-5 h-5 text-gray-400 group-hover:text-pink-500" fill="none"
@@ -130,16 +164,6 @@
                                     </svg>
                                     Donate ủng hộ
                                 </a>
-
-                                <a href="#"
-                                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-miku-50 dark:hover:bg-gray-700 hover:text-miku-600 dark:hover:text-white transition-colors">
-                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-miku-500" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                    </svg>
-                                    Game đã mua
-                                </a>
                             </div>
 
                             <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
@@ -148,8 +172,7 @@
                                 @csrf
                                 <button type="submit"
                                     class="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
                                         </path>

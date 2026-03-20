@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-admin-layout>
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-bold text-black dark:text-white">
             Thêm Game Mới
@@ -147,7 +147,7 @@
                                                         <svg width="14" height="14" viewBox="0 0 14 14"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7"
-                                                                stroke="white" stroke-width="1.94437"
+                                                                stroke="currentColor" stroke-width="1.94437"
                                                                 stroke-linecap="round" stroke-linejoin="round" />
                                                         </svg>
                                                     </span>
@@ -200,7 +200,7 @@
                                                         <svg width="14" height="14" viewBox="0 0 14 14"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7"
-                                                                stroke="white" stroke-width="1.94437"
+                                                                stroke="currentColor" stroke-width="1.94437"
                                                                 stroke-linecap="round" stroke-linejoin="round" />
                                                         </svg>
                                                     </span>
@@ -242,7 +242,7 @@
                                                         'opacity-0'">
                                                     <svg width="14" height="14" viewBox="0 0 14 14"
                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white"
+                                                        <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor"
                                                             stroke-width="2" stroke-linecap="round"
                                                             stroke-linejoin="round" />
                                                     </svg>
@@ -426,4 +426,4 @@
             </button>
         </div>
     </form>
-</x-app-layout>
+</x-admin-layout>
