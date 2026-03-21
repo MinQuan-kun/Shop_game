@@ -18,8 +18,25 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
+
+        // Get purchased games from orders
+        $purchasedGames = \App\Models\OrderItem::whereHas('order', function ($query) use ($user) {
+            $query->where('user_id', $user->_id)
+                ->where('status', 'completed');
+        })->with('game')->get()->pluck('game')->unique('_id');
+
+        // Get transaction history with order relationship
+        $transactions = \App\Models\Transaction::where('user_id', $user->_id)
+            ->with('order')
+            ->orderBy('created_at', 'desc')
+            ->limit(20)
+            ->get();
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'purchasedGames' => $purchasedGames,
+            'transactions' => $transactions,
         ]);
     }
 
@@ -40,7 +57,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's avatar (HÀM MỚI CẦN THÊM).
+     * Update the user's avatar.
      */
     public function updateAvatar(Request $request): RedirectResponse
     {
@@ -101,5 +118,4 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-
 }

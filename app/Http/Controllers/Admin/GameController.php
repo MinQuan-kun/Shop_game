@@ -20,7 +20,7 @@ class GameController extends Controller
 
     public function create()
     {
-        $categories = \App\Models\Category::all();
+        $categories = Category::all();
         return view('admin.games.create', compact('categories'));
     }
 
