@@ -3,21 +3,150 @@
 
         <x-banner />
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="flex flex-col lg:flex-row gap-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-                {{-- Cột bên trái: Danh sách Game --}}
-                <div class="w-full lg:w-9/12">
-                    <div class="flex items-center justify-between mb-6 border-l-4 border-miku-500 pl-4">
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                            Game Mới
-                        </h2>
-                        <a href="#" class="text-sm text-miku-600 dark:text-miku-400 hover:underline">
-                            Xem tất cả <i class="fa-solid fa-arrow-right"></i>
-                        </a>
+            {{-- Thanh tìm kiếm riêng biệt ở đầu --}}
+            <div class="mb-8 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg p-6" x-data="searchAutocomplete()">
+                <div class="flex flex-col gap-4">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            placeholder="🔍 Tìm kiếm game..."
+                            value="{{ request('search') }}"
+                            @input="search($el.value)"
+                            @focus="open = true"
+                            @keydown.escape="open = false"
+                            class="w-full px-5 py-3 bg-gray-50 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-0 focus:border-miku-500 outline-none transition text-lg">
+                        
+                        {{-- Suggestions dropdown --}}
+                        <div x-show="open && suggestions.length > 0" @click.outside="closeSuggestions()" class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border-2 border-miku-300 dark:border-miku-600 rounded-lg shadow-2xl z-50 max-h-96 overflow-y-auto">
+                            <template x-for="(game, idx) in suggestions" :key="idx">
+                                <a :href="`{{ url('/game') }}/${game.id}`" @click="closeSuggestions()" class="flex items-center gap-3 p-4 hover:bg-miku-50 dark:hover:bg-miku-900/20 transition border-b border-gray-100 dark:border-gray-700 last:border-0">
+                                    <img :src="game.image" :alt="game.name" class="w-12 h-16 object-cover rounded-lg shadow-sm">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-bold text-gray-900 dark:text-white truncate" x-text="game.name"></p>
+                                        <p class="text-xs text-miku-600 dark:text-miku-400 font-bold" x-text="game.price_formatted"></p>
+                                    </div>
+                                </a>
+                            </template>
+                        </div>
                     </div>
+                </div>
+            </div>
 
-                    {{-- Grid hiển thị Game --}}
+            {{-- Bộ lọc ngang ở đầu - Collapsible --}}
+            <form action="{{ route('home') }}" method="GET" id="filterForm">
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden" x-data="{ open: {{ request()->hasAny(['search', 'min_price', 'max_price', 'platform', 'publisher']) ? 'true' : 'false' }} }">
+                    
+                    {{-- Header toggle --}}
+                    <button type="button" @click="open = !open" class="w-full px-6 py-4 bg-gradient-to-r from-miku-500 to-miku-600 hover:from-miku-600 hover:to-miku-700 text-white font-black text-lg flex items-center justify-between transition shadow-md">
+                        <span class="flex items-center gap-3">
+                            <i class="fa-solid fa-sliders"></i>Bộ lọc nâng cao
+                        </span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300" :class="open && 'rotate-180'"></i>
+                    </button>
+
+                    {{-- Filter content --}}
+                    <div x-show="open" x-transition class="p-6 border-t border-gray-200 dark:border-gray-700">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            
+                            {{-- Giá --}}
+                            <div>
+                                <label class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide block mb-2">💰 Từ giá</label>
+                                <input type="number" name="min_price" placeholder="Từ" value="{{ request('min_price') }}" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-0 focus:border-orange-500 outline-none transition text-sm">
+                            </div>
+
+                            {{-- Đến giá --}}
+                            <div>
+                                <label class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide block mb-2">💰 Đến giá</label>
+                                <input type="number" name="max_price" placeholder="Đến" value="{{ request('max_price') }}" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-0 focus:border-orange-500 outline-none transition text-sm">
+                            </div>
+
+                            {{-- Nền tảng --}}
+                            <div>
+                                <label class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide block mb-2">🎮 Nền tảng</label>
+                                <select name="platform[]" multiple class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-0 focus:border-blue-500 outline-none transition text-sm">
+                                    <option value="">Chọn...</option>
+                                    @foreach(['PC', 'PS5', 'Xbox Series X/S', 'Nintendo Switch'] as $platform)
+                                        <option value="{{ $platform }}" {{ in_array($platform, (array)request('platform', [])) ? 'selected' : '' }}>{{ $platform }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Nhà phát hành --}}
+                            @if($publishers->count() > 0)
+                            <div>
+                                <label class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide block mb-2">🏢 NPH</label>
+                                <select name="publisher" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-0 focus:border-purple-500 outline-none transition text-sm">
+                                    <option value="">Tất cả</option>
+                                    @foreach($publishers as $pub)
+                                        <option value="{{ $pub }}" {{ request('publisher') === $pub ? 'selected' : '' }}>{{ substr($pub, 0, 15) }}{{ strlen($pub) > 15 ? '...' : '' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
+
+                        </div>
+
+                        {{-- Nút submit & reset --}}
+                        <div class="flex gap-3 mt-6">
+                            <button type="submit" class="flex-1 bg-gradient-to-r from-miku-500 to-miku-600 hover:from-miku-600 hover:to-miku-700 text-white font-bold py-2 px-4 rounded-lg transition shadow-md transform hover:scale-105 duration-300">
+                                <i class="fa-solid fa-check mr-2"></i>Áp dụng
+                            </button>
+                            @if(request()->hasAny(['search', 'category', 'min_price', 'max_price', 'platform', 'publisher']))
+                            <a href="{{ route('home') }}" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition shadow-md transform hover:scale-105 duration-300 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-redo"></i>Reset
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            {{-- Phần category filter ngang --}}
+            <form action="{{ route('home') }}" method="GET" class="mb-6">
+                <div class="flex gap-2 flex-wrap">
+                    <button type="submit" name="category" value="" class="px-4 py-2 rounded-lg font-semibold text-sm transition {{ !request('category') ? 'bg-miku-500 text-white shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-miku-500' }}">
+                        ⭐ Tất cả
+                    </button>
+                    @foreach ($categories as $category)
+                        <button type="submit" name="category" value="{{ $category->slug }}" class="px-4 py-2 rounded-lg font-semibold text-sm transition {{ request('category') === $category->slug ? 'bg-miku-500 text-white shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-miku-500' }}">
+                            {{ $category->name }}
+                        </button>
+                    @endforeach
+                </div>
+                {{-- Preserve other filters --}}
+                @if(request('search'))
+                    <input type="hidden" name="search" value="{{ request('search') }}">
+                @endif
+                @if(request('min_price'))
+                    <input type="hidden" name="min_price" value="{{ request('min_price') }}">
+                @endif
+                @if(request('max_price'))
+                    <input type="hidden" name="max_price" value="{{ request('max_price') }}">
+                @endif
+                @if(request('publisher'))
+                    <input type="hidden" name="publisher" value="{{ request('publisher') }}">
+                @endif
+            </form>
+
+            {{-- Danh sách Game --}}
+            <div>
+                <div class="flex items-center justify-between mb-6 border-l-4 border-miku-500 pl-4">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-wider">
+                        @if(request('category'))
+                            {{ $categories->firstWhere('slug', request('category'))?->name ?? 'Games' }} Mới
+                        @else
+                            Game Mới
+                        @endif
+                    </h2>
+                    <a href="#" class="text-sm text-miku-600 dark:text-miku-400 hover:underline">
+                        Xem tất cả <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                {{-- Grid hiển thị Game --}}
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                         @foreach ($games as $game)
                             <div class="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md dark:shadow-lg border border-gray-200 dark:border-gray-700 hover:border-miku-500 transition duration-300">
@@ -70,64 +199,6 @@
                     {{-- Phân trang (Pagination) --}}
                     <div class="mt-8">
                         {{ $games->links() }}
-                    </div>
-                </div>
-
-                {{-- Cột bên phải: Sidebar --}}
-                <div class="w-full lg:w-3/12 space-y-8">
-                    {{-- Tìm kiếm --}}
-                    <div class="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-600 pb-2">
-                            Tìm Kiếm
-                        </h3>
-                        <form class="relative">
-                            <input type="text" placeholder="Nhập tên game..."
-                                class="w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-4 focus:ring-miku-500 focus:border-miku-500 outline-none">
-                            <button type="submit" class="absolute right-3 top-2.5 text-gray-400 hover:text-miku-500">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
-                        </form>
-                    </div>
-
-                    {{-- Thể loại --}}
-                    <div class="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-600 pb-2">
-                            Thể Loại
-                        </h3>
-                        <ul class="space-y-2">
-                            {{-- All games link --}}
-                            <li>
-                                <a href="{{ route('home') }}"
-                                    class="block text-gray-600 dark:text-gray-300 hover:text-miku-600 dark:hover:text-miku-400 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition font-medium {{ !request('category') ? 'bg-miku-50 dark:bg-miku-900/20 text-miku-600 dark:text-miku-400' : '' }}">
-                                    <i class="fa-solid fa-list text-miku-500 mr-2"></i> Tất cả
-                                </a>
-                            </li>
-                            
-                            @foreach ($categories as $category)
-                                <li>
-                                    <a href="{{ route('home', ['category' => $category->slug]) }}"
-                                        class="block text-gray-600 dark:text-gray-300 hover:text-miku-600 dark:hover:text-miku-400 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition font-medium {{ request('category') === $category->slug ? 'bg-miku-50 dark:bg-miku-900/20 text-miku-600 dark:text-miku-400' : '' }}">
-                                        <i class="fa-solid fa-caret-right text-miku-500 mr-2"></i> {{ $category->name }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    {{-- Banner Discord --}}
-                    <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 relative h-64 flex items-center justify-center group cursor-pointer shadow-sm transition-colors duration-300">
-                        <img src="https://res.cloudinary.com/davfujasj/image/upload/v1765274236/Gemini_Generated_Image_l4qelbl4qelbl4qe_v2akas.png"
-                            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition duration-500">
-
-                        <div class="relative z-10 text-center p-4">
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Tham gia Discord</h3>
-                            <p class="text-sm font-bold text-gray-600 dark:text-gray-300 mb-4">
-                                Nhận link tải tốc độ cao & hỗ trợ cài đặt
-                            </p>
-                            <span class="inline-block bg-[#5865F2] text-white px-4 py-2 rounded font-bold hover:bg-[#4752c4] transition shadow-md">
-                                <i class="fa-brands fa-discord mr-1"></i> Join Now
-                            </span>
-                        </div>
                     </div>
                 </div>
             </div>

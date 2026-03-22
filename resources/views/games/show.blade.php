@@ -2,33 +2,40 @@
     <div class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300 py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            {{-- Breadcrumb (Đường dẫn) --}}
-            <nav class="flex mb-6 text-sm text-gray-500 dark:text-gray-400">
-                <a href="{{ route('home') }}" class="hover:text-miku-500 hover:underline">Trang chủ</a>
-                <span class="mx-2">/</span>
-                <span class="text-gray-800 dark:text-white font-medium truncate">{{ $game->name }}</span>
-            </nav>
+            {{-- Header với Back Button --}}
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-4">
+                    <button onclick="window.history.back()" class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-miku-600 dark:hover:text-miku-400 hover:border-miku-500 transition shadow-sm">
+                        <i class="fa-solid fa-arrow-left text-lg"></i>
+                    </button>
+                    <nav class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <a href="{{ route('home') }}" class="hover:text-miku-500 transition">Trang chủ</a>
+                        <span class="mx-3">/</span>
+                        <span class="text-gray-800 dark:text-white font-semibold max-w-xs truncate">{{ $game->name }}</span>
+                    </nav>
+                </div>
+            </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                 {{-- CỘT TRÁI: Ảnh & Thông tin chính --}}
-                <div class="lg:col-span-2 space-y-8">
+                <div class="lg:col-span-2 space-y-6">
 
                     {{-- Ảnh Bìa Game --}}
-                    <div
-                        class="rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-                        <div class="relative aspect-video">
+                    <div class="rounded-2xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 group">
+                        <div class="relative aspect-video bg-gray-900 overflow-hidden">
                             <img src="{{ Str::startsWith($game->image, 'http') ? $game->image : asset('storage/' . $game->image) }}"
-                                alt="{{ $game->name }}" class="w-full h-full object-cover">
+                                alt="{{ $game->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
 
                             {{-- Nhãn Giá --}}
-                            <div class="absolute bottom-4 right-4">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-4 right-4 flex flex-col items-end gap-2">
                                 @if($game->price == 0)
-                                    <span class="bg-green-500 text-white text-lg font-bold px-4 py-2 rounded-lg shadow-lg">
-                                        Miễn phí
+                                    <span class="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-lg font-bold px-6 py-3 rounded-xl shadow-2xl">
+                                        <i class="fa-solid fa-gift mr-2"></i>Miễn phí
                                     </span>
                                 @else
-                                    <span class="bg-brand-500 text-white text-lg font-bold px-4 py-2 rounded-lg shadow-lg">
+                                    <span class="bg-gradient-to-r from-miku-500 to-miku-600 text-white text-lg font-bold px-6 py-3 rounded-xl shadow-2xl">
                                         {{ number_format($game->price, 0, ',', '.') }} VNĐ
                                     </span>
                                 @endif
@@ -37,33 +44,49 @@
                     </div>
 
                     {{-- Thông tin chi tiết & Nút bấm --}}
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-                        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">{{ $game->name }}</h1>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h1 class="text-4xl font-black text-gray-900 dark:text-white mb-2 bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">{{ $game->name }}</h1>
 
-                        <div class="flex flex-wrap gap-4 mb-6 text-sm">
-                            <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                <i class="fa-solid fa-user-tie mr-2 text-miku-500"></i>
-                                Nhà phát hành: <span
-                                    class="font-semibold ml-1 text-gray-900 dark:text-white">{{ $game->publisher }}</span>
+                        <div class="flex flex-wrap gap-6 mb-8 text-sm pt-4 border-t border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-miku-50 dark:bg-miku-900/30 flex items-center justify-center text-miku-600">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Nhà phát hành</p>
+                                    <p class="font-bold text-gray-900 dark:text-white">{{ $game->publisher }}</p>
+                                </div>
                             </div>
-                            <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                <i class="fa-solid fa-calendar-days mr-2 text-miku-500"></i>
-                                Ngày đăng: <span
-                                    class="font-semibold ml-1 text-gray-900 dark:text-white">{{ $game->created_at->format('d/m/Y') }}</span>
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Ngày đăng</p>
+                                    <p class="font-bold text-gray-900 dark:text-white">{{ $game->created_at->format('d/m/Y') }}</p>
+                                </div>
                             </div>
+                            @if(!empty($game->sold_count))
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-orange-50 dark:bg-orange-900/30 flex items-center justify-center text-orange-600">
+                                    <i class="fa-solid fa-fire"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Đã bán</p>
+                                    <p class="font-bold text-gray-900 dark:text-white">{{ number_format($game->sold_count) }}</p>
+                                </div>
+                            </div>
+                            @endif
                         </div>
 
                         {{-- Danh sách nền tảng --}}
                         @if(!empty($game->platforms))
-                            <div class="mb-6">
-                                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase">Nền tảng
-                                    hỗ trợ</h3>
-                                <div class="flex gap-2">
+                            <div class="mb-8">
+                                <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 mb-3 uppercase tracking-wide">Nền tảng hỗ trợ</h3>
+                                <div class="flex flex-wrap gap-2">
                                     @foreach($game->platforms as $platform)
-                                        <span
-                                            class="px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium border border-gray-200 dark:border-gray-600">
-                                            {{ $platform }}
+                                        <span class="px-4 py-2 rounded-lg bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 text-gray-800 dark:text-gray-100 text-sm font-semibold border border-gray-200 dark:border-gray-600 shadow-sm">
+                                            <i class="fa-solid fa-gamepad mr-2"></i>{{ $platform }}
                                         </span>
                                     @endforeach
                                 </div>
@@ -71,13 +94,13 @@
                         @endif
 
                         {{-- Nút hành động --}}
-                        <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                        <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-100 dark:border-gray-700">
                             @auth
                                 @if(Auth::user()->ownsGame($game->id))
                                     {{-- User owns the game - show download --}}
                                     <a href="{{ $game->download_link }}" target="_blank"
-                                        class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg flex items-center justify-center gap-2">
-                                        <i class="fa-solid fa-download"></i>
+                                        class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-green-500/30 flex items-center justify-center gap-2 group">
+                                        <i class="fa-solid fa-download group-hover:scale-110 transition"></i>
                                         Tải Game
                                     </a>
                                 @else
@@ -87,15 +110,15 @@
                                             @csrf
                                             <input type="hidden" name="game_id" value="{{ $game->id }}">
                                             <button type="submit"
-                                                class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-brand-500/30 flex items-center justify-center gap-2">
-                                                <i class="fa-solid fa-cart-plus"></i>
-                                                Thêm vào giỏ hàng - {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                                                class="w-full bg-gradient-to-r from-miku-500 to-miku-600 hover:from-miku-600 hover:to-miku-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-miku-500/30 flex items-center justify-center gap-2 group">
+                                                <i class="fa-solid fa-cart-plus group-hover:scale-110 transition"></i>
+                                                Thêm vào giỏ hàng
                                             </button>
                                         </form>
                                     @else
                                         <a href="{{ $game->download_link }}" target="_blank"
-                                            class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg flex items-center justify-center gap-2">
-                                            <i class="fa-solid fa-download"></i>
+                                            class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-green-500/30 flex items-center justify-center gap-2 group">
+                                            <i class="fa-solid fa-download group-hover:scale-110 transition"></i>
                                             Tải Game Miễn Phí
                                         </a>
                                     @endif
@@ -104,15 +127,15 @@
                                 {{-- Not logged in --}}
                                 @if($game->price > 0)
                                     <a href="{{ route('login') }}"
-                                        class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-brand-500/30 flex items-center justify-center gap-2">
-                                        <i class="fa-solid fa-cart-plus"></i>
-                                        Đăng nhập để mua - {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                                        class="flex-1 bg-gradient-to-r from-miku-500 to-miku-600 hover:from-miku-600 hover:to-miku-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-miku-500/30 flex items-center justify-center gap-2 group">
+                                        <i class="fa-solid fa-cart-plus group-hover:scale-110 transition"></i>
+                                        Đăng nhập để mua
                                     </a>
                                 @else
                                     <a href="{{ route('login') }}"
-                                        class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg flex items-center justify-center gap-2">
-                                        <i class="fa-solid fa-download"></i>
-                                        Đăng nhập để tải miễn phí
+                                        class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-green-500/30 flex items-center justify-center gap-2 group">
+                                        <i class="fa-solid fa-download group-hover:scale-110 transition"></i>
+                                        Đăng nhập tải miễn phí
                                     </a>
                                 @endif
                             @endauth
@@ -120,63 +143,70 @@
                     </div>
 
                     {{-- Mô tả Game --}}
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-align-left text-miku-500"></i> Giới thiệu game
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-miku-500 to-miku-600 flex items-center justify-center text-white">
+                                <i class="fa-solid fa-align-left text-sm"></i>
+                            </div>
+                            Giới thiệu game
                         </h2>
-                        <div
-                            class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+                        <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line text-base">
                             {{ $game->description }}
                         </div>
                     </div>
                 </div>
 
                 {{-- CỘT PHẢI: Sidebar & Game liên quan --}}
-                <div class="w-full space-y-8">
+                <div class="w-full space-y-6">
 
-                    {{-- Box thông tin Discord (Giữ lại từ trang chủ) --}}
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 relative h-64 flex items-center justify-center group cursor-pointer shadow-sm">
+                    {{-- Box thông tin Discord --}}
+                    <div class="bg-gradient-to-br from-[#5865F2] to-[#4752c4] rounded-2xl overflow-hidden relative h-72 flex items-center justify-center group cursor-pointer shadow-2xl border border-[#6c77ff]/50 hover:shadow-[#5865F2]/50 transition-all duration-300">
                         <img src="https://res.cloudinary.com/davfujasj/image/upload/v1765274236/Gemini_Generated_Image_l4qelbl4qelbl4qe_v2akas.png"
-                            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition duration-500">
-                        <div class="relative z-10 text-center p-4">
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Cộng đồng Discord</h3>
-                            <p class="text-sm font-bold text-gray-600 dark:text-gray-300 mb-4">Hỗ trợ cài đặt & tìm bạn
-                                chơi cùng</p>
-                            <span
-                                class="inline-block bg-[#5865F2] text-white px-4 py-2 rounded font-bold hover:bg-[#4752c4] transition shadow-md">
-                                <i class="fa-brands fa-discord mr-1"></i> Tham gia ngay
-                            </span>
+                            class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#5865F2]/80 via-transparent to-transparent"></div>
+                        <div class="relative z-10 text-center p-6">
+                            <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-white/20 flex items-center justify-center text-2xl">
+                                <i class="fa-brands fa-discord text-white"></i>
+                            </div>
+                            <h3 class="text-2xl font-black text-white mb-2">Cộng đồng Discord</h3>
+                            <p class="text-sm font-semibold text-blue-100 mb-5 leading-relaxed">
+                                Hỗ trợ cài đặt & tìm bạn chơi cùng
+                            </p>
+                            <a href="#" class="inline-block bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-bold hover:bg-yellow-300 transition shadow-lg transform group-hover:scale-105 duration-300">
+                                <i class="fa-brands fa-discord mr-2"></i>Tham gia ngay
+                            </a>
                         </div>
                     </div>
 
                     {{-- Game Liên Quan --}}
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <h3
-                            class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-600 pb-2">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                        <h3 class="text-lg font-black text-gray-900 dark:text-white mb-5 border-b border-gray-100 dark:border-gray-600 pb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-fire text-orange-500"></i>
                             Có thể bạn thích
                         </h3>
-                        <div class="space-y-4">
+                        <div class="space-y-3">
                             @foreach($relatedGames as $related)
-                                <a href="{{ route('game.show', $related->id) }}" class="flex gap-4 group">
-                                    <div class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden relative">
+                                <a href="{{ route('game.show', $related->id) }}" class="flex gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition group">
+                                    <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden relative shadow-md">
                                         <img src="{{ Str::startsWith($related->image, 'http') ? $related->image : asset('storage/' . $related->image) }}"
                                             class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                            <i class="fa-solid fa-play text-white text-xl"></i>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h4
-                                            class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-miku-500 transition line-clamp-2">
+                                    <div class="flex-1">
+                                        <h4 class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-miku-500 dark:group-hover:text-miku-400 transition line-clamp-2 mb-2">
                                             {{ $related->name }}
                                         </h4>
-                                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                            @if($related->price == 0)
-                                                <span class="text-green-500 font-bold">Miễn phí</span>
-                                            @else
-                                                <span
-                                                    class="text-brand-500 font-bold">{{ number_format($related->price, 0, ',', '.') }}đ</span>
-                                            @endif
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                @if($related->price == 0)
+                                                    <span class="text-xs font-black text-green-600 dark:text-green-400 uppercase tracking-wide">Miễn phí</span>
+                                                @else
+                                                    <span class="text-sm font-black text-miku-600 dark:text-miku-400">{{ number_format($related->price, 0, ',', '.') }}đ</span>
+                                                @endif
+                                            </div>
+                                            <i class="fa-solid fa-arrow-right text-gray-400 group-hover:text-miku-500 transition opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 duration-300"></i>
                                         </div>
                                     </div>
                                 </a>
