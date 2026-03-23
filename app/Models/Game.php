@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// SỬA DÒNG NÀY: Dùng Model của MongoDB thay vì SQL chuẩn
 use MongoDB\Laravel\Eloquent\Model;
 
 class Game extends Model
@@ -26,6 +25,12 @@ class Game extends Model
         'languages',     
         'sold_count',
         'is_active',
+    ];
+
+    protected $casts = [
+        'price' => 'integer',      
+        'sold_count' => 'integer',
+        'is_active' => 'boolean',
     ];
 
     public function category()

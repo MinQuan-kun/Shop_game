@@ -127,7 +127,7 @@
                                 <td class="px-6 py-4 text-center">
                                     @if ($game->price == 0)
                                         <span
-                                            class="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-black dark:text-white">
+                                            class="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-black dark:text-black">
                                             Miễn phí
                                         </span>
                                     @else
@@ -151,13 +151,15 @@
                                         </a>
 
                                         {{-- Nút Xóa --}}
-                                        <form action="{{ route('admin.games.destroy', $game->id) }}" method="POST"
-                                            onsubmit="return confirm('Hành động này không thể hoàn tác. Bạn chắc chắn muốn xóa?');">
+                                        <form id="delete-game-form-{{ $game->id }}"
+                                            action="{{ route('admin.games.destroy', $game->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"
+
+                                            <button type="button"
+                                                onclick="confirmDeleteGame('{{ $game->id }}', '{{ $game->name }}')"
                                                 class="p-2 rounded-full text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-500/10 transition-all"
-                                                title="Xóa">
+                                                title="Xóa Game">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -182,3 +184,22 @@
         </div>
     </div>
 </x-admin-layout>
+
+<script>
+    function confirmDeleteGame(gameId, gameName) {
+        Swal.fire({
+            title: 'Xóa game này?',
+            text: `Bạn có chắc muốn xóa game "${gameName}" không? Hành động này không thể hoàn tác!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Vâng, xóa nó!',
+            cancelButtonText: 'Hủy bỏ'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-game-form-' + gameId).submit();
+            }
+        })
+    }
+</script>

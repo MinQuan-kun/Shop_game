@@ -173,12 +173,15 @@
                         </div>
                         {{-- Ngôn ngữ --}}
                         <div x-data="{
-                            selectedLanguages: [],
-                            showOtherInput: false,
-                            toggleOther() {
-                                this.showOtherInput = this.selectedLanguages.includes('Khác');
-                            }
-                        }">
+                            selectedLanguages: {{ Js::from(old('languages', $game->languages ?? [])) }},
+                                showOtherInput: false,
+                                init() {
+                                    this.toggleOther();
+                                },
+                                toggleOther() {
+                                    this.showOtherInput = this.selectedLanguages.includes('Khác');
+                                }
+                        }" x-init="init()">
                             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Ngôn
                                 ngữ</label>
 
