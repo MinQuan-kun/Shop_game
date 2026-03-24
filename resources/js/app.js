@@ -9,7 +9,7 @@ window.Swal = Swal;
 window.Alpine = Alpine;
 
 
-window.confirmDelete = function(formId) {
+window.confirmDelete = function (formId) {
     Swal.fire({
         title: 'Bạn có chắc chắn không?',
         text: "Hành động này không thể hoàn tác!",
@@ -26,7 +26,7 @@ window.confirmDelete = function(formId) {
     });
 };
 
-window.confirmResetPassword = function(userId) {
+window.confirmResetPassword = function (userId) {
     Swal.fire({
         title: 'Xác nhận reset mật khẩu?',
         text: "Mật khẩu sẽ được đặt về '12345678'",
@@ -43,21 +43,23 @@ window.confirmResetPassword = function(userId) {
     });
 };
 
+
+
 // Autocomplete function
-window.searchAutocomplete = function() {
+window.searchAutocomplete = function () {
     return {
         open: false,
         suggestions: [],
         timeout: null,
         search(query) {
             clearTimeout(this.timeout);
-            
+
             if (!query || query.length < 2) {
                 this.suggestions = [];
                 this.open = false;
                 return;
             }
-            
+
             this.timeout = setTimeout(() => {
                 fetch(`/api/games/search?q=${encodeURIComponent(query)}`)
                     .then(res => res.json())

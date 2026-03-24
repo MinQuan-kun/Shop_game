@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -24,6 +25,33 @@ class UserController extends Controller
         $status = $user->is_active ? 'được mở khóa' : 'đã bị khóa';
 
         return redirect()->route('admin.users.index')->with('success', "Tài khoản {$user->name} đã $status thành công!");
+    }
+
+    public function create()
+    {
+        return view('admin.users.create');
+    }
+
+    public function store(Request $request)
+    {
+        // Validate dữ liệu
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        // Tạo tài khoản với quyền Admin cố định
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'admin',
+            'status' => 'active',
+            'balance' => 0,
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', 'Đã thêm quản trị viên mới thành công!');
     }
 
     public function destroy($id)
