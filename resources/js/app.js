@@ -8,6 +8,41 @@ window.Swal = Swal;
 
 window.Alpine = Alpine;
 
+
+window.confirmDelete = function(formId) {
+    Swal.fire({
+        title: 'Bạn có chắc chắn không?',
+        text: "Hành động này không thể hoàn tác!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Xóa ngay!',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + formId).submit();
+        }
+    });
+};
+
+window.confirmResetPassword = function(userId) {
+    Swal.fire({
+        title: 'Xác nhận reset mật khẩu?',
+        text: "Mật khẩu sẽ được đặt về '12345678'",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý reset!',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('reset-password-form-' + userId).submit();
+        }
+    });
+};
+
 // Autocomplete function
 window.searchAutocomplete = function() {
     return {

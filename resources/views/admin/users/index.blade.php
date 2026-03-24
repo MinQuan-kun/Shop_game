@@ -160,6 +160,17 @@
                                             </button>
                                         @endif
                                     </form>
+                                    <form id="reset-password-form-{{ $user->id }}"
+                                        action="{{ route('admin.users.resetPassword', $user->id) }}" method="POST"
+                                        class="hidden">
+                                        @csrf
+                                        @method('PATCH')
+                                    </form>
+                                    <button type="button" onclick="confirmResetPassword('{{ $user->id }}')"
+                                        title="Reset mật khẩu về 12345678"
+                                        class="group flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out text-success-700 hover:bg-success-50 dark:text-success-500 dark:hover:bg-success-500/10">
+                                        <i class="fa-solid fa-key w-5 h-5 text-center"></i>
+                                    </button>
 
                                     {{-- Xóa user --}}
                                     <form id="delete-form-{{ $user->id }}"
@@ -170,7 +181,6 @@
                                         <button type="button" onclick="confirmDelete('{{ $user->id }}')"
                                             title="Xóa tài khoản"
                                             class="group flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out text-error-700 hover:bg-error-50 dark:text-error-500 dark:hover:bg-error-500/10">
-
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -195,22 +205,3 @@
         </div>
     </div>
 </x-admin-layout>
-
-<script>
-    function confirmDelete(userId) {
-        Swal.fire({
-            title: 'Bạn có chắc chắn không?',
-            text: "Hành động này không thể hoàn tác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Xóa ngay!',
-            cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form-' + userId).submit();
-            }
-        })
-    }
-</script>
