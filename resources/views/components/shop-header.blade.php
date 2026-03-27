@@ -27,7 +27,7 @@
                     class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150">
                     Trang chủ
                 </a>
-                <a href="#"
+                <a href="/shop"
                     class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150">
                     Cửa hàng
                 </a>
