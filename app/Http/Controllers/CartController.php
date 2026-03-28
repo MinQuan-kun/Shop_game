@@ -31,32 +31,45 @@ class CartController extends Controller
     public function addToCart(Request $request)
     {
         $request->validate([
-            'game_id' => 'required|exists:games,_id'
+            'game_id' => 'required|exists:games,_id' // Lưu ý: MongoDB dùng _id
         ]);
 
         $gameId = $request->game_id;
         $game = Game::findOrFail($gameId);
 
-        // Check if user already owns this game
+        // Kiểm tra sở hữu game
         if (Auth::user()->ownsGame($gameId)) {
+            // [SỬA] Trả về JSON nếu là AJAX
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Bạn đã sở hữu game này rồi!'], 409);
+            }
             return back()->with('error', 'Bạn đã sở hữu game này rồi!');
         }
 
-        // Check if game already in cart
+        // Kiểm tra đã có trong giỏ hàng
         $existingCartItem = Cart::where('user_id', Auth::id())
             ->where('game_id', $gameId)
             ->first();
 
         if ($existingCartItem) {
+            // [SỬA] Trả về JSON nếu là AJAX
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'info', 'message' => 'Game này đã có trong giỏ hàng']);
+            }
             return back()->with('info', 'Game này đã có trong giỏ hàng');
         }
 
+        // Thêm vào giỏ
         Cart::create([
             'user_id' => Auth::id(),
             'game_id' => $gameId,
             'price_at_time' => $game->price,
             'quantity' => 1,
         ]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['status' => 'success', 'message' => 'Đã thêm vào giỏ hàng thành công!']);
+        }
 
         return back()->with('success', 'Đã thêm vào giỏ hàng');
     }
