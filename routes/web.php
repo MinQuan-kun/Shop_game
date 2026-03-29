@@ -16,6 +16,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
+Route::get('/shop', [HomeController::class, 'shop'])->name('shop.index');
+
 Route::middleware('auth')->group(function () {
     Route::get('/user/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -69,10 +71,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::patch('/users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggleStatus');
     Route::patch('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/export-report', [\App\Http\Controllers\Admin\DashboardController::class, 'exportCsv'])->name('reports.export');
     Route::resource('games', GameController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
 });
 
 require __DIR__ . '/auth.php';
-

@@ -112,11 +112,11 @@
                                             <button type="submit"
                                                 class="w-full bg-gradient-to-r from-miku-500 to-miku-600 hover:from-miku-600 hover:to-miku-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-miku-500/30 flex items-center justify-center gap-2 group">
                                                 <i class="fa-solid fa-cart-plus group-hover:scale-110 transition"></i>
-                                                Thêm vào giỏ hàng
+                                                Thêm vào danh sách
                                             </button>
                                         </form>
                                     @else
-                                        <a href="{{ $game->download_link }}" target="_blank"
+                                        <a href="{{ $game->direct_download_link}}" target="_blank"
                                             class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-center transition shadow-lg shadow-green-500/30 flex items-center justify-center gap-2 group">
                                             <i class="fa-solid fa-download group-hover:scale-110 transition"></i>
                                             Tải Game Miễn Phí
