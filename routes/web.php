@@ -6,7 +6,9 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\GameController;
+use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\HomeController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/game/{id}', [HomeController::class, 'show'])->name('game.show');
@@ -47,9 +49,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/clear', [App\Http\Controllers\CartController::class, 'clear'])->name('cart.clear');
     Route::get('/cart/count', [App\Http\Controllers\CartController::class, 'count'])->name('cart.count');
 
+    // Wishlist routes
+    Route::get('/wishlist', [App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/add', [App\Http\Controllers\WishlistController::class, 'add'])->name('wishlist.add');
+    Route::delete('/wishlist/{id}', [App\Http\Controllers\WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::post('/wishlist/toggle', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::get('/wishlist/check/{gameId}', [App\Http\Controllers\WishlistController::class, 'check'])->name('wishlist.check');
+
     // Order routes
     Route::get('/checkout', [App\Http\Controllers\OrderController::class, 'checkout'])->name('checkout');
     Route::post('/checkout/process', [App\Http\Controllers\OrderController::class, 'processCheckout'])->name('checkout.process');
+    Route::post('/checkout/validate-discount', [App\Http\Controllers\OrderController::class, 'validateDiscount'])->name('checkout.validate.discount');
     Route::get('/orders', [App\Http\Controllers\OrderController::class, 'myOrders'])->name('orders.index');
     Route::get('/orders/{id}', [App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
     Route::get('/check-owns-game/{gameId}', [App\Http\Controllers\OrderController::class, 'ownsGame'])->name('check.owns.game');
@@ -74,6 +84,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/export-report', [\App\Http\Controllers\Admin\DashboardController::class, 'exportCsv'])->name('reports.export');
     Route::resource('games', GameController::class);
+    Route::patch('/games/{game}/toggle-active', [GameController::class, 'toggleActive'])->name('games.toggleActive');
+
+    // Discount Code Management
+    Route::resource('discounts', DiscountController::class);
+    Route::post('/discounts/{id}/toggle', [DiscountController::class, 'toggleActive'])->name('discounts.toggle');
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
 });

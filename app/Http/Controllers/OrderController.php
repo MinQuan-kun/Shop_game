@@ -123,6 +123,45 @@ class OrderController extends Controller
     }
 
     /**
+     * Validate discount code (AJAX)
+     */
+    public function validateDiscount(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string',
+            'total' => 'required|numeric|min:0'
+        ]);
+
+        $discountCode = \App\Models\DiscountCode::where('code', strtoupper($request->code))->first();
+
+        if (!$discountCode) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Mã giảm giá không tồn tại!'
+            ]);
+        }
+
+        if (!$discountCode->isValid()) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Mã giảm giá đã hết hạn hoặc hết lượt sử dụng!'
+            ]);
+        }
+
+        $discountAmount = $discountCode->calculateDiscount($request->total);
+        $finalTotal = $request->total - $discountAmount;
+
+        return response()->json([
+            'valid' => true,
+            'message' => 'Mã giảm giá hợp lệ!',
+            'discount_amount' => $discountAmount,
+            'final_total' => $finalTotal,
+            'discount_type' => $discountCode->type,
+            'discount_value' => $discountCode->value
+        ]);
+    }
+
+    /**
      * Display user's order history
      */
     public function myOrders()
