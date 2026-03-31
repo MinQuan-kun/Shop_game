@@ -50,7 +50,8 @@
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Giá trị <span class="text-red-500">*</span>
                         </label>
-                        <input type="number" name="value" value="{{ old('value') }}" min="0" step="0.01" required
+                        <input type="number" name="value" value="{{ old('value') }}" min="0" step="0.01"
+                            required
                             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                             placeholder="VD: 10 hoặc 50000">
                         @error('value')
@@ -90,11 +91,19 @@
                     </div>
 
                     {{-- Is Active --}}
-                    <div>
-                        <label class="flex items-center">
-                            <input type="checkbox" name="is_active" value="1" {{ old('is_active') ? 'checked' : '' }}
-                                class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Kích hoạt ngay</span>
+                    <div x-data="{ switcherToggle: {{ old('is_active') ? 'true' : 'false' }} }">
+                        <label
+                            class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 dark:text-gray-400">
+                            <span>Trạng thái kích hoạt</span>
+                            <div class="relative">
+                                <input type="checkbox" name="is_active" value="1" class="sr-only"
+                                    x-model="switcherToggle" />
+                                <div class="block h-6 w-11 rounded-full duration-300"
+                                    :class="switcherToggle ? 'bg-blue-600' : 'bg-gray-200 dark:bg-white/10'"></div>
+                                <div :class="switcherToggle ? 'translate-x-full' : 'translate-x-0'"
+                                    class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300">
+                                </div>
+                            </div>
                         </label>
                     </div>
                 </div>

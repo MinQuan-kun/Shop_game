@@ -21,19 +21,22 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        // 1. Logic lọc game theo giá
         $query = Game::where('is_active', true);
-        if ($request->has('category')) {
+
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category_ids', $request->category);
         }
+
         if ($request->has('min_price')) {
+            $query->where('price', '>=', (int)$request->min_price);
         }
+        // ------------------------------------------------------------
 
         $games = $query->latest()->paginate(12);
         $categories = Category::all();
         $publishers = Game::where('is_active', true)->distinct('publisher')->pluck('publisher')->sort()->values();
 
-        // 2. Lấy danh sách "Có thể bạn thích" cho Trang Chủ
-        $recommendedGames = $this->recommendationService->getForHome(Auth::user(), 4); // Lấy 4 game
+        $recommendedGames = $this->recommendationService->getForHome(Auth::user(), 4);
 
         return view('welcome', compact('games', 'categories', 'publishers', 'recommendedGames'));
     }
@@ -41,10 +44,7 @@ class HomeController extends Controller
     public function show($id)
     {
         $game = Game::where('is_active', true)->findOrFail($id);
-
-        // Logic đề xuất thông minh thay vì chỉ lấy mới nhất
         $relatedGames = $this->recommendationService->getRelatedGames($game, 4);
-
         return view('games.show', compact('game', 'relatedGames'));
     }
 
@@ -96,7 +96,6 @@ class HomeController extends Controller
             $query->where('category_ids', $request->category);
         }
 
-        // 4. Sắp xếp (Optional)
         if ($request->has('sort')) {
             switch ($request->sort) {
                 case 'price_asc':
@@ -115,10 +114,7 @@ class HomeController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        // 5. Lấy dữ liệu & Phân trang (12 game/trang)
         $games = $query->paginate(12)->withQueryString();
-
-        // 6. Lấy danh sách danh mục để hiển thị ở Sidebar
         $categories = Category::all();
 
         return view('shop.index', compact('games', 'categories'));
