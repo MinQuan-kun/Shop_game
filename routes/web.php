@@ -19,6 +19,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop.index');
+Route::view('/community', 'community.index')->name('community.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/user/profile', [ProfileController::class, 'edit'])->name('profile.edit');
