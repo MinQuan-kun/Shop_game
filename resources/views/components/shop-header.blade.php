@@ -1,4 +1,5 @@
-<header class="sticky top-0 z-50 w-full
+<header
+    class="sticky top-0 z-50 w-full
          bg-white/90
          dark:bg-black
          backdrop-blur
@@ -31,8 +32,8 @@
                     class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150">
                     Cửa hàng
                 </a>
-                <a href="#"
-                    class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150">
+                <a href="{{ route('community.index') }}"
+                    class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150 {{ request()->routeIs('community.index') ? 'text-miku-500 dark:text-miku-400' : '' }}">
                     Cộng đồng
                 </a>
                 <a href="#"
@@ -64,9 +65,9 @@
                         @php
                             $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
                         @endphp
-                        @if($cartCount > 0)
+                        @if ($cartCount > 0)
                             <span id="cart-count"
-                                class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                class="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-extrabold rounded-full h-4 w-4 flex items-center justify-center shadow-md shadow-red-500/50 border border-white dark:border-black animate-pulse z-10">
                                 {{ $cartCount }}
                             </span>
                         @endif
@@ -74,17 +75,23 @@
 
                     {{-- Wishlist Icon with Badge --}}
                     <a href="{{ route('wishlist.index') }}"
-                        class="relative text-gray-700 dark:text-gray-300 hover:text-pink-500 dark:hover:text-pink-400 transition">
-                        <i class="fa-solid fa-heart fa-lg"></i>
-                        @php
-                            $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
-                        @endphp
-                        @if($wishlistCount > 0)
-                            <span id="wishlist-count"
-                                class="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                {{ $wishlistCount }}
-                            </span>
-                        @endif
+                        class="text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 transition group flex items-center">
+
+                        {{-- Bọc icon và badge trong một div relative để định vị chuẩn xác --}}
+                        <div class="relative inline-block">
+                            <i class="fa-solid fa-heart fa-lg group-hover:scale-110 transition-transform duration-200"></i>
+
+                            @php
+                                $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                            @endphp
+
+                            @if ($wishlistCount > 0)
+                                <span id="wishlist-count"
+                                    class="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-extrabold rounded-full h-4 w-4 flex items-center justify-center shadow-md shadow-red-500/50 border border-white dark:border-black animate-pulse z-10">
+                                    {{ $wishlistCount }}
+                                </span>
+                            @endif
+                        </div>
                     </a>
                 @endauth
 
@@ -179,7 +186,7 @@
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                        </path>
+                                        </path>
                                     </svg>
                                     Danh sách yêu thích
                                 </a>
@@ -202,7 +209,8 @@
                                 @csrf
                                 <button type="submit"
                                     class="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
                                         </path>

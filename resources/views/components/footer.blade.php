@@ -3,8 +3,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
 
+            {{-- Cột 1: Logo & Social --}}
             <div class="space-y-4">
-                <a href="/" class="flex items-center gap-2 group">
+                <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                     <div class="h-12 w-auto group-hover:scale-105 transition-transform duration-300 -mt-2">
                         <img src="{{ asset('img/Logo.png') }}" alt="Mirai Logo"
                             class="h-full w-auto object-contain drop-shadow-sm">
@@ -29,24 +30,38 @@
                 </div>
             </div>
 
+            {{-- Cột 2: Khám Phá (Updated Links) --}}
             <div>
                 <h3 class="text-gray-900 dark:text-white font-bold uppercase tracking-wider mb-4 text-sm">Khám Phá</h3>
                 <ul class="space-y-3">
-                    <li><a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">Cửa
-                            hàng Game</a></li>
-                    <li><a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">Top
-                            Bán Chạy</a></li>
-                    <li><a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">Game
-                            Mới Phát Hành</a></li>
-                    <li><a href="#"
-                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">Tin
-                            Tức & Blog</a></li>
+                    <li>
+                        <a href="{{ route('shop.index') }}"
+                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">
+                            Cửa hàng Game
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('shop.index') }}"
+                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">
+                            Top Bán Chạy
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('shop.index', ['sort' => 'newest']) }}"
+                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">
+                            Game Mới Phát Hành
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="text-gray-500 dark:text-gray-400 hover:text-miku-600 dark:hover:text-miku-400 transition-colors text-sm">
+                            Tin Tức & Blog
+                        </a>
+                    </li>
                 </ul>
             </div>
 
+            {{-- Cột 3: Hỗ Trợ --}}
             <div>
                 <h3 class="text-gray-900 dark:text-white font-bold uppercase tracking-wider mb-4 text-sm">Hỗ Trợ</h3>
                 <ul class="space-y-3">
@@ -65,6 +80,7 @@
                 </ul>
             </div>
 
+            {{-- Cột 4: Newsletter --}}
             <div>
                 <h3 class="text-gray-900 dark:text-white font-bold uppercase tracking-wider mb-4 text-sm">Nhận Tin Mới
                 </h3>
@@ -83,10 +99,11 @@
             </div>
         </div>
 
+        {{-- Footer Bottom --}}
         <div
             class="border-t border-gray-200 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-gray-500 dark:text-gray-500 text-sm text-center md:text-left">
-                &copy; 2025 <span class="text-miku-600 dark:text-miku-400 font-bold">Mirai</span>. All rights reserved.
+                &copy; {{ date('Y') }} <span class="text-miku-600 dark:text-miku-400 font-bold">Mirai Store</span>. All rights reserved.
             </p>
 
             <div class="flex items-center gap-6">
