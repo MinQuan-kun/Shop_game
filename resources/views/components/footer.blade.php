@@ -85,7 +85,7 @@
             <div>
                 <h3 class="text-gray-900 dark:text-white font-bold uppercase tracking-wider mb-4 text-sm">Nhận Tin Mới
                 </h3>
-                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Đừng bỏ lỡ các ưu đãi game bản quyền miễn phí
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Đừng bỏ lỡ các ưu đãi game miễn phí
                     hàng tuần.</p>
                 <form class="space-y-2">
                     <div class="relative">

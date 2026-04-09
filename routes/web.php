@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\GameController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\ChatbotController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/game/{id}', [HomeController::class, 'show'])->name('game.show');
@@ -20,6 +20,9 @@ Route::get('/dashboard', function () {
 
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop.index');
 Route::view('/community', 'community.index')->name('community.index');
+Route::post('/chatbot/send', [ChatbotController::class, 'chat'])->name('chatbot.send');
+// Route::view();
+
 Route::middleware('auth')->group(function () {
     Route::get('/user/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/user/profile', [ProfileController::class, 'update'])->name('profile.update');

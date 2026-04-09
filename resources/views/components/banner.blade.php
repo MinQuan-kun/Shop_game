@@ -57,7 +57,7 @@
             </h1>
             
             <p class="text-lg text-gray-300 mb-8 leading-relaxed font-medium drop-shadow-md">
-                Trải nghiệm kho game bản quyền khổng lồ. Tải xuống nhanh chóng, bảo mật tuyệt đối.
+                Trải nghiệm kho game khổng lồ. Tải xuống nhanh chóng, bảo mật tuyệt đối.
             </p>
             
             <div class="flex flex-wrap gap-4">
