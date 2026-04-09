@@ -1,29 +1,31 @@
 <x-shop-layout>
     <div class="min-h-screen flex items-stretch text-white overflow-hidden transition-colors duration-300" style="min-height: 100vh;">
-        
-        <div class="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat relative items-center" 
-             style="background-image: url('https://res.cloudinary.com/davfujasj/image/upload/v1764930652/miku_lfnyju.jpg'); background-size: cover; background-position: center center;">
-            
-            <div class="absolute inset-0 bg-black opacity-40"></div> 
-            
-            <div class="w-full px-24 z-10 relative"> 
+
+        <div class="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat relative items-center"
+            style="background-image: url('https://res.cloudinary.com/davfujasj/image/upload/v1764930652/miku_lfnyju.jpg'); background-size: cover; background-position: center center;">
+
+            <div class="absolute inset-0 bg-black opacity-40"></div>
+
+            <div class="w-full px-24 z-10 relative">
                 <h1 class="text-5xl font-bold text-left tracking-wide text-white">Mirai Store</h1>
                 <p class="text-sm my-4 text-miku-300 font-semibold">Tải game uy tín, giá rẻ</p>
             </div>
         </div>
 
         <div class="lg:w-1/2 w-full flex items-center justify-center text-center md:px-16 px-0 z-0 bg-white dark:bg-gray-900 relative transition-colors duration-300">
-            
-            <div class="absolute lg:hidden z-10 inset-0 bg-gray-500 bg-no-repeat items-center" 
-                 style="background-image: url('https://images4.alphacoders.com/936/936378.jpg'); background-size: cover; background-position: center center;">
+
+            <div class="absolute lg:hidden z-10 inset-0 bg-gray-500 bg-no-repeat items-center"
+                style="background-image: url('https://images4.alphacoders.com/936/936378.jpg'); background-size: cover; background-position: center center;">
                 <div class="absolute inset-0 bg-black opacity-80"></div>
             </div>
 
             <div class="w-full py-6 z-20 px-6 md:px-12 bg-white/95 dark:bg-gray-900/95 h-full flex flex-col justify-center transition-colors duration-300">
-                
+
                 <div class="py-6 space-x-2 flex justify-center items-center">
                     <span class="w-10 h-10 rounded-full bg-miku-500 shadow-lg shadow-miku-200/50 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
                     </span>
                     <h2 class="text-3xl font-bold text-gray-800 dark:text-white transition-colors">Đăng Nhập</h2>
                 </div>
@@ -45,7 +47,9 @@
                                        focus:outline-none focus:border-miku-500 focus:ring-2 focus:ring-miku-200 dark:focus:ring-miku-500/30 
                                        transition-colors duration-200">
                         </div>
-                        <x-input-error :messages="$errors->get('email')" class="mt-2 text-left" />
+                        @error('email')
+                        <span style="color: red; font-size: 0.8rem;">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="pb-2 pt-4 text-left">
@@ -69,7 +73,7 @@
                             <span class="ml-2">Ghi nhớ tôi</span>
                         </label>
                         @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-miku-600 dark:text-miku-400 hover:text-miku-800 dark:hover:text-miku-300 font-semibold transition-colors">Quên mật khẩu?</a>
+                        <a href="{{ route('password.request') }}" class="text-miku-600 dark:text-miku-400 hover:text-miku-800 dark:hover:text-miku-300 font-semibold transition-colors">Quên mật khẩu?</a>
                         @endif
                     </div>
 
