@@ -1,4 +1,9 @@
 <x-shop-layout>
+    @php
+    $wishlistGameIds = auth()->check()
+    ? \App\Models\Wishlist::where('user_id', auth()->id())->pluck('game_id')->toArray()
+    : [];
+    @endphp
     <div class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
 
         <x-banner />
@@ -292,46 +297,58 @@
                                 <span>{{ optional($game->primary_category)->name ?? 'Game' }}</span>
                             </div>
 
-                            {{-- 3. CHÂN CARD (Giá & Nút mua) --}}
-                            <div
-                                class="mt-auto pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                            {{-- 3. CHÂN CARD (GIÁ & CÁC NÚT) --}}
+                            <div class="mt-auto pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
 
                                 {{-- Giá tiền --}}
                                 <div class="flex flex-col">
                                     @if ($game->price == 0)
                                     <span class="text-lg font-bold text-green-500">Miễn phí</span>
                                     @else
-                                    <span class="text-[10px] text-gray-400 line-through">
-                                        {{ number_format($fakeOriginalPrice, 0, ',', '.') }}đ
-                                    </span>
-                                    <span class="text-lg font-black text-miku-600 dark:text-miku-400">
-                                        {{ number_format($game->price, 0, ',', '.') }}đ
-                                    </span>
+                                    <span class="text-[10px] text-gray-400 line-through">{{ number_format($fakeOriginalPrice, 0, ',', '.') }}đ</span>
+                                    <span class="text-lg font-black text-miku-600 dark:text-miku-400">{{ number_format($game->price, 0, ',', '.') }}đ</span>
                                     @endif
                                 </div>
 
-                                {{-- Nút Giỏ hàng (Hoạt động thật) --}}
-                                {{-- Kiểm tra: Nếu là Guest -> Link sang Login, Nếu User -> Submit Form --}}
-                                @auth
-                                <form action="{{ route('cart.add') }}" method="POST" class="ajax-cart-form">
-                                    @csrf
-                                    {{-- Quan trọng: name="game_id" phải khớp với Controller --}}
-                                    <input type="hidden" name="game_id" value="{{ $game->id }}">
+                                {{-- KHU VỰC CÁC NÚT (WISHLIST + CART) --}}
+                                <div class="flex items-center gap-2">
 
-                                    <button type="submit"
-                                        class="flex items-center justify-center w-10 h-10 rounded-full bg-miku-50 dark:bg-miku-900/30 text-miku-600 dark:text-miku-400 hover:bg-miku-500 hover:text-white transition-all shadow-sm hover:shadow-md transform active:scale-95"
-                                        title="Thêm vào giỏ hàng">
-                                        <i class="fa-solid fa-cart-plus"></i>
+                                    {{-- [MỚI] Nút Wishlist (Trái tim) --}}
+                                    @auth
+                                    @php $inWishlist = in_array($game->id, $wishlistGameIds); @endphp
+                                    <button type="button"
+                                        data-game-id="{{ $game->id }}"
+                                        class="wishlist-btn w-10 h-10 flex items-center justify-center rounded-full bg-miku-50 dark:bg-miku-900/30 text-gray-400 dark:text-gray-500 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/30 transition-all shadow-sm hover:shadow-md transform active:scale-95 group/wishlist {{ $inWishlist ? '!text-red-500' : '' }}"
+                                        title="{{ $inWishlist ? 'Bỏ yêu thích' : 'Thêm yêu thích' }}">
+                                        <i class="{{ $inWishlist ? 'fa-solid' : 'fa-regular' }} fa-heart text-sm group-hover/wishlist:text-red-500 transition-transform"></i>
                                     </button>
-                                </form>
-                                @else
-                                <a href="{{ route('login') }}"
-                                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-miku-500 hover:text-white transition-all shadow-sm"
-                                    title="Đăng nhập để mua">
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                </a>
-                                @endauth
+                                    @else
+                                    <a href="{{ route('login') }}"
+                                        class="w-10 h-10 flex items-center justify-center rounded-full bg-miku-50 dark:bg-miku-900/30 text-gray-400 dark:text-gray-500 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/30 transition-all shadow-sm hover:shadow-md transform active:scale-95 group/wishlist"
+                                        title="Đăng nhập để yêu thích">
+                                        <i class="fa-regular fa-heart text-sm group-hover/wishlist:text-red-500"></i>
+                                    </a>
+                                    @endauth
 
+                                    {{-- Nút Giỏ hàng (Giữ nguyên) --}}
+                                    @auth
+                                    <form action="{{ route('cart.add') }}" method="POST" class="ajax-cart-form">
+                                        @csrf
+                                        <input type="hidden" name="game_id" value="{{ $game->id }}">
+                                        <button type="submit"
+                                            class="flex items-center justify-center w-10 h-10 rounded-full bg-miku-50 dark:bg-miku-900/30 text-miku-600 dark:text-miku-400 hover:bg-miku-500 hover:text-white transition-all shadow-sm hover:shadow-md transform active:scale-95"
+                                            title="Thêm vào giỏ hàng">
+                                            <i class="fa-solid fa-cart-plus"></i>
+                                        </button>
+                                    </form>
+                                    @else
+                                    <a href="{{ route('login') }}"
+                                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-miku-500 hover:text-white transition-all shadow-sm"
+                                        title="Đăng nhập để mua">
+                                        <i class="fa-solid fa-cart-plus"></i>
+                                    </a>
+                                    @endauth
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -410,6 +427,72 @@
                                 button.innerHTML = originalContent;
                             }
                         }, 2000);
+                    });
+            });
+        });
+        const wishlistBtns = document.querySelectorAll('.wishlist-btn');
+        wishlistBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const gameId = this.dataset.gameId;
+                const icon = this.querySelector('i');
+
+                // Loading
+                icon.classList.add('fa-spin');
+                this.disabled = true;
+
+                fetch("{{ route('wishlist.toggle') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({
+                            game_id: gameId
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            if (data.action === 'added') {
+                                // Tim đỏ
+                                icon.classList.remove('fa-regular');
+                                icon.classList.add('fa-solid');
+                                this.classList.add('!text-red-500');
+                            } else {
+                                // Tim rỗng
+                                icon.classList.remove('fa-solid');
+                                icon.classList.add('fa-regular');
+                                this.classList.remove('!text-red-500');
+                            }
+                            window.dispatchEvent(new CustomEvent('notify', {
+                                detail: {
+                                    message: data.message,
+                                    type: 'success'
+                                }
+                            }));
+                        } else {
+                            window.dispatchEvent(new CustomEvent('notify', {
+                                detail: {
+                                    message: data.message || 'Lỗi',
+                                    type: 'error'
+                                }
+                            }));
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Wishlist Error:', err);
+                        window.dispatchEvent(new CustomEvent('notify', {
+                            detail: {
+                                message: 'Lỗi kết nối',
+                                type: 'error'
+                            }
+                        }));
+                    })
+                    .finally(() => {
+                        icon.classList.remove('fa-spin');
+                        this.disabled = false;
                     });
             });
         });
