@@ -41,26 +41,36 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $user_email = \App\Models\User::where('email', $this->email)->first();
-        $user_password = \App\Models\User::where('password', $this->pasword)->first();
+        try {
+            // 1. Kiểm tra Email có tồn tại không
+            $user = \App\Models\User::where('email', $this->email)->first();
 
-        if (! $user_email) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'email' => 'Email không tồn tại, vui lòng đăng ký tài khoản.',
-            ]);
-        }
+            if (! $user) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'email' => 'Email không tồn tại, vui lòng đăng ký tài khoản.',
+                ]);
+            }
 
-        if (!$user_password) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'password' => 'Bạn đã nhập sai mật khẩu, vui lòng nhập lại.',
-            ]);
-        }
+            // 2. Kiểm tra Mật khẩu (Auth::attempt)
+            // Khối này dễ gây lỗi 500 nếu cấu hình sai, nên cần try-catch
+            if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+                RateLimiter::hit($this->throttleKey());
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+                throw ValidationException::withMessages([
+                    'password' => 'Mật khẩu không chính xác, vui lòng nhập lại.', // Bạn có thể dùng trans('auth.failed')
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Nếu lỗi là do Validation (Email không tồn tại / Sai pass) -> Ném lỗi ra bình thường
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+                throw $e;
+            }
+
+            // Nếu là lỗi 500 (Lỗi code, DB, Server...) -> Log lại và báo lỗi thân thiện
+            \Illuminate\Support\Facades\Log::error('Login Error: ' . $e->getMessage());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => 'Đã có lỗi hệ thống xảy ra khi đăng nhập. Vui lòng thử lại sau.',
             ]);
         }
 
