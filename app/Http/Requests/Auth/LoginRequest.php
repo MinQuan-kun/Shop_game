@@ -41,11 +41,18 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $user = \App\Models\User::where('email', $this->email)->first();
+        $user_email = \App\Models\User::where('email', $this->email)->first();
+        $user_password = \App\Models\User::where('password', $this->pasword)->first();
 
-        if (! $user) {
+        if (! $user_email) {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'email' => 'Email không tồn tại, vui lòng đăng ký tài khoản.',
+            ]);
+        }
+
+        if (!$user_password) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'password' => 'Bạn đã nhập sai mật khẩu, vui lòng nhập lại.',
             ]);
         }
 
