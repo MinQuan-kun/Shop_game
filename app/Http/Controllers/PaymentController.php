@@ -290,6 +290,7 @@ class PaymentController extends Controller
             if ($transaction && $transaction->status == 'completed') {
                 $user = Auth::user();
                 return redirect()->route('wallet.index')
+                
                     ->with('success', 'Nạp tiền thành công! Số dư mới: ' . number_format($user->balance, 0, ',', '.') . ' VNĐ');
             } else {
                 return redirect()->route('wallet.deposit')

@@ -63,10 +63,6 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Bạn không thể xóa tài khoản của chính mình!');
         }
 
-        if ($user->role === 'admin') {
-            return redirect()->back()->with('error', 'Không thể xóa tài khoản có quyền Quản trị (Admin)!');
-        }
-
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'Đã xóa người dùng thành công.');

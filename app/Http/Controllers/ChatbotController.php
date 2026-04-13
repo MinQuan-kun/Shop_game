@@ -102,7 +102,7 @@ class ChatbotController extends Controller
             $systemInstruction = "Bạn là Muki - Trợ lý ảo bán game.
             Nhiệm vụ: Trả lời ngắn gọn, vui vẻ, chốt đơn dựa trên DANH SÁCH GAME.
             Tuyệt đối không bịa ra game không có trong danh sách.
-            Nếu khách hỏi về kỹ thuật/lỗi: Liên hệ Admin 0966846502.
+            Nếu khách hỏi về kỹ thuật/lỗi: Liên hệ Admin 1234567890.
             Mua game: Đăng nhập > Chọn > Thanh toán.
             
             DỮ LIỆU:";
