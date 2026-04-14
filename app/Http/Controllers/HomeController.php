@@ -92,10 +92,29 @@ class HomeController extends Controller
 
         // 3. Xử lý Lọc theo Thể loại (Category)
         if ($request->has('category') && $request->category != '') {
-            // Nếu lưu dạng mảng ID trong MongoDB
             $query->where('category_ids', $request->category);
         }
 
+        // 4. Xử lý Lọc theo Giá
+        if ($request->has('min_price') && $request->min_price != '') {
+            $query->where('price', '>=', (int)$request->min_price);
+        }
+
+        if ($request->has('max_price') && $request->max_price != '') {
+            $query->where('price', '<=', (int)$request->max_price);
+        }
+
+        // 5. Xử lý Lọc theo Nhà phát hành (Publisher)
+        if ($request->has('publisher') && $request->publisher != '') {
+            $query->where('publisher', $request->publisher);
+        }
+
+        // 6. Xử lý Lọc theo Nền tảng (Platform)
+        if ($request->has('platform') && $request->platform != '') {
+            $query->where('platforms', $request->platform);
+        }
+
+        // 7. Xử lý sắp xếp (Sort)
         if ($request->has('sort')) {
             switch ($request->sort) {
                 case 'price_asc':
@@ -114,9 +133,55 @@ class HomeController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
+        // 8. Lấy dữ liệu games
         $games = $query->paginate(12)->withQueryString();
-        $categories = Category::all();
+        
+        // Lấy chỉ những category có game
+        $categoriesWithGames = Game::where('is_active', true)
+            ->pluck('category_ids')
+            ->flatten()
+            ->unique()
+            ->toArray();
+        $categories = Category::whereIn('_id', $categoriesWithGames)->get();
+        
+        // 9. Lấy danh sách publishers từ TẤT CẢ games
+        $allPublishers = Game::where('is_active', true)
+            ->whereNotNull('publisher')
+            ->where('publisher', '!=', '')
+            ->pluck('publisher')
+            ->unique()
+            ->sort()
+            ->values();
+        
+        // 10. Lấy danh sách platforms từ TẤT CẢ games
+        $allPlatforms = Game::where('is_active', true)
+            ->whereNotNull('platforms')
+            ->get()
+            ->flatMap(function ($game) {
+                return $game->platforms ?? [];
+            })
+            ->unique()
+            ->sort()
+            ->values();
+        
+        // 11. Lấy count cho mỗi category (cho filter)
+        $categoryCounts = Category::all()->mapWithKeys(function ($cat) {
+            $count = Game::where('is_active', true)->where('category_ids', $cat->id)->count();
+            return [$cat->id => $count];
+        });
 
-        return view('shop.index', compact('games', 'categories'));
+        // 12. Lấy count cho mỗi publisher
+        $publisherCounts = $allPublishers->mapWithKeys(function ($pub) {
+            $count = Game::where('is_active', true)->where('publisher', $pub)->count();
+            return [$pub => $count];
+        });
+
+        // 13. Lấy count cho mỗi platform
+        $platformCounts = $allPlatforms->mapWithKeys(function ($platform) {
+            $count = Game::where('is_active', true)->where('platforms', $platform)->count();
+            return [$platform => $count];
+        });
+
+        return view('shop.index', compact('games', 'categories', 'allPublishers', 'allPlatforms', 'categoryCounts', 'publisherCounts', 'platformCounts'));
     }
 }

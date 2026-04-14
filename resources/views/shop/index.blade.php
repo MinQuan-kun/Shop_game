@@ -1,4 +1,4 @@
-<x-shop-layout>
+    <x-shop-layout>
     <div class="bg-gray-50 dark:bg-gray-900 min-h-screen py-8 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -84,14 +84,29 @@
 
                                         {{-- Thể loại --}}
                                         <div
-                                            class="mb-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                                            class="mb-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2 flex-wrap">
                                             @if (!empty($game->platforms))
                                                 <span
-                                                    class="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-gray-500 dark:text-gray-300">
+                                                    class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">
                                                     {{ $game->platforms[0] ?? 'PC' }}
                                                 </span>
                                             @endif
-                                            <span>{{ optional($game->category)->name ?? 'Game' }}</span>
+                                            @if (!empty($game->category_ids))
+                                                @foreach ($game->category_ids as $catId)
+                                                    @php
+                                                        $cat = $categories->find($catId);
+                                                    @endphp
+                                                    @if ($cat)
+                                                        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">
+                                                            {{ $cat->name }}
+                                                        </span>
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                <span class="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">
+                                                    Game
+                                                </span>
+                                            @endif
                                         </div>
 
                                         {{-- Tên Game --}}
@@ -169,37 +184,142 @@
                     @endif
                 </div>
 
-                {{-- CỘT PHẢI: SIDEBAR (Chiếm 1 phần) --}}
-                <aside class="lg:col-span-1 order-1 lg:order-2 space-y-6">
+                {{-- CỘT PHẢI: SIDEBAR FILTER (STEAM STYLE) --}}
+                <aside class="lg:col-span-1 order-1 lg:order-2">
 
-                    {{-- Bộ lọc Danh mục --}}
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 sticky top-24">
-                        <div class="flex items-center gap-2 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
-                            <i class="fa-solid fa-filter text-miku-500"></i>
-                            <h3 class="font-bold text-lg text-gray-900 dark:text-white">Thể loại</h3>
+                    <div class="space-y-0">
+                        {{-- FILTER: Thể loại --}}
+                        <div class="overflow-hidden first:rounded-t-xl last:rounded-b-xl">
+                            <button type="button" class="filter-toggle w-full px-6 py-4 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold flex items-center justify-between transition"
+                                data-target="categories-list">
+                                <span>
+                                    Thể loại
+                                </span>
+                                <i class="fa-solid fa-chevron-down transition-transform duration-300 text-gray-500"></i>
+                            </button>
+                            <div id="categories-list" class="filter-content space-y-0 max-h-96 overflow-y-auto hidden">
+                                @foreach ($categories as $cat)
+                                <label class="flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-6 py-3 border-b border-white/20 dark:border-white/10 last:border-0 transition group">
+                                    <input type="checkbox" name="category" value="{{ $cat->id }}"
+                                        {{ request('category') == $cat->id ? 'checked' : '' }}
+                                        class="category-filter w-4 h-4 rounded border-gray-300 dark:border-gray-600 cursor-pointer accent-blue-500">
+                                    <span class="flex-1 text-sm text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                                        {{ $cat->name }}
+                                    </span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                                        {{ $categoryCounts[$cat->id] ?? 0 }}
+                                    </span>
+                                </label>
+                                @endforeach
+                            </div>
                         </div>
 
-                        <div class="space-y-2">
-                            {{-- Nút "Tất cả" --}}
-                            <a href="{{ route('shop.index') }}"
-                                class="flex items-center justify-between p-3 rounded-xl transition group {{ !request('category') ? 'bg-miku-50 dark:bg-miku-900/20 text-miku-600 dark:text-miku-400 font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300' }}">
-                                <span>Tất cả</span>
-                                <i
-                                    class="fa-solid fa-chevron-right text-xs {{ !request('category') ? 'opacity-100' : 'opacity-0 group-hover:opacity-100' }}"></i>
-                            </a>
+                        {{-- FILTER: Nền tảng (Platform) --}}
+                        @if (isset($allPlatforms) && $allPlatforms->count() > 0)
+                        <div class="overflow-hidden last:rounded-b-xl">
+                            <button type="button" class="filter-toggle w-full px-6 py-4 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold flex items-center justify-between transition"
+                                data-target="platforms-list">
+                                <span>
+                                    Nền tảng
+                                </span>
+                                <i class="fa-solid fa-chevron-down transition-transform duration-300 text-gray-500"></i>
+                            </button>
+                            <div id="platforms-list" class="filter-content space-y-0 max-h-64 overflow-y-auto hidden">
+                                @foreach ($allPlatforms as $platform)
+                                <label class="flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-6 py-3 border-b border-white/20 dark:border-white/10 last:border-0 transition group">
+                                    <input type="checkbox" name="platform" value="{{ $platform }}"
+                                        {{ request('platform') === $platform ? 'checked' : '' }}
+                                        class="platform-filter w-4 h-4 rounded border-gray-300 dark:border-gray-600 cursor-pointer accent-cyan-500 flex-shrink-0">
+                                    <span class="flex-1 text-sm text-gray-700 dark:text-gray-300 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition">
+                                        {{ $platform }}
+                                    </span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                                        {{ $platformCounts[$platform] ?? 0 }}
+                                    </span>
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
 
-                            {{-- Danh sách Categories --}}
-                            @foreach ($categories as $cat)
-                                <a href="{{ route('shop.index', array_merge(request()->query(), ['category' => $cat->id, 'page' => 1])) }}"
-                                    class="flex items-center justify-between p-3 rounded-xl transition group {{ request('category') == $cat->id ? 'bg-miku-50 dark:bg-miku-900/20 text-miku-600 dark:text-miku-400 font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300' }}">
-                                    <span>{{ $cat->name }}</span>
-                                    @if (request('category') == $cat->id)
-                                        <i class="fa-solid fa-check text-xs"></i>
+                        {{-- FILTER: Giá --}}
+                        <div class="overflow-hidden last:rounded-b-xl">
+                            <button type="button" class="filter-toggle w-full px-6 py-4 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold flex items-center justify-between transition"
+                                data-target="price-list">
+                                <span>
+                                    Giá
+                                </span>
+                                <i class="fa-solid fa-chevron-down transition-transform duration-300 text-gray-500"></i>
+                            </button>
+                            <div id="price-list" class="filter-content space-y-0 hidden border-t border-white/20 dark:border-white/10">
+                                @php
+                                    $priceRanges = [
+                                        ['min' => 0, 'max' => 100000, 'label' => 'Dưới 100K'],
+                                        ['min' => 100000, 'max' => 300000, 'label' => '100K - 300K'],
+                                        ['min' => 300000, 'max' => 500000, 'label' => '300K - 500K'],
+                                        ['min' => 500000, 'max' => 999999999, 'label' => 'Trên 500K'],
+                                    ];
+                                @endphp
+                                @foreach ($priceRanges as $range)
+                                <form action="{{ route('shop.index') }}" method="GET" class="inline w-full">
+                                    {{-- Preserve other filters --}}
+                                    @if (request('search'))
+                                        <input type="hidden" name="search" value="{{ request('search') }}">
                                     @endif
-                                </a>
-                            @endforeach
+                                    @if (request('category'))
+                                        <input type="hidden" name="category" value="{{ request('category') }}">
+                                    @endif
+                                    @if (request('publisher'))
+                                        <input type="hidden" name="publisher" value="{{ request('publisher') }}">
+                                    @endif
+                                    @if (request('platform'))
+                                        <input type="hidden" name="platform" value="{{ request('platform') }}">
+                                    @endif
+                                    <input type="hidden" name="min_price" value="{{ $range['min'] }}">
+                                    <input type="hidden" name="max_price" value="{{ $range['max'] }}">
+                                    
+                                    <label class="flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-6 py-3 border-b border-white/20 dark:border-white/10 last:border-0 transition group price-preset-label" data-min="{{ $range['min'] }}" data-max="{{ $range['max'] }}">
+                                        <input type="checkbox" class="price-preset-checkbox appearance-none w-0 h-0 opacity-0 cursor-pointer"
+                                            {{ (request('min_price') == $range['min'] && request('max_price') == $range['max']) ? 'checked' : '' }}
+                                            onchange="this.closest('form').submit()">
+                                        <span class="flex-1 text-sm text-gray-700 dark:text-gray-300 group-hover:text-green-600 dark:group-hover:text-green-400 transition">
+                                            {{ $range['label'] }}
+                                        </span>
+                                        <i class="fa-solid fa-check text-green-500 opacity-0 transition-opacity"
+                                            style="opacity: {{ (request('min_price') == $range['min'] && request('max_price') == $range['max']) ? '1' : '0' }}"></i>
+                                    </label>
+                                </form>
+                                @endforeach
+                            </div>
                         </div>
+
+                        {{-- FILTER: Nhà phát hành --}}
+                        @if (isset($allPublishers) && $allPublishers->count() > 0)
+                        <div class="overflow-hidden last:rounded-b-xl">
+                            <button type="button" class="filter-toggle w-full px-6 py-4 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold flex items-center justify-between transition"
+                                data-target="publishers-list">
+                                <span>
+                                    Nhà phát hành
+                                </span>
+                                <i class="fa-solid fa-chevron-down transition-transform duration-300 text-gray-500"></i>
+                            </button>
+                            <div id="publishers-list" class="filter-content space-y-0 max-h-64 overflow-y-auto hidden">
+                                @foreach ($allPublishers as $pub)
+                                <label class="flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-6 py-3 border-b border-white/20 dark:border-white/10 last:border-0 transition group">
+                                    <input type="checkbox" name="publisher" value="{{ $pub }}"
+                                        {{ request('publisher') === $pub ? 'checked' : '' }}
+                                        class="publisher-filter w-4 h-4 rounded border-gray-300 dark:border-gray-600 cursor-pointer accent-purple-500 flex-shrink-0">
+                                    <span class="flex-1 text-sm text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition truncate">
+                                        {{ $pub }}
+                                    </span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                                        {{ $publisherCounts[$pub] ?? 0 }}
+                                    </span>
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </aside>
 
@@ -208,7 +328,145 @@
     </div>
 </x-shop-layout>
 <script>
+    // Format price with Vietnamese number format
+    function formatPrice(input) {
+        const value = input.value;
+        const display = input.id === 'min_price' ? document.getElementById('min_display') : document.getElementById('max_display');
+        
+        if (value) {
+            display.textContent = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        } else {
+            display.textContent = '';
+        }
+    }
+
+    // Helper function to create filter form
+    function createFilterForm(filterData) {
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = '{{ route("shop.index") }}';
+        
+        Object.keys(filterData).forEach(key => {
+            if (filterData[key]) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = filterData[key];
+                form.appendChild(input);
+            }
+        });
+        
+        return form;
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+        // Initialize price displays
+        const minPrice = document.getElementById('min_price');
+        const maxPrice = document.getElementById('max_price');
+        if (minPrice && minPrice.value) formatPrice(minPrice);
+        if (maxPrice && maxPrice.value) formatPrice(maxPrice);
+
+        // Price preset buttons
+        document.querySelectorAll('.price-preset').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('min_price').value = this.getAttribute('data-min');
+                document.getElementById('max_price').value = this.getAttribute('data-max');
+                
+                formatPrice(document.getElementById('min_price'));
+                formatPrice(document.getElementById('max_price'));
+                
+                // Auto submit
+                document.getElementById('price-filter-form').submit();
+            });
+        });
+
+        // Toggle filter sections
+        document.querySelectorAll('.filter-toggle').forEach(btn => {
+            const targetId = btn.getAttribute('data-target');
+            const content = document.getElementById(targetId);
+            const icon = btn.querySelector('i:last-child');
+            
+            // Restore state from localStorage on page load
+            if (localStorage.getItem(`filter-${targetId}`) === 'true') {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+            }
+            
+            // Add click event listener
+            btn.addEventListener('click', function() {
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+                
+                // Save state to localStorage
+                localStorage.setItem(`filter-${targetId}`, !content.classList.contains('hidden'));
+            });
+        });
+
+        // Handle category checkbox changes
+        document.querySelectorAll('.category-filter').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // Submit form regardless of check state
+                const filterData = {
+                    category: this.checked ? this.value : null,
+                    search: '{{ request('search') }}' || null,
+                    min_price: '{{ request('min_price') }}' || null,
+                    max_price: '{{ request('max_price') }}' || null,
+                    publisher: '{{ request('publisher') }}' || null,
+                    platform: '{{ request('platform') }}' || null
+                };
+                
+                const form = createFilterForm(filterData);
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+
+        // Handle platform checkbox changes
+        document.querySelectorAll('.platform-filter').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // Submit form regardless of check state
+                const filterData = {
+                    platform: this.checked ? this.value : null,
+                    search: '{{ request('search') }}' || null,
+                    category: '{{ request('category') }}' || null,
+                    min_price: '{{ request('min_price') }}' || null,
+                    max_price: '{{ request('max_price') }}' || null,
+                    publisher: '{{ request('publisher') }}' || null
+                };
+                
+                const form = createFilterForm(filterData);
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+
+        // Handle publisher checkbox changes
+        document.querySelectorAll('.publisher-filter').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // Submit form regardless of check state
+                const filterData = {
+                    publisher: this.checked ? this.value : null,
+                    search: '{{ request('search') }}' || null,
+                    category: '{{ request('category') }}' || null,
+                    min_price: '{{ request('min_price') }}' || null,
+                    max_price: '{{ request('max_price') }}' || null
+                };
+                
+                const form = createFilterForm(filterData);
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+
+        // AJAX cart form handling
         document.querySelectorAll('.ajax-cart-form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
