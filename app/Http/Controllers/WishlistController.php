@@ -77,18 +77,35 @@ class WishlistController extends Controller
             ->where('game_id', $request->game_id)
             ->first();
 
+        $action = '';
+        $message = '';
+
         if ($wishlistItem) {
-            // Remove from wishlist
+            // Đã có -> Xóa
             $wishlistItem->delete();
-            return back()->with('success', 'Đã xóa khỏi danh sách yêu thích!');
+            $action = 'removed'; // Đánh dấu là đã xóa
+            $message = 'Đã xóa khỏi danh sách yêu thích!';
         } else {
-            // Add to wishlist
+            // Chưa có -> Thêm
             Wishlist::create([
                 'user_id' => Auth::id(),
                 'game_id' => $request->game_id
             ]);
-            return back()->with('success', 'Đã thêm vào danh sách yêu thích!');
+            $action = 'added'; // Đánh dấu là đã thêm
+            $message = 'Đã thêm vào danh sách yêu thích!';
         }
+
+        // Nếu request là AJAX (muốn JSON)
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'action' => $action,
+                'message' => $message
+            ]);
+        }
+
+        // Fallback cho request thường
+        return back()->with('success', $message);
     }
 
     /**

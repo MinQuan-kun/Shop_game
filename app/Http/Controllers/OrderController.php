@@ -18,6 +18,7 @@ class OrderController extends Controller
     public function checkout()
     {
         $cartItems = Cart::where('user_id', Auth::id())
+            ->whereHas('game')
             ->with('game')
             ->get();
 
