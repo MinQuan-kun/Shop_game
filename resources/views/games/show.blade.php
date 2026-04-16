@@ -115,6 +115,46 @@
                             </div>
                         @endif
 
+                        {{-- Thể loại Game --}}
+                        @if(!empty($game->category_ids))
+                            <div class="mb-8">
+                                <h3
+                                    class="text-sm font-black text-gray-800 dark:text-gray-200 mb-3 uppercase tracking-wide">
+                                    Thể loại</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach($game->category_ids as $catId)
+                                        @php
+                                            $categories = \App\Models\Category::all();
+                                            $cat = $categories->find($catId);
+                                        @endphp
+                                        @if($cat)
+                                            <a href="{{ route('shop.index', ['category' => $catId]) }}"
+                                                class="px-3 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/60 transition border border-blue-300 dark:border-blue-700">
+                                                {{ $cat->name }}
+                                            </a>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Ngôn ngữ hỗ trợ --}}
+                        @if(!empty($game->languages))
+                            <div class="mb-8">
+                                <h3
+                                    class="text-sm font-black text-gray-800 dark:text-gray-200 mb-3 uppercase tracking-wide">
+                                    Ngôn ngữ hỗ trợ</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach(is_array($game->languages) ? $game->languages : [$game->languages] as $lang)
+                                        <span
+                                            class="px-3 py-1 rounded-lg bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 text-xs font-semibold border border-green-300 dark:border-green-700">
+                                            <i class="fa-solid fa-globe mr-1"></i>{{ $lang }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- Nút hành động --}}
                         <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-100 dark:border-gray-700">
                             @auth
@@ -199,6 +239,86 @@
                             {{ $game->description }}
                         </div>
                     </div>
+
+                    {{-- Thông tin kỹ thuật --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {{-- Thông tin chung --}}
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-black text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-info-circle text-blue-500"></i>
+                                Thông tin
+                            </h3>
+                            <div class="space-y-3">
+                                @if($game->publisher)
+                                    <div class="flex justify-between items-start border-b border-gray-100 dark:border-gray-700 pb-3">
+                                        <span class="text-sm font-semibold text-gray-600 dark:text-gray-400">Nhà phát hành:</span>
+                                        <span class="text-sm font-bold text-gray-900 dark:text-white text-right">{{ $game->publisher }}</span>
+                                    </div>
+                                @endif
+                                <div class="flex justify-between items-start border-b border-gray-100 dark:border-gray-700 pb-3">
+                                    <span class="text-sm font-semibold text-gray-600 dark:text-gray-400">Ngày phát hành:</span>
+                                    <span class="text-sm font-bold text-gray-900 dark:text-white">{{ $game->created_at->format('d/m/Y') }}</span>
+                                </div>
+                                @if(!empty($game->platforms))
+                                    <div class="flex justify-between items-start border-b border-gray-100 dark:border-gray-700 pb-3">
+                                        <span class="text-sm font-semibold text-gray-600 dark:text-gray-400">Nền tảng:</span>
+                                        <div class="text-right">
+                                            @foreach($game->platforms as $platform)
+                                                <span class="inline-block text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded ml-1">{{ $platform }}</span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                                @if($game->sold_count)
+                                    <div class="flex justify-between items-start">
+                                        <span class="text-sm font-semibold text-gray-600 dark:text-gray-400">Đã bán:</span>
+                                        <span class="text-sm font-bold text-orange-500">{{ number_format($game->sold_count) }} bản</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- Danh mục & Ngôn ngữ --}}
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-black text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-tag text-purple-500"></i>
+                                Danh mục & Ngôn ngữ
+                            </h3>
+                            <div class="space-y-3">
+                                @if(!empty($game->category_ids))
+                                    <div>
+                                        <p class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-2">Thể loại:</p>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach($game->category_ids as $catId)
+                                                @php
+                                                    $categories = \App\Models\Category::all();
+                                                    $cat = $categories->find($catId);
+                                                @endphp
+                                                @if($cat)
+                                                    <a href="{{ route('shop.index', ['category' => $catId]) }}"
+                                                        class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 px-2 py-1 rounded hover:bg-blue-200 dark:hover:bg-blue-900/60 transition">
+                                                        {{ $cat->name }}
+                                                    </a>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                                @if(!empty($game->languages))
+                                    <div class="border-t border-gray-100 dark:border-gray-700 pt-3">
+                                        <p class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-2">Ngôn ngữ:</p>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach(is_array($game->languages) ? $game->languages : [$game->languages] as $lang)
+                                                <span class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-2 py-1 rounded">
+                                                    {{ $lang }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {{-- CỘT PHẢI: Sidebar & Game liên quan --}}
@@ -272,6 +392,170 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+
+            {{-- SECTION: COMMENTS/REVIEWS --}}
+            <div class="mt-20 pt-12 border-t-2 border-gray-200 dark:border-gray-700">
+                <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-8 flex items-center gap-3 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center text-white">
+                        <i class="fa-solid fa-comments text-sm"></i>
+                    </div>
+                    Bình luận & Đánh giá
+                </h2>
+
+                <div class="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    @auth
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Viết bình luận</h3>
+                            <form action="#" method="POST" class="space-y-4">
+                                @csrf
+                                <input type="hidden" name="game_id" value="{{ $game->id }}">
+                                
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Đánh giá:</label>
+                                    <div class="flex gap-2">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <button type="button" class="rating-star text-3xl text-gray-300 hover:text-yellow-400 transition" data-rating="{{ $i }}">
+                                                <i class="fa-{{ $i <= 3 ? 'regular' : 'solid' }} fa-star"></i>
+                                            </button>
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tiêu đề bình luận:</label>
+                                    <input type="text" name="title" placeholder="VD: Game tuyệt vời..." 
+                                        class="w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-miku-500 focus:border-transparent outline-none transition"
+                                        required>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nội dung:</label>
+                                    <textarea name="content" rows="4" placeholder="Chia sẻ suy nghĩ của bạn về game..." 
+                                        class="w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-miku-500 focus:border-transparent outline-none transition resize-none"
+                                        required></textarea>
+                                </div>
+
+                                <div class="flex gap-3 pt-4">
+                                    <button type="submit" class="flex-1 bg-gradient-to-r from-miku-500 to-miku-600 hover:from-miku-600 hover:to-miku-700 text-white font-bold py-2 px-4 rounded-lg transition shadow-lg shadow-miku-500/30 flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                        Gửi bình luận
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @else
+                        <div class="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 text-center">
+                            <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                <i class="fa-solid fa-info-circle text-blue-500 mr-2"></i>
+                                Vui lòng đăng nhập để bình luận
+                            </p>
+                            <a href="{{ route('login') }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition">
+                                Đăng nhập
+                            </a>
+                        </div>
+                    @endauth
+
+                    {{-- Comments List --}}
+                    <div class="space-y-4">
+                        {{-- Sample Comments (Replace with dynamic data) --}}
+                        <div class="p-4 border-l-4 border-yellow-400 bg-white dark:bg-gray-800 rounded-r-lg border border-gray-200 dark:border-gray-700">
+                            <div class="flex items-start justify-between mb-2">
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                        <span>Người dùng tuyệt vời</span>
+                                        <div class="flex text-yellow-400">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <i class="fa-solid fa-star text-sm"></i>
+                                            @endfor
+                                        </div>
+                                    </h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">2 ngày trước</p>
+                                </div>
+                            </div>
+                            <h5 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Game tuyệt vời!</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Đây là game rất hay, đồ họa đẹp, gameplay mượt mà. Mình chơi rất thích! Nên mua ngay nếu bạn yêu thích thể loại này.
+                            </p>
+                            <div class="mt-3 flex gap-3 text-xs">
+                                <button class="text-gray-500 hover:text-miku-500 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-thumbs-up"></i> Hữu ích (5)
+                                </button>
+                                <button class="text-gray-500 hover:text-red-500 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-thumbs-down"></i> Không hữu ích (0)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 border-l-4 border-yellow-400 bg-white dark:bg-gray-800 rounded-r-lg border border-gray-200 dark:border-gray-700">
+                            <div class="flex items-start justify-between mb-2">
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                        <span>Game Gamer</span>
+                                        <div class="flex text-yellow-400">
+                                            @for($i = 1; $i <= 4; $i++)
+                                                <i class="fa-solid fa-star text-sm"></i>
+                                            @endfor
+                                            <i class="fa-regular fa-star text-sm"></i>
+                                        </div>
+                                    </h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">5 ngày trước</p>
+                                </div>
+                            </div>
+                            <h5 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Hay, nhưng đôi khi lỗi</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Game chơi rất mượt, nhưng đôi khi bị lag trong những trận đông người. Hy vọng nhà phát hành sẽ fix sớm.
+                            </p>
+                            <div class="mt-3 flex gap-3 text-xs">
+                                <button class="text-gray-500 hover:text-miku-500 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-thumbs-up"></i> Hữu ích (12)
+                                </button>
+                                <button class="text-gray-500 hover:text-red-500 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-thumbs-down"></i> Không hữu ích (2)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 border-l-4 border-yellow-400 bg-white dark:bg-gray-800 rounded-r-lg border border-gray-200 dark:border-gray-700">
+                            <div class="flex items-start justify-between mb-2">
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                        <span>Pro Player</span>
+                                        <div class="flex text-yellow-400">
+                                            @for($i = 1; $i <= 3; $i++)
+                                                <i class="fa-solid fa-star text-sm"></i>
+                                            @endfor
+                                            @for($i = 4; $i <= 5; $i++)
+                                                <i class="fa-regular fa-star text-sm"></i>
+                                            @endfor
+                                        </div>
+                                    </h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">1 tuần trước</p>
+                                </div>
+                            </div>
+                            <h5 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Chưa thực sự thuyết phục</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Gameplay chưa đủ sâu, story tạm được. Sẽ chờ bản update tiếp theo để xem họ cải thiện gì.
+                            </p>
+                            <div class="mt-3 flex gap-3 text-xs">
+                                <button class="text-gray-500 hover:text-miku-500 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-thumbs-up"></i> Hữu ích (8)
+                                </button>
+                                <button class="text-gray-500 hover:text-red-500 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-thumbs-down"></i> Không hữu ích (3)
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Load More --}}
+                        <div class="text-center pt-6 border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800 rounded-lg">
+                            <button class="inline-flex items-center gap-2 px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 font-semibold rounded-lg transition">
+                                <i class="fa-solid fa-chevron-down"></i>
+                                Xem thêm bình luận
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
