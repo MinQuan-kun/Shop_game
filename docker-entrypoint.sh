@@ -1,15 +1,17 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting deployment tasks for MongoDB Project..."
+echo "🚀 Starting deployment tasks..."
 
-# Clear cache Laravel
+php artisan package:discover --ansi
+
+# 2. Các lệnh clear cache cũ
 php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-echo "✅ Cache cleared. Starting Apache..."
+echo "✅ Ready to start Apache."
 
 # Start Apache
 exec apache2-foreground
