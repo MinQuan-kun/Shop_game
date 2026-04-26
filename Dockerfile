@@ -31,7 +31,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # 6. Cài đặt Dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 RUN npm install
 RUN npm run build
 
