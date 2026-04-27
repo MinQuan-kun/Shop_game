@@ -47,6 +47,7 @@ class RecommendationService
         $recommendations = Game::where('is_active', true)
             ->whereNotIn('_id', $purchasedGameIds)
             ->whereIn('category_ids', $favoriteCategories)
+            ->select('_id', 'name', 'slug', 'image', 'price', 'category_ids', 'platforms', 'publisher', 'description', 'sold_count', 'is_active')
             ->take($limit)
             ->get();
 
@@ -56,6 +57,7 @@ class RecommendationService
             $trending = Game::where('is_active', true)
                 ->whereNotIn('_id', $purchasedGameIds)
                 ->whereNotIn('_id', $recommendations->pluck('_id'))
+                ->select('_id', 'name', 'slug', 'image', 'price', 'category_ids', 'platforms', 'publisher', 'description', 'sold_count', 'is_active')
                 ->orderBy('sold_count', 'desc')
                 ->take($needed)
                 ->get();
@@ -74,6 +76,7 @@ class RecommendationService
         return Game::where('is_active', true)
             ->where('_id', '!=', $currentGame->id)
             ->whereIn('category_ids', $currentGame->category_ids ?? [])
+            ->select('_id', 'name', 'slug', 'image', 'price', 'category_ids', 'platforms', 'publisher', 'description', 'sold_count', 'is_active')
             ->take($limit)
             ->get();
     }
@@ -81,7 +84,8 @@ class RecommendationService
     private function getTrendingGames($limit)
     {
         return Game::where('is_active', true)
-            ->orderBy('sold_count', 'desc') //
+            ->select('_id', 'name', 'slug', 'image', 'price', 'category_ids', 'platforms', 'publisher', 'description', 'sold_count', 'is_active')
+            ->orderBy('sold_count', 'desc')
             ->take($limit)
             ->get();
     }

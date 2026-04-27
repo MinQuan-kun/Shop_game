@@ -88,6 +88,26 @@
 
                             {{-- Info --}}
                             <div class="p-4">
+                                {{-- Tags --}}
+                                <div class="mb-2 flex flex-wrap gap-1">
+                                    @if (!empty($recGame->platforms))
+                                        @foreach ($recGame->platforms as $platform)
+                                        <span class="text-[9px] font-bold bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded">
+                                            {{ $platform }}
+                                        </span>
+                                        @endforeach
+                                    @endif
+                                    @if (!empty($recGame->category_ids))
+                                        @php
+                                            $recCats = \App\Models\Category::whereIn('_id', $recGame->category_ids)->get();
+                                        @endphp
+                                        @foreach ($recCats as $cat)
+                                        <span class="text-[9px] font-bold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-1.5 py-0.5 rounded">
+                                            {{ $cat->name }}
+                                        </span>
+                                        @endforeach
+                                    @endif
+                                </div>
                                 <h3 class="font-bold text-gray-900 dark:text-white truncate mb-1"
                                     title="{{ $recGame->name }}">
                                     <a href="{{ route('game.show', $recGame->id) }}">{{ $recGame->name }}</a>
@@ -158,6 +178,26 @@
 
                         {{-- 2. NỘI DUNG --}}
                         <div class="p-4 flex flex-col flex-grow">
+                            {{-- Tags --}}
+                            <div class="mb-3 flex flex-wrap gap-1.5">
+                                @if (!empty($game->platforms))
+                                    @foreach ($game->platforms as $platform)
+                                    <span class="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-md">
+                                        {{ $platform }}
+                                    </span>
+                                    @endforeach
+                                @endif
+                                @if (!empty($game->category_ids))
+                                    @php
+                                        $gameCats = \App\Models\Category::whereIn('_id', $game->category_ids)->get();
+                                    @endphp
+                                    @foreach ($gameCats as $cat)
+                                    <span class="text-[10px] font-bold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-md">
+                                        {{ $cat->name }}
+                                    </span>
+                                    @endforeach
+                                @endif
+                            </div>
                             {{-- Tên Game --}}
                             <h3
                                 class="text-base font-bold text-gray-900 dark:text-white leading-tight mb-2 line-clamp-2 hover:text-miku-600 dark:hover:text-miku-400 transition-colors">

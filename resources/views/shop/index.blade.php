@@ -87,16 +87,28 @@
                             {{-- 2. PHẦN NỘI DUNG --}}
                             <div class="p-4 flex flex-col flex-grow">
 
-                                {{-- Thể loại --}}
-                                <div
-                                    class="mb-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                                {{-- Thể loại & Nền tảng (Tags) --}}
+                                <div class="mb-3 flex flex-wrap gap-1.5">
+                                    {{-- Platform Tags --}}
                                     @if (!empty($game->platforms))
-                                    <span
-                                        class="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-gray-500 dark:text-gray-300">
-                                        {{ $game->platforms[0] ?? 'PC' }}
-                                    </span>
+                                        @foreach ($game->platforms as $platform)
+                                        <span class="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-md">
+                                            {{ $platform }}
+                                        </span>
+                                        @endforeach
                                     @endif
-                                    <span>{{ optional($game->category)->name ?? 'Game' }}</span>
+                                    
+                                    {{-- Category Tags --}}
+                                    @if (!empty($game->category_ids))
+                                        @php
+                                            $gameCats = \App\Models\Category::whereIn('_id', $game->category_ids)->get();
+                                        @endphp
+                                        @foreach ($gameCats as $cat)
+                                        <span class="text-[10px] font-bold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-md">
+                                            {{ $cat->name }}
+                                        </span>
+                                        @endforeach
+                                    @endif
                                 </div>
 
                                 {{-- Tên Game --}}
