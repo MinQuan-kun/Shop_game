@@ -14,15 +14,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/game/{id}', [HomeController::class, 'show'])->name('game.show');
 Route::get('/api/games/search', [HomeController::class, 'searchSuggestions'])->name('games.search');
 
-// Temporary route to clear cache - Remove after deployment fix
-Route::get('/clear-all-cache-temp', function () {
-    Artisan::call('config:clear');
-    Artisan::call('cache:clear');
-    Artisan::call('route:clear');
-    Artisan::call('view:clear');
-    return 'Cache cleared! You can now login. Remember to remove this route after testing.';
-});
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'admin'])->name('dashboard');
