@@ -23,7 +23,7 @@
                 </a>
             </div>
 
-            <nav class="hidden md:flex flex-1 justify-center space-x-8">
+            <nav class="hidden md:flex flex-2 justify-center space-x-8">
                 <a href="/"
                     class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150">
                     Trang chủ
@@ -36,8 +36,24 @@
                     class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150 {{ request()->routeIs('community.index') ? 'text-miku-500 dark:text-miku-400' : '' }}">
                     Cộng đồng
                 </a>
-            </nav>
 
+                {{-- Nút Gacha --}}
+                <a href="{{ route('gacha') }}"
+                    class="text-gray-600 dark:text-gray-300 hover:text-miku-500 dark:hover:text-miku-400 font-medium transition duration-150p">
+
+                    {{-- Icon Xúc xắc (Dùng FontAwesome cho đồng bộ) --}}
+                    <i class="fa-solid fa-dice text-xl mr-2 animate-bounce"></i>
+
+                    <span>Gacha</span>
+
+                    {{-- Chấm đỏ thông báo --}}
+                    <span class="absolute top-0 right-0 flex w-3 h-3 -mt-1 -mr-1">
+                        <span
+                            class="absolute inline-flex w-full h-full bg-red-400 rounded-full opacity-75 animate-ping"></span>
+                        <span class="relative inline-flex w-3 h-3 bg-red-500 rounded-full"></span>
+                    </span>
+                </a>
+            </nav>
             <div class="flex-1 flex items-center justify-end gap-4">
 
                 @guest

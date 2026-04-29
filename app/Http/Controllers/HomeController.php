@@ -135,7 +135,7 @@ class HomeController extends Controller
 
         // 8. Lấy dữ liệu games
         $games = $query->paginate(12)->withQueryString();
-        
+
         // Lấy chỉ những category có game
         $categoriesWithGames = Game::where('is_active', true)
             ->pluck('category_ids')
@@ -144,7 +144,7 @@ class HomeController extends Controller
             ->values()
             ->toArray();
         $categories = Category::whereIn('_id', $categoriesWithGames)->get()->unique('_id');
-        
+
         // 9. Lấy danh sách publishers từ TẤT CẢ games
         $allPublishers = Game::where('is_active', true)
             ->whereNotNull('publisher')
@@ -153,7 +153,7 @@ class HomeController extends Controller
             ->unique()
             ->sort()
             ->values();
-        
+
         // 10. Lấy danh sách platforms từ TẤT CẢ games
         $allPlatforms = Game::where('is_active', true)
             ->whereNotNull('platforms')
@@ -164,7 +164,7 @@ class HomeController extends Controller
             ->unique()
             ->sort()
             ->values();
-        
+
         // 11. Lấy count cho mỗi category (cho filter)
         $categoryCounts = Category::all()->mapWithKeys(function ($cat) {
             $count = Game::where('is_active', true)->where('category_ids', $cat->id)->count();
@@ -184,5 +184,20 @@ class HomeController extends Controller
         });
 
         return view('shop.index', compact('games', 'categories', 'allPublishers', 'allPlatforms', 'categoryCounts', 'publisherCounts', 'platformCounts'));
+    }
+
+    public function gacha()
+    {
+        // Lấy tất cả game đang active
+        $games = Game::where('is_active', true)->get();
+
+        if ($games->isEmpty()) {
+            return redirect()->back()->with('error', 'Hiện chưa có game nào để quay!');
+        }
+
+        // Chọn ngẫu nhiên 1 game
+        $randomGame = $games->random();
+
+        return redirect()->route('game.show', ['id' => $randomGame->id]);
     }
 }

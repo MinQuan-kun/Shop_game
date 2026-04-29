@@ -21,6 +21,7 @@ Route::get('/dashboard', function () {
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop.index');
 Route::view('/community', 'community.index')->name('community.index');
 Route::post('/chatbot/send', [ChatbotController::class, 'chat'])->name('chatbot.send');
+Route::get('/gacha', [HomeController::class, 'gacha'])->name('gacha');
 // Route::view();
 
 Route::middleware('auth')->group(function () {
