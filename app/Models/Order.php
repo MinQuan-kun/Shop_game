@@ -16,12 +16,17 @@ class Order extends Model
         'user_id',
         'order_number',
         'total_amount',
+        'subtotal',
+        'discount_amount',
+        'discount_code_id',
         'status',          // 'pending', 'completed', 'cancelled', 'refunded'
         'payment_method',  // 'wallet'
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
+        'subtotal' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
     ];
 
     /**
@@ -52,5 +57,13 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Get the discount code used for this order
+     */
+    public function discountCode()
+    {
+        return $this->belongsTo(DiscountCode::class, 'discount_code_id');
     }
 }
