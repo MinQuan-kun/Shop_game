@@ -1,5 +1,4 @@
-
-# 🎮 **Mirai Store**
+# 🎮 **Mirai Store - Website Bán Game Trực Tuyến**
 
 <p align="center">
   <a href="/" target="_blank">
@@ -7,206 +6,203 @@
   </a>
 </p>
 
-[![PHP](https://img.shields.io/badge/PHP-8.2-blue?logo=php\&logoColor=white)]()
-[![Laravel](https://img.shields.io/badge/Laravel-11-red?logo=laravel\&logoColor=white)]()
-[![MongoDB](https://img.shields.io/badge/MongoDB-7.0-darkgreen?logo=mongodb\&logoColor=white)]()
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-teal?logo=tailwindcss\&logoColor=white)]()
-[![Cloudinary](https://img.shields.io/badge/Cloudinary-Images-blue?logo=cloudinary\&logoColor=white)]()
+<p align="center">
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"></a>
+    <a href="https://www.php.net"><img src="https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP"></a>
+    <a href="https://www.mongodb.com"><img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB"></a>
+    <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS"></a>
+    <a href="https://www.docker.com"><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"></a>
+    <a href="https://cloudinary.com"><img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" alt="Cloudinary"></a>
+</p>
+
+<p align="center">
+    <strong>🌐 Live Demo: <a href="https://mirai-store-pzz3.onrender.com" target="_blank">https://mirai-store.onrender.com</a></strong>
+</p>
 
 ---
 
 ## 📌 **Giới thiệu**
-**Mirai Store** là đồ án môn PHP, hệ thống được xây dựng bằng **Laravel + MongoDB** với khả năng mở rộng mạnh mẽ và tốc độ truy vấn nhanh.
+**Mirai Store** là nền tảng thương mại điện tử chuyên cung cấp các sản phẩm game bản quyền. Hệ thống được xây dựng trên nền tảng **Laravel 11** kết hợp với cơ sở dữ liệu NoSQL **MongoDB**, mang lại hiệu năng cao và khả năng mở rộng linh hoạt. Dự án tích hợp nhiều công nghệ hiện đại như AI Chatbot, Gợi ý game thông minh và Cổng thanh toán điện tử.
 
 ---
 
 ## ✨ **Tính năng nổi bật**
-### 🔐 **Hệ thống xác thực**
 
-* Laravel Auth/Breeze.
-* Reset password, xác thực email (tuỳ chọn).
-* Bảo mật cao theo chuẩn Laravel.
+### 🤖 **Công nghệ & AI**
+* **Hệ thống Gợi ý Game (Recommendation System):** Tự động đề xuất game phù hợp dựa trên sở thích và hành vi người dùng.
+* **AI Chatbot:** Trợ lý ảo hỗ trợ khách hàng giải đáp thắc mắc và hướng dẫn mua hàng 24/7.
+* **Gacha (Vòng quay may mắn):** Tính năng giải trí giúp người dùng ngẫu nhiên khám phá các tựa game thú vị.
 
-### ☁️ **Quản lý hình ảnh tự động**
+### 💳 **Thanh toán & Ví điện tử**
+* **Đa dạng cổng thanh toán:** Tích hợp **MoMo (QR Code/ATM)** và **PayPal**.
+* **Ví nội bộ (Wallet):** Người dùng có thể nạp tiền vào ví để mua sắm nhanh chóng.
+* **Xử lý giao dịch an toàn:** Hệ thống xử lý IPN/Callback chặt chẽ, đảm bảo tính toàn vẹn của đơn hàng.
 
-* Cloudinary upload.
-* Tự động resize, crop, tối ưu.
-* Lưu link ảnh để render cực nhanh.
+### 🛒 **Trải nghiệm mua sắm**
+* **Quản lý Giỏ hàng & Wishlist:** Thêm/xóa sản phẩm, lưu game yêu thích (sử dụng AJAX mượt mà).
+* **Mã giảm giá (Discount Code):** Áp dụng coupon giảm giá theo phần trăm hoặc số tiền cố định.
+* **Tìm kiếm & Lọc:** Tìm kiếm thời gian thực (Autocomplete), lọc theo giá, thể loại, nhà phát hành.
 
-### 🛒 **Quản lý Shop/Game Store**
-
-* CRUD game trong admin.
-* Mỗi game có nhiều hình ảnh.
-* Trang chi tiết game đẹp mắt, đúng chủ đề anime.
-
-### ⚡ **Hiệu năng vượt trội**
-
-* MongoDB đọc/write cực nhanh.
-* Vite build asset tốc độ cao.
-* Alpine.js tương tác UI mượt mà.
-
-### 📱 **Responsive 100%**
-
-* Tối ưu cho mọi kích thước màn hình.
+### 🔐 **Quản trị & Hệ thống**
+* **Phân quyền (Auth):** Đăng ký, Đăng nhập, Quên mật khẩu, Xác thực Email.
+* **Admin Dashboard:** Thống kê doanh thu, quản lý Người dùng, Game, Danh mục, Đơn hàng.
+* **Cloudinary Integration:** Tự động upload và tối ưu hóa hình ảnh game.
 
 ---
 
 ## ⚙️ **Công nghệ sử dụng**
 
-| Công nghệ           | Vai trò                             |
-| ------------------- | ----------------------------------- |
-| **Laravel 11**      | Backend + MVC + Authentication      |
-| **MongoDB**         | Lưu sản phẩm, tài khoản, đơn hàng   |
-| **Laravel MongoDB** | Driver mở rộng (jenssegers/mongodb) |
-| **TailwindCSS 4**   | UI nhanh – gọn – đẹp                |
-| **Vite**            | Build CSS/JS tốc độ cao             |
-| **Cloudinary API**  | Lưu trữ & tối ưu hình ảnh           |
-| **Alpine.js**       | UI interaction không cần jQuery     |
+| Lĩnh vực | Công nghệ | Chi tiết |
+| :--- | :--- | :--- |
+| **Backend** | Laravel 11 | Framework PHP hiện đại, mạnh mẽ. |
+| **Database** | MongoDB | NoSQL Database, xử lý dữ liệu lớn linh hoạt. |
+| **Driver** | mongodb/laravel-mongodb | Driver chính thức kết nối Laravel & MongoDB. |
+| **Frontend** | Blade, TailwindCSS | Giao diện Responsive, tối ưu UX/UI. |
+| **Scripting** | Alpine.js, Vanilla JS | Xử lý tương tác phía Client nhẹ nhàng. |
+| **Payments** | MoMo API, PayPal SDK | Tích hợp cổng thanh toán trực tuyến. |
+| **Storage** | Cloudinary | Lưu trữ và CDN cho hình ảnh. |
+| **DevOps** | Docker | Container hóa môi trường phát triển & Deploy. |
 
 ---
 
-# 🚀 **Cách chạy dự án (Không dùng Docker)**
+## 🚀 **Cài đặt & Chạy dự án**
 
-> **Yêu cầu:**
->
-> * PHP ≥ 8.1
-> * Composer
-> * MongoDB (local hoặc Atlas)
-> * Node.js ≥ 18
+### Yêu cầu hệ thống
+* PHP ≥ 8.2
+* Composer
+* MongoDB (Cài đặt Local hoặc dùng MongoDB Atlas)
+* Node.js ≥ 18
+* Docker (Tùy chọn)
 
----
+### Các bước cài đặt
 
-## 1️⃣ Clone code
-
+#### 1️⃣ Clone source code
 ```bash
 git clone <repo-url>
-cd mirai-store
+cd shop_game
+
 ```
 
----
-
-## 2️⃣ Cài Laravel dependencies
+#### 2️⃣ Cài đặt thư viện Backend & Frontend
 
 ```bash
 composer install
-```
-
----
-
-## 3️⃣ Cài frontend dependencies
-
-```bash
 npm install
+
 ```
 
----
+#### 3️⃣ Cấu hình môi trường (.env)
 
-## 4️⃣ Tạo file `.env`
+Copy file `.env.example` thành `.env` và cấu hình các thông số:
 
 ```bash
 cp .env.example .env
+
 ```
 
-Chỉnh lại phần MongoDB:
+**Cấu hình MongoDB:**
 
 ```env
 DB_CONNECTION=mongodb
-DB_HOST=127.0.0.1
-DB_PORT=27017
+DB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/mirai_store?retryWrites=true&w=majority
 DB_DATABASE=mirai_store
-DB_USERNAME=
-DB_PASSWORD=
+
 ```
 
-Nếu bạn dùng MongoDB Atlas:
+**Cấu hình Cloudinary (Ảnh):**
 
 ```env
-DB_URI=mongodb+srv://username:password@cluster.mongodb.net/mirai_store
+CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
+
 ```
 
----
+**Cấu hình Mail (SMTP Gmail):**
 
-## 5️⃣ Cài driver MongoDB cho Laravel
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-app-password
 
-```bash
-composer require jenssegers/mongodb
 ```
 
----
-
-## 6️⃣ Generate key
+#### 4️⃣ Tạo Key & Link Storage
 
 ```bash
 php artisan key:generate
+php artisan storage:link
+
 ```
 
----
+#### 5️⃣ Seed dữ liệu mẫu (Quan trọng)
 
-## 7️⃣ Chạy migration (nếu có)
-
-> 🚨 Lưu ý: MongoDB không dùng schema như MySQL
-> → Migration chỉ tạo dữ liệu mẫu hoặc collection tùy bạn.
+Tạo tài khoản Admin, Danh mục, Game mẫu:
 
 ```bash
-php artisan migrate
+php artisan db:seed
+
 ```
 
----
+*Tài khoản Admin mặc định: `admin@gmail.com` / `password*`
 
-## 8️⃣ Chạy Laravel server
+#### 6️⃣ Khởi chạy
+
+Chạy 2 terminal riêng biệt:
+
+**Terminal 1 (Backend):**
 
 ```bash
 php artisan serve
+
 ```
 
-👉 Truy cập: **[http://localhost:8000](http://localhost:8000)**
-
----
-
-## 9️⃣ Chạy Vite
+**Terminal 2 (Frontend Build):**
 
 ```bash
 npm run dev
+
+```
+
+👉 Truy cập website tại: **[http://localhost:8000](https://www.google.com/search?q=http://localhost:8000)**
+
+---
+
+## 🐳 **Chạy bằng Docker (Production/Dev)**
+
+Dự án đã được đóng gói sẵn với Docker để dễ dàng triển khai.
+
+### Chạy nhanh với Docker Compose
+
+```bash
+docker-compose up -d --build
+
+```
+
+Truy cập tại: `http://localhost:8000`
+
+### Build Image thủ công
+
+```bash
+# Build image
+docker build -t mirai-store .
+
+# Run container
+docker run -p 8000:8000 mirai-store
+
 ```
 
 ---
 
-# 📂 **Cấu trúc thư mục**
+## 👥 **Thành viên thực hiện**
 
-```
-mirai-store/
-│
-├── app/                   # Controllers, Models (MongoDB Model)
-│   ├── Models/            # Model sử dụng Jenssegers\Mongodb
-│
-├── public/                # Logo, ảnh tĩnh
-├── resources/
-│   ├── views/             # Blade giao diện Miku UI
-│   ├── css/               # TailwindCSS
-│   └── js/                # Alpine.js + app.js
-│
-├── routes/
-│   ├── web.php            # Route giao diện
-│   └── api.php            # Route API
-│
-├── database/              # Seeder, migration tùy chỉnh
-└── README.md
-```
+Đồ án môn học **Lập trình PHP** - GVHD: **ThS. Nguyễn Quốc Trung**
+
+1. **Nguyễn Hữu Minh Quân** (49.01.104.120)
+2. **Nguyễn Thái Bình** (49.01.104.011)
+3. **Trương Vĩnh Phát** (49.01.104.108)
+4. **Trương Trường Giang** (49.01.104.036)
 
 ---
 
-# 🧰 **Lệnh hữu ích**
-
-| Hành động                   | Lệnh                         |
-| --------------------------- | ---------------------------- |
-| Chạy Laravel server         | `php artisan serve`          |
-| Chạy Vite frontend          | `npm run dev`                |
-| Build assets cho production | `npm run build`              |
-| Clear cache backend         | `php artisan optimize:clear` |
-| Seed dữ liệu mẫu            | `php artisan db:seed`        |
-
----
-
-# ❤️ **Đóng góp**
-- Sẽ thêm chatbot
----
+<p align="center">Made with ❤️ by Mirai Team</p>
