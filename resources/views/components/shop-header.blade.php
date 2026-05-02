@@ -45,13 +45,6 @@
                     <i class="fa-solid fa-dice text-xl mr-2 animate-bounce"></i>
 
                     <span>Gacha</span>
-
-                    {{-- Chấm đỏ thông báo --}}
-                    <span class="absolute top-0 right-0 flex w-3 h-3 -mt-1 -mr-1">
-                        <span
-                            class="absolute inline-flex w-full h-full bg-red-400 rounded-full opacity-75 animate-ping"></span>
-                        <span class="relative inline-flex w-3 h-3 bg-red-500 rounded-full"></span>
-                    </span>
                 </a>
             </nav>
             <div class="flex-1 flex items-center justify-end gap-4">
